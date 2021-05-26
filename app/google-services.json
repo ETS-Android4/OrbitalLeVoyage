@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1024729101211",
+    "project_id": "orbital-le-voyage",
+    "storage_bucket": "orbital-le-voyage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024729101211:android:6ef93e42ad022bf715e73e",
+        "android_client_info": {
+          "package_name": "com.example.levoyage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024729101211-8mcu49emoojf0b8s9fvqfduf6n1ho1bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8CGrA2yfT68-wdUkzO50E1-_u7isDnMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024729101211-8mcu49emoojf0b8s9fvqfduf6n1ho1bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

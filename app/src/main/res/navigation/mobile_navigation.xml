@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    android:label="@string/menu_attractions"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_checklist"
+        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:label="@string/menu_checklist"
+        tools:layout="@layout/fragment_attractions" />
+    <fragment
+        android:id="@+id/nav_notes"
+        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:label="@string/menu_notes"
+        tools:layout="@layout/fragment_attractions" />
+    <fragment
+        android:id="@+id/nav_weather"
+        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:label="@string/menu_weather"
+        tools:layout="@layout/fragment_attractions" />
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_attractions" />
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.levoyage.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_accommodation"
+        android:name="com.example.levoyage.ui.Accommodation.AccommodationFragment"
+        android:label="@string/menu_accommodation"
+        tools:layout="@layout/fragment_accommodation" />
+
+    <!--    <fragment-->
+    <!--        android:id="@+id/nav_contacts"-->
+    <!--        android:name="com.example.levoyage.ui.contacts.ContactsFragment"-->
+    <!--        android:label="@string/menu_contacts"-->
+    <!--        tools:layout="@layout/contacts_fragment" />-->
+    <fragment
+        android:id="@+id/nav_attractions"
+        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:label="@string/menu_attractions"
+        tools:layout="@layout/fragment_attractions" />
+    <fragment
+        android:id="@+id/nav_food"
+        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:label="@string/menu_attractions"
+        tools:layout="@layout/fragment_attractions" />
+</navigation>
