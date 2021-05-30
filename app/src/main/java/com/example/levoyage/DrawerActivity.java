@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -17,12 +18,14 @@ import com.example.levoyage.databinding.ActivityDrawerBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class DrawerActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityDrawerBinding binding;
-    Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +54,7 @@ public class DrawerActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        logoutButton = findViewById(R.id.LogoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
@@ -60,6 +62,13 @@ public class DrawerActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        View header = navigationView.getHeaderView(0);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        TextView profileEmail = header.findViewById(R.id.ProfileEmail);
+        TextView profileUsername = header.findViewById(R.id.ProfileUsername);
+        profileEmail.setText(user.getEmail());
+        profileUsername.setText(user.getDisplayName());
     }
 
     @Override
