@@ -1,4 +1,4 @@
-package com.example.levoyage.ui;
+package com.example.levoyage.ui.home;
 
 import android.view.LayoutInflater;
 import android.view.View;

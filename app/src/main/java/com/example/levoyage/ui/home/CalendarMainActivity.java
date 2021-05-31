@@ -1,4 +1,4 @@
-package com.example.levoyage.ui;
+package com.example.levoyage.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
