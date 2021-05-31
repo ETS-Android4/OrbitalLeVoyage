@@ -1,6 +1,8 @@
 package com.example.levoyage.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ import com.example.levoyage.DrawerActivity;
 import com.example.levoyage.R;
 import com.example.levoyage.databinding.FragmentHomeBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +34,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private View root;
+    Context thiscontext;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        thiscontext = container.getContext();
 
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -67,7 +73,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(thiscontext, 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
     }
@@ -102,14 +108,35 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         return date.format(formatter);
     }
 
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+       root.findViewById(R.id.previousMonth).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               selectedDate = selectedDate.minusMonths(1);
+               setMonthView();
+           }
+       });
+
+       root.findViewById(R.id.nextMonth).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               selectedDate = selectedDate.plusMonths(1);
+               setMonthView();
+           }
+       });
+    }
+
     public void previousMonthAction(View view)
     {
         selectedDate = selectedDate.minusMonths(1);
         setMonthView();
     }
 
-    public void nextMonthAction(View view)
-    {
+    public void nextMonthAction(View view) {
+        Log.d("NEXT", "started");
         selectedDate = selectedDate.plusMonths(1);
         setMonthView();
     }
@@ -120,7 +147,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         if(!dayText.equals(""))
         {
             String message = "Selected Date " + dayText + " " + monthYearFromDate(selectedDate);
-            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(thiscontext, message, Toast.LENGTH_SHORT).show();
         }
     }
     @Override
