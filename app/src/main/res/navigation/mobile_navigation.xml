@@ -30,7 +30,16 @@
         android:id="@+id/nav_home"
         android:name="com.example.levoyage.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/mobile_navigation">
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_home_to_itineraryFragment"
+            app:destination="@id/itineraryFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_accommodation"
@@ -38,11 +47,6 @@
         android:label="@string/menu_accommodation"
         tools:layout="@layout/fragment_accommodation" />
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/nav_contacts"-->
-    <!--        android:name="com.example.levoyage.ui.contacts.ContactsFragment"-->
-    <!--        android:label="@string/menu_contacts"-->
-    <!--        tools:layout="@layout/contacts_fragment" />-->
     <fragment
         android:id="@+id/nav_attractions"
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
@@ -53,4 +57,13 @@
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
         android:label="@string/menu_attractions"
         tools:layout="@layout/fragment_attractions" />
+    <fragment
+        android:id="@+id/itineraryFragment"
+        android:name="com.example.levoyage.ui.home.ItineraryFragment"
+        android:label="Itinerary"
+        tools:layout="@layout/fragment_itinerary" >
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
 </navigation>

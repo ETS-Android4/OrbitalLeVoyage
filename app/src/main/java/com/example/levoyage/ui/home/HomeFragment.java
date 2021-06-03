@@ -1,28 +1,22 @@
 package com.example.levoyage.ui.home;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.levoyage.DrawerActivity;
 import com.example.levoyage.R;
 import com.example.levoyage.databinding.FragmentHomeBinding;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -34,34 +28,22 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private View root;
-    Context thiscontext;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private TextView monthYearText;
+    private RecyclerView calendarRecyclerView;
+    private LocalDate selectedDate;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
-        thiscontext = container.getContext();
-
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
         initWidgets();
         selectedDate = LocalDate.now();
         setMonthView();
 
         return root;
     }
-
-    private TextView monthYearText;
-    private RecyclerView calendarRecyclerView;
-    private LocalDate selectedDate;
 
     private void initWidgets() {
         calendarRecyclerView = root.findViewById(R.id.calendarRecyclerView);
@@ -73,13 +55,12 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(thiscontext, 7);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
     }
 
-    private ArrayList<String> daysInMonthArray(LocalDate date)
-    {
+    private ArrayList<String> daysInMonthArray(LocalDate date) {
         ArrayList<String> daysInMonthArray = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(date);
 
@@ -88,28 +69,23 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
         int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
 
-        for(int i = 1; i <= 42; i++)
-        {
-            if(i <= dayOfWeek || i > daysInMonth + dayOfWeek)
-            {
+        for(int i = 1; i <= 42; i++) {
+            if(i <= dayOfWeek || i > daysInMonth + dayOfWeek) {
                 daysInMonthArray.add("");
-            }
-            else
-            {
+            } else {
                 daysInMonthArray.add(String.valueOf(i - dayOfWeek));
             }
         }
         return  daysInMonthArray;
     }
 
-    private String monthYearFromDate(LocalDate date)
-    {
+    private String monthYearFromDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         return date.format(formatter);
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
        root.findViewById(R.id.previousMonth).setOnClickListener(new View.OnClickListener() {
@@ -129,27 +105,18 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
        });
     }
 
-    public void previousMonthAction(View view)
-    {
-        selectedDate = selectedDate.minusMonths(1);
-        setMonthView();
-    }
-
-    public void nextMonthAction(View view) {
-        Log.d("NEXT", "started");
-        selectedDate = selectedDate.plusMonths(1);
-        setMonthView();
-    }
-
     @Override
-    public void onItemClick(int position, String dayText)
-    {
-        if(!dayText.equals(""))
-        {
+    public void onItemClick(int position, String dayText) {
+        if(!dayText.equals("")) {
             String message = "Selected Date " + dayText + " " + monthYearFromDate(selectedDate);
-            Toast.makeText(thiscontext, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            Bundle bundle = new Bundle();
+            bundle.putString("DATE", dayText + " " + monthYearFromDate(selectedDate));
+            bundle.putString("UserID", user.getUid());
+            Navigation.findNavController(root).navigate(R.id.action_nav_home_to_itineraryFragment, bundle);
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
