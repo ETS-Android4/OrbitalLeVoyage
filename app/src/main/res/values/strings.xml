@@ -19,7 +19,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings related to features -->
+    <!-- Strings related to navigation menu -->
     <string name="menu_home">My Trips</string>
     <string name="menu_accommodation">Accommodation</string>
     <string name="menu_food">Food</string>
@@ -41,4 +41,21 @@
     <string name="thursday">THU</string>
     <string name="friday">FRI</string>
     <string name="saturday">SAT</string>
+    <!-- Strings related to itinerary -->
+    <string name="add_itinerary_header">Add to itinerary</string>
+    <string name="add">Add</string>
+    <string name="start_time">Start Time</string>
+    <string name="date">Date</string>
+    <string name="location">Location</string>
+    <string name="end_time">End Time</string>
+    <string name="time">Time</string>
+    <!-- Strings related to accommodation -->
+    <string name="city_country">City/Country</string>
+    <string name="adults">Number of Adults</string>
+    <string name="rooms">Number of Rooms</string>
+    <string name="nights">Number of Nights</string>
+    <string name="price_range">Price Range</string>
+    <string name="address">Address</string>
+    <string name="name">Name</string>
+
 </resources>

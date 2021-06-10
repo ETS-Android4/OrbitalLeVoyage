@@ -45,7 +45,11 @@
         android:id="@+id/nav_accommodation"
         android:name="com.example.levoyage.ui.Accommodation.AccommodationFragment"
         android:label="@string/menu_accommodation"
-        tools:layout="@layout/fragment_accommodation" />
+        tools:layout="@layout/fragment_accommodation" >
+        <action
+            android:id="@+id/action_nav_accommodation_to_accommodationResultFragment"
+            app:destination="@id/accommodationResultFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_attractions"
@@ -65,5 +69,22 @@
         <argument
             android:name="date"
             app:argType="string" />
+        <action
+            android:id="@+id/action_itineraryFragment_to_accommodationDetailFragment"
+            app:destination="@id/accommodationDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/accommodationResultFragment"
+        android:name="com.example.levoyage.ui.Accommodation.AccommodationResultFragment"
+        android:label="Search Results"
+        tools:layout="@layout/fragment_accommodation_result" >
+        <action
+            android:id="@+id/action_accommodationResultFragment_to_accommodationDetailFragment"
+            app:destination="@id/accommodationDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accommodationDetailFragment"
+        android:name="com.example.levoyage.ui.Accommodation.AccommodationDetailFragment"
+        android:label="Accommodation Details"
+        tools:layout="@layout/fragment_accommodation_detail" />
 </navigation>

@@ -2,13 +2,20 @@ package com.example.levoyage.ui.home;
 
 public class ItineraryItem {
 
-    String location;
+    String location, date;
     TimeParcel startTime, endTime;
+    int type;
 
-    public ItineraryItem(String location, TimeParcel startTime, TimeParcel endTime) {
+    public ItineraryItem(String location, String date, TimeParcel startTime, TimeParcel endTime) {
         this.location = location;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.type = 0;
+    }
+
+    public ItineraryItem(int type) {
+        this.type = type;
     }
 
     public ItineraryItem() {}
@@ -36,4 +43,12 @@ public class ItineraryItem {
     public void setEndTime(TimeParcel endTime) {
         this.endTime = endTime;
     }
+
+    public int getType() { return type; }
+
+    public void setType(int type) { this.type = type; }
+
+    public String getDate() { return date; }
+
+    public void setDate(String date) { this.date = date; }
 }

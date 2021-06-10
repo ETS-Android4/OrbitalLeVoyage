@@ -143,7 +143,7 @@ public class ItineraryFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String loc = location.getText().toString();
-                        ItineraryItem item = new ItineraryItem(loc, st, et);
+                        ItineraryItem item = new ItineraryItem(loc, date, st, et);
                         database.child(loc).setValue(item);
                         dialog.dismiss();
                     }
