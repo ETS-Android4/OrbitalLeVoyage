@@ -2,7 +2,6 @@ package com.example.levoyage.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +12,22 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
-import com.example.levoyage.ui.Accommodation.AccommodationItineraryItem;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * MyAdapter class is an adapter for
+ * ItineraryAdapter class is an adapter for
  * recycler views used in the itinerary fragment.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.MyViewHolder> {
 
     Context context;
 
     ArrayList<ItineraryItem> list;
 
-    public MyAdapter(Context context, ArrayList<ItineraryItem> list) {
+    public ItineraryAdapter(Context context, ArrayList<ItineraryItem> list) {
         this.context = context;
         this.list = list;
     }
@@ -45,8 +45,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
     }
 
+    @NotNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.itinerary_item, parent,false);
         return new MyViewHolder(v);
     }
@@ -55,7 +56,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         ItineraryItem item = list.get(position);
         holder.location.setText(item.getLocation());
-        holder.time.setText(item.getStartTime().toString() + " - " + item.getEndTime().toString());
+        holder.time.setText(String.format("%s - %s", item.getStartTime().toString(), item.getEndTime().toString()));
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,11 +64,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("Saved", true);
                 bundle.putString("Date", item.getDate());
-                Log.d("date", item.getDate());
                 bundle.putString("Location", item.getLocation());
                 if (item.getType() == 1) {
                     Navigation.findNavController(v).navigate(
                             R.id.action_itineraryFragment_to_accommodationDetailFragment, bundle);
+                } else if (item.getType() == 2) {
+                    Navigation.findNavController(v).navigate(
+                            R.id.action_itineraryFragment_to_attractionDetailFragment, bundle);
+                } else if (item.getType() == 3) {
+                    Navigation.findNavController(v).navigate(
+                            R.id.action_itineraryFragment_to_foodDetailFragment, bundle);
                 }
             }
         });

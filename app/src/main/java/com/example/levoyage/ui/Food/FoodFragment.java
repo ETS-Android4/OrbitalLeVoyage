@@ -1,12 +1,15 @@
-package com.example.levoyage.ui.Accommodation;
+package com.example.levoyage.ui.Food;
 
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,17 +32,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccommodationFragment extends SearchFragment {
+public class FoodFragment extends SearchFragment {
 
+    private ArrayList<FoodItineraryItem> list = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private FoodAdapter adapter;
     private EditText locationView;
     private ImageButton searchBtn;
-    private RecyclerView recyclerView;
-    private ArrayList<AccommodationItineraryItem> list = new ArrayList<>();
-    private AccommodationAdapter adapter;
     private RequestQueue queue;
 
     @Override
-    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.searchRecycler);
@@ -59,32 +62,37 @@ public class AccommodationFragment extends SearchFragment {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AccommodationAdapter(getContext(), list);
+        adapter = new FoodAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void extractInfo(String locationID) {
-        String propertiesURL = "https://travel-advisor.p.rapidapi.com/hotels/list?sort=recommended&adults=1&rooms=1&nights=1";
-        propertiesURL = propertiesURL + "&location_id=" + locationID;
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        JsonObjectRequest searchHotels = new JsonObjectRequest(Request.Method.GET,
-                propertiesURL, null, new Response.Listener<JSONObject>() {
+        String foodURL = "https://travel-advisor.p.rapidapi.com/restaurants/list?currency=USD&location_id=" + locationID;
+        JsonObjectRequest searchFood = new JsonObjectRequest(Request.Method.GET,
+                foodURL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray arr = response.getJSONArray("data");
+                    if (arr.length() == 0) {
+                        Toast.makeText(getContext(), "No restaurants found.", Toast.LENGTH_SHORT).show();
+                    }
                     for (int i = 0; i < arr.length(); i++) {
-                        if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
+                        if (i != 4 && i != 11 && i != 18) { // API call returns different data at these positions
                             JSONObject item = arr.getJSONObject(i);
-                            AccommodationItineraryItem hotel = new AccommodationItineraryItem();
-                            hotel.setLocation(getFromJson("name", item));
-                            hotel.setRating(getFromJson("rating", item));
-                            hotel.setPrice(getFromJson("price", item));
-                            hotel.setId(getFromJson("location_id", item));
+                            FoodItineraryItem restaurant = new FoodItineraryItem();
+                            restaurant.setLocation(getFromJson("name", item));
+                            restaurant.setRating(getFromJson("rating", item));
+                            restaurant.setAddress(getFromJson("address", item));
+                            restaurant.setLink(getURLFromJson("website", item));
+                            restaurant.setPrice(getFromJson("price_level", item));
+                            restaurant.setDescription(getFromJson("description", item));
                             JSONObject image = item.getJSONObject("photo").getJSONObject("images").getJSONObject("medium");
-                            hotel.setImageURL(image.getString("url"));
-                            list.add(hotel);
+                            restaurant.setImageURL(image.getString("url"));
+                            restaurant.setCategory(getFromJsonArray("cuisine", "name", item));
+
+                            list.add(restaurant);
                         }
                     }
                 } catch (JSONException e) {
@@ -92,7 +100,7 @@ public class AccommodationFragment extends SearchFragment {
                     e.printStackTrace();
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new AccommodationAdapter(getContext(), list);
+                adapter = new FoodAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
             }
         }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
@@ -105,10 +113,9 @@ public class AccommodationFragment extends SearchFragment {
                 return h;
             }
         };
-        Toast.makeText(getContext(), "Loading...", Toast.LENGTH_LONG).show();
-        searchHotels.setRetryPolicy(new DefaultRetryPolicy(5000,
+        searchFood.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        queue.add(searchHotels);
+        Toast.makeText(getContext(), "Loading...", Toast.LENGTH_LONG).show();
+        queue.add(searchFood);
     }
-
 }

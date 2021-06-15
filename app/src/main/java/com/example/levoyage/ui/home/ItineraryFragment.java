@@ -26,15 +26,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ItineraryFragment extends Fragment {
 
     private String date, userID;
     private RecyclerView recyclerView;
     private DatabaseReference database;
-    private MyAdapter adapter;
+    private ItineraryAdapter adapter;
     private ArrayList<ItineraryItem> list;
     private TextView itineraryDate, start, end;
     private EditText location;
@@ -62,7 +63,7 @@ public class ItineraryFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.itineraryRecyclerView);
@@ -73,16 +74,16 @@ public class ItineraryFragment extends Fragment {
         itineraryDate = view.findViewById(R.id.itineraryDate);
 
         // Set header
-        itineraryDate.setText("Date: " + date);
+        itineraryDate.setText(String.format("Date: %s", date));
 
         // Fill up recycler view with data from database
         database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
                 list = new ArrayList<>();
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new MyAdapter(getContext(), list);
+                adapter = new ItineraryAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
@@ -93,7 +94,7 @@ public class ItineraryFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
             }
         });
@@ -149,12 +150,7 @@ public class ItineraryFragment extends Fragment {
                     }
                 });
 
-                closeBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                closeBtn.setOnClickListener(x -> dialog.dismiss());
             }
         });
     }

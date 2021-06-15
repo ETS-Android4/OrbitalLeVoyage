@@ -27,7 +27,7 @@
             android:id="@+id/detailImage"
             android:layout_width="match_parent"
             android:layout_height="248dp"
-            android:contentDescription="Hotel Image"
+            android:contentDescription="@string/menu_accommodation"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
@@ -51,21 +51,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="12dp"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/text_blue"
                 android:textSize="14sp" />
         </ScrollView>
-
-        <TextView
-            android:id="@+id/detailPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="12dp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/text_blue"
-            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/detailAddress"
@@ -78,12 +67,34 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/detailPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/text_blue"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/detailBooking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/booking"
+            android:textColor="@color/text_blue"
+            android:textSize="14sp" />
+
+        <TextView
             android:id="@+id/detailLink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-medium"
+            android:text="@string/website"
             android:textColor="@color/text_blue"
             android:textSize="14sp" />
 
@@ -94,7 +105,7 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Reviews"
+            android:text="@string/reviews"
             android:textColor="@color/text_blue"
             android:textSize="16sp"
             android:textStyle="bold" />

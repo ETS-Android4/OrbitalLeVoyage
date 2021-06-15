@@ -10,22 +10,22 @@
         android:id="@+id/nav_checklist"
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
         android:label="@string/menu_checklist"
-        tools:layout="@layout/fragment_attractions" />
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/nav_notes"
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
         android:label="@string/menu_notes"
-        tools:layout="@layout/fragment_attractions" />
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/nav_weather"
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
         android:label="@string/menu_weather"
-        tools:layout="@layout/fragment_attractions" />
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/nav_map"
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
         android:label="@string/menu_map"
-        tools:layout="@layout/fragment_attractions" />
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.levoyage.ui.home.HomeFragment"
@@ -47,20 +47,28 @@
         android:label="@string/menu_accommodation"
         tools:layout="@layout/fragment_accommodation" >
         <action
-            android:id="@+id/action_nav_accommodation_to_accommodationResultFragment"
-            app:destination="@id/accommodationResultFragment" />
+            android:id="@+id/action_nav_accommodation_to_accommodationDetailFragment"
+            app:destination="@id/accommodationDetailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_attractions"
         android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
         android:label="@string/menu_attractions"
-        tools:layout="@layout/fragment_attractions" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_nav_attractions_to_attractionDetailFragment"
+            app:destination="@id/attractionDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_food"
-        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
-        android:label="@string/menu_attractions"
-        tools:layout="@layout/fragment_attractions" />
+        android:name="com.example.levoyage.ui.Food.FoodFragment"
+        android:label="@string/menu_food"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_nav_food_to_foodDetailFragment"
+            app:destination="@id/foodDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/itineraryFragment"
         android:name="com.example.levoyage.ui.home.ItineraryFragment"
@@ -72,19 +80,26 @@
         <action
             android:id="@+id/action_itineraryFragment_to_accommodationDetailFragment"
             app:destination="@id/accommodationDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/accommodationResultFragment"
-        android:name="com.example.levoyage.ui.Accommodation.AccommodationResultFragment"
-        android:label="Search Results"
-        tools:layout="@layout/fragment_accommodation_result" >
         <action
-            android:id="@+id/action_accommodationResultFragment_to_accommodationDetailFragment"
-            app:destination="@id/accommodationDetailFragment" />
+            android:id="@+id/action_itineraryFragment_to_attractionDetailFragment"
+            app:destination="@id/attractionDetailFragment" />
+        <action
+            android:id="@+id/action_itineraryFragment_to_foodDetailFragment"
+            app:destination="@id/foodDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/accommodationDetailFragment"
         android:name="com.example.levoyage.ui.Accommodation.AccommodationDetailFragment"
         android:label="Accommodation Details"
-        tools:layout="@layout/fragment_accommodation_detail" />
+        tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/attractionDetailFragment"
+        android:name="com.example.levoyage.ui.Attractions.AttractionDetailFragment"
+        android:label="Attraction Details"
+        tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/foodDetailFragment"
+        android:name="com.example.levoyage.ui.Food.FoodDetailFragment"
+        android:label="Restaurant Details"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

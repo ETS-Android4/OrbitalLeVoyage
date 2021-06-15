@@ -1,4 +1,4 @@
-package com.example.levoyage.ui.Accommodation;
+package com.example.levoyage.ui.Food;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,37 +13,35 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
+import com.example.levoyage.ui.Attractions.AttractionItineraryItem;
+import com.example.levoyage.ui.Attractions.AttractionsAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-/**
- * AccommodationAdapter class is an adapter for
- * recycler views used in the itinerary fragment.
- */
-public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdapter.AccommodationViewHolder> {
+public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
 
     Context context;
 
-    ArrayList<AccommodationItineraryItem> list;
+    ArrayList<FoodItineraryItem> list;
 
-    public AccommodationAdapter(Context context, ArrayList<AccommodationItineraryItem> list) {
+    public FoodAdapter(Context context, ArrayList<FoodItineraryItem> list) {
         this.context = context;
         this.list = list;
     }
 
-    public static class AccommodationViewHolder extends RecyclerView.ViewHolder{
+    public static class FoodViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, address, rating, price;
+        TextView name, category, rating, price;
         ImageView image;
         ConstraintLayout layout;
 
-        public AccommodationViewHolder(View itemView) {
+        public FoodViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.location);
-            address = itemView.findViewById(R.id.itemAddress);
+            category = itemView.findViewById(R.id.itemAddress);
             rating = itemView.findViewById(R.id.itemRating);
             price = itemView.findViewById(R.id.itemPrice);
             image = itemView.findViewById(R.id.itemImage);
@@ -53,17 +51,17 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
 
     @NotNull
     @Override
-    public AccommodationViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+    public FoodAdapter.FoodViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.search_result, parent,false);
-        return new AccommodationViewHolder(v);
+        return new FoodAdapter.FoodViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(AccommodationViewHolder holder, int position) {
-        AccommodationItineraryItem item = list.get(position);
+    public void onBindViewHolder(FoodAdapter.FoodViewHolder holder, int position) {
+        FoodItineraryItem item = list.get(position);
         holder.name.setText(item.getLocation());
-        holder.address.setVisibility(View.GONE);
         holder.rating.setText(item.getRating());
+        holder.category.setText(item.getCategory());
         holder.price.setText(item.getPrice());
         Picasso.get().load(item.getImageURL()).into(holder.image);
 
@@ -71,10 +69,10 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("Accommodation", item);
+                bundle.putParcelable("Food", item);
                 bundle.putBoolean("Saved", false);
                 Navigation.findNavController(v).navigate(
-                        R.id.action_nav_accommodation_to_accommodationDetailFragment, bundle);
+                        R.id.action_nav_food_to_foodDetailFragment, bundle);
             }
         });
 
