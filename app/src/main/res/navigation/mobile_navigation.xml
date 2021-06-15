@@ -45,7 +45,7 @@
         android:id="@+id/nav_accommodation"
         android:name="com.example.levoyage.ui.Accommodation.AccommodationFragment"
         android:label="@string/menu_accommodation"
-        tools:layout="@layout/fragment_accommodation" >
+        tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_nav_accommodation_to_accommodationDetailFragment"
             app:destination="@id/accommodationDetailFragment" />

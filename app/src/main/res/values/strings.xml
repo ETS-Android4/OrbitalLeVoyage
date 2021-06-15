@@ -19,7 +19,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings related to navigation menu -->
+    <!-- Strings related to features -->
     <string name="menu_home">My Trips</string>
     <string name="menu_accommodation">Accommodation</string>
     <string name="menu_food">Food</string>
@@ -56,5 +56,4 @@
     <string name="website"><u>Official website</u></string>
     <string name="booking"><u>Book now</u></string>
     <string name="reviews">Reviews</string>
-
 </resources>
