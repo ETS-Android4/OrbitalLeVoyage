@@ -49,6 +49,11 @@
     <string name="location">Location</string>
     <string name="end_time">End Time</string>
     <string name="time">Time</string>
+    <string name="edit_itinerary">EDIT ITINERARY</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="add_to_itinerary">ADD TO ITINERARY</string>
+    <string name="event">Event</string>
     <!-- Strings related to details -->
     <string name="price_range">Price Range</string>
     <string name="address">Address</string>
@@ -56,4 +61,5 @@
     <string name="website"><u>Official website</u></string>
     <string name="booking"><u>Book now</u></string>
     <string name="reviews">Reviews</string>
+
 </resources>
