@@ -6,12 +6,12 @@
     android:background="@color/light_blue">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/add_to_itinerary"
+        android:text="@string/edit_itinerary"
         android:textColor="@color/text_blue"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,47 +20,74 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/popupEvent"
+        android:id="@+id/editPopupEvent"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/edit_text_bg"
         android:ems="10"
-        android:hint="@string/event"
         android:inputType="textPersonName"
         android:paddingHorizontal="16dp"
         android:textColor="@color/text_blue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <EditText
+        android:id="@+id/editPopupDate"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_bg"
+        android:ems="10"
+        android:hint="@string/date"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="16dp"
+        android:textColor="@color/text_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPopupEvent" />
 
     <Button
-        android:id="@+id/popupButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/editPopupUpdate"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/add"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/update"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popupEnd"
-        app:layout_constraintVertical_bias="0.067" />
+        app:layout_constraintEnd_toEndOf="@+id/editPopupEnd"
+        app:layout_constraintTop_toBottomOf="@+id/editPopupEnd"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/editPopupDelete"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editPopupUpdate"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editPopupEnd"
+        app:layout_constraintTop_toBottomOf="@+id/editPopupEnd"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
-        android:id="@+id/popupClose"
+        android:id="@+id/editPopupClose"
         android:layout_width="52dp"
         android:layout_height="46dp"
         android:backgroundTint="@color/light_blue"
-        app:tint="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+        app:tint="@color/blue" />
 
     <TextView
-        android:id="@+id/popupStart"
+        android:id="@+id/editPopupStart"
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
@@ -72,12 +99,12 @@
         android:textColor="@color/text_blue"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popupEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/editPopupDate" />
 
     <TextView
-        android:id="@+id/popupEnd"
+        android:id="@+id/editPopupEnd"
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
@@ -89,8 +116,7 @@
         android:textColor="@color/text_blue"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popupStart" />
-
+        app:layout_constraintTop_toBottomOf="@+id/editPopupStart" />
 </androidx.constraintlayout.widget.ConstraintLayout>

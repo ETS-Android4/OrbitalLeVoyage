@@ -83,7 +83,7 @@ public class ItineraryFragment extends Fragment {
                 list = new ArrayList<>();
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new ItineraryAdapter(getContext(), list);
+                adapter = new ItineraryAdapter(getContext(), list, userID);
                 recyclerView.setAdapter(adapter);
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
