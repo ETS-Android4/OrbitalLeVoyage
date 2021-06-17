@@ -2,11 +2,13 @@ package com.example.levoyage.ui.Accommodation;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -32,6 +34,8 @@ public class AccommodationDetailFragment extends DetailFragment<AccommodationIti
     private TextView nameView, descriptionView, linkView, priceView, addressView, extraView;
     private ImageView image;
     private FloatingActionButton detailFab;
+    private Button addReviewBtn;
+    private RecyclerView reviewsRecycler;
     private AccommodationItineraryItem accommodation;
     private boolean saved;
 
@@ -57,6 +61,8 @@ public class AccommodationDetailFragment extends DetailFragment<AccommodationIti
         extraView = view.findViewById(R.id.detailBooking);
         image = view.findViewById(R.id.detailImage);
         detailFab = view.findViewById(R.id.detailfab);
+        addReviewBtn = view.findViewById(R.id.addReviewOpenBtn);
+        reviewsRecycler = view.findViewById(R.id.detailReviews);
 
         extraView.setVisibility(View.GONE);
 
@@ -112,9 +118,11 @@ public class AccommodationDetailFragment extends DetailFragment<AccommodationIti
         priceView.setText(String.format("Price Range (USD): %s", item.getPrice()));
         Picasso.get().load(item.getImageURL()).into(image);
         String link = item.getLink();
+        retrieveReviews(item.getId(), reviewsRecycler);
 
         linkView.setOnClickListener(v -> goToLink(link));
         detailFab.setOnClickListener(v -> addToItinerary(item));
+        addReviewBtn.setOnClickListener(v -> addReview(item.getLocation(), item.getId()));
     }
 
     private String getFromJson(String tag, JSONObject json) throws JSONException {

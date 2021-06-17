@@ -4,8 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +24,8 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
     private TextView nameView, descriptionView, linkView, addressView, categoryView, priceView;
     private ImageView image;
     private FloatingActionButton detailFab;
+    private Button addReviewBtn;
+    private RecyclerView reviewsRecycler;
     private boolean saved;
 
     public FoodDetailFragment() { }
@@ -46,6 +50,8 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
         linkView = view.findViewById(R.id.detailLink);
         image = view.findViewById(R.id.detailImage);
         detailFab = view.findViewById(R.id.detailfab);
+        addReviewBtn = view.findViewById(R.id.addReviewOpenBtn);
+        reviewsRecycler = view.findViewById(R.id.detailReviews);
 
         if (saved) {
             detailFab.hide();
@@ -66,8 +72,10 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
         categoryView.setText(String.format("Cuisine: %s", item.getCategory()));
         priceView.setText(String.format("Price level: %s", item.getPrice()));
         Picasso.get().load(item.getImageURL()).into(image);
+        retrieveReviews(item.getId(), reviewsRecycler);
 
         linkView.setOnClickListener(v -> goToLink(link));
         detailFab.setOnClickListener(v -> addToItinerary(item));
+        addReviewBtn.setOnClickListener(v -> addReview(item.getLocation(), item.getId()));
     }
 }

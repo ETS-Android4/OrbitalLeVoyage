@@ -3,8 +3,11 @@ package com.example.levoyage.ui.Attractions;
 import android.os.Bundle;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.DetailFragment;
 import com.example.levoyage.R;
@@ -19,7 +22,9 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
     private AttractionItineraryItem attraction;
     private TextView nameView, descriptionView, linkView, bookingView, addressView, categoryView;
     private ImageView image;
+    private Button addReviewBtn;
     private FloatingActionButton detailFab;
+    private RecyclerView reviewsRecycler;
     private boolean saved;
 
     public AttractionDetailFragment() { }
@@ -44,6 +49,8 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
         linkView = view.findViewById(R.id.detailLink);
         image = view.findViewById(R.id.detailImage);
         detailFab = view.findViewById(R.id.detailfab);
+        addReviewBtn = view.findViewById(R.id.addReviewOpenBtn);
+        reviewsRecycler = view.findViewById(R.id.detailReviews);
 
         if (saved) {
             detailFab.hide();
@@ -65,10 +72,12 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
         descriptionView.setText(item.getDescription());
         categoryView.setText(String.format("Category: %s", item.getCategory()));
         Picasso.get().load(item.getImageURL()).into(image);
+        retrieveReviews(item.getId(), reviewsRecycler);
 
         bookingView.setOnClickListener(v -> goToLink(bookingURL));
         linkView.setOnClickListener(v -> goToLink(link));
         detailFab.setOnClickListener(v -> addToItinerary(item));
+        addReviewBtn.setOnClickListener(v -> addReview(location, item.getId()));
     }
 }
 

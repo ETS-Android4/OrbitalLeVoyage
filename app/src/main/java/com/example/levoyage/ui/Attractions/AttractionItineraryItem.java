@@ -7,7 +7,7 @@ import com.example.levoyage.ui.home.ItineraryItem;
 
 public class AttractionItineraryItem extends ItineraryItem implements Parcelable {
 
-    private String description, link, bookingURL, imageURL, address, category, rating;
+    private String description, link, bookingURL, imageURL, address, category, rating, id;
 
     public AttractionItineraryItem() {
         super(2);
@@ -21,6 +21,7 @@ public class AttractionItineraryItem extends ItineraryItem implements Parcelable
         address = in.readString();
         category = in.readString();
         rating = in.readString();
+        id = in.readString();
     }
 
     public static final Creator<AttractionItineraryItem> CREATOR = new Creator<AttractionItineraryItem>() {
@@ -63,6 +64,10 @@ public class AttractionItineraryItem extends ItineraryItem implements Parcelable
 
     public void setRating(String rating) { this.rating = rating; }
 
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -77,5 +82,6 @@ public class AttractionItineraryItem extends ItineraryItem implements Parcelable
         dest.writeString(address);
         dest.writeString(category);
         dest.writeString(rating);
+        dest.writeString(id);
     }
 }

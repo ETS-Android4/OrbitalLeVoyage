@@ -87,6 +87,7 @@ public class AttractionsFragment extends SearchFragment {
                         if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
                             JSONObject item = arr.getJSONObject(i);
                             AttractionItineraryItem attraction = new AttractionItineraryItem();
+                            attraction.setId(getFromJson("location_id", item));
                             attraction.setLocation(getFromJson("name", item));
                             attraction.setRating(getFromJson("rating", item));
                             attraction.setAddress(getFromJson("address", item));

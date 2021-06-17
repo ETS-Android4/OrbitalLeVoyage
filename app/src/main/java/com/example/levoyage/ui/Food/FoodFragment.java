@@ -82,6 +82,7 @@ public class FoodFragment extends SearchFragment {
                         if (i != 4 && i != 11 && i != 18) { // API call returns different data at these positions
                             JSONObject item = arr.getJSONObject(i);
                             FoodItineraryItem restaurant = new FoodItineraryItem();
+                            restaurant.setId(getFromJson("location_id", item));
                             restaurant.setLocation(getFromJson("name", item));
                             restaurant.setRating(getFromJson("rating", item));
                             restaurant.setAddress(getFromJson("address", item));

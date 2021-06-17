@@ -6,21 +6,28 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.levoyage.ui.home.ItineraryAdapter;
 import com.example.levoyage.ui.home.ItineraryItem;
 import com.example.levoyage.ui.home.TimeParcel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,14 +38,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
-    private TextView date, start, end, location;
-    private Button btn;
-    private ImageButton closeBtn;
+    private TextView date, start, end, location, reviewLocation;
+    private Button itineraryBtn, reviewBtn;
+    private ImageButton itineraryCloseBtn, reviewCloseBtn;
+    private EditText reviewText;
+    private RatingBar ratingBar;
+    private ArrayList<ReviewItem> list;
+    private ReviewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,8 +98,8 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         date = popupView.findViewById(R.id.detailPopupDate);
         start = popupView.findViewById(R.id.detailPopupStart);
         end = popupView.findViewById(R.id.detailPopupEnd);
-        btn = popupView.findViewById(R.id.detailPopupAdd);
-        closeBtn = popupView.findViewById(R.id.detailPopupClose);
+        itineraryBtn = popupView.findViewById(R.id.detailPopupAdd);
+        itineraryCloseBtn = popupView.findViewById(R.id.detailPopupClose);
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference database = FirebaseDatabase
                 .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
@@ -136,7 +148,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
         dialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
+        itineraryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 database.child(item.getDate()).child(item.getLocation()).setValue(item);
@@ -144,6 +156,67 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
             }
         });
 
-        closeBtn.setOnClickListener(v -> dialog.dismiss());
+        itineraryCloseBtn.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    public void addReview(String location, String locationID) {
+        dialogBuilder = new AlertDialog.Builder(getContext());
+        View popupView = getLayoutInflater().inflate(R.layout.review_popup, null);
+        reviewLocation = popupView.findViewById(R.id.addReviewLocation);
+        reviewText = popupView.findViewById(R.id.addReviewText);
+        ratingBar = popupView.findViewById(R.id.addRatingBar);
+        reviewBtn = popupView.findViewById(R.id.addReviewBtn);
+        reviewCloseBtn = popupView.findViewById(R.id.addReviewClose);
+
+        reviewLocation.setText(location);
+        dialogBuilder.setView(popupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        reviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String reviewString = reviewText.getText().toString();
+                float rating = ratingBar.getRating();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userID = user.getUid();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+                String date = LocalDate.now().format(formatter);
+                ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
+                DatabaseReference database = FirebaseDatabase
+                        .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                        .getReference("Reviews").child(locationID).child(userID);
+                database.setValue(review);
+                dialog.dismiss();
+            }
+        });
+        reviewCloseBtn.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    public void retrieveReviews(String locationID, RecyclerView recyclerView) {
+        DatabaseReference database = FirebaseDatabase
+                .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("Reviews").child(locationID);
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
+                list = new ArrayList<>();
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new ReviewAdapter(getContext(), list);
+                recyclerView.setAdapter(adapter);
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ReviewItem reviewItem = dataSnapshot.getValue(ReviewItem.class);
+                    list.add(reviewItem);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NotNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

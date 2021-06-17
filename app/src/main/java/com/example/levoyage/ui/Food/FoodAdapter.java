@@ -13,8 +13,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
-import com.example.levoyage.ui.Attractions.AttractionItineraryItem;
-import com.example.levoyage.ui.Attractions.AttractionsAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
