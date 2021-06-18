@@ -44,6 +44,7 @@
     <string name="thursday">THU</string>
     <string name="friday">FRI</string>
     <string name="saturday">SAT</string>
+    <string name="create_new_trip">Create New Trip</string>
     <!-- Strings related to itinerary -->
     <string name="add_itinerary_header">Add to itinerary</string>
     <string name="add">Add</string>

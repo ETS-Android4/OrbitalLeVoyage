@@ -131,4 +131,19 @@
         android:layout_height="300dp"
         android:background="@color/light_blue" />
 
+    <ListView
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/tripListView"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/addTripButton"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/blue"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|end"/>
+
 </LinearLayout>

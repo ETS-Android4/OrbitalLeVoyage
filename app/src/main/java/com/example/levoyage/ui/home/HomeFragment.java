@@ -1,9 +1,11 @@
 package com.example.levoyage.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
 import com.example.levoyage.databinding.FragmentHomeBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -25,17 +30,16 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements CalendarAdapter.OnItemListener {
 
-    private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private View root;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
+    private FloatingActionButton addTripFAB;
+    private ListView tripListView;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         initWidgets();
@@ -48,6 +52,8 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private void initWidgets() {
         calendarRecyclerView = root.findViewById(R.id.calendarRecyclerView);
         monthYearText = root.findViewById(R.id.monthYearTV);
+        addTripFAB = root.findViewById(R.id.addTripButton);
+        tripListView = root.findViewById(R.id.tripListView);
     }
 
     private void setMonthView() {
@@ -85,7 +91,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
        root.findViewById(R.id.previousMonth).setOnClickListener(new View.OnClickListener() {
@@ -103,6 +109,13 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
                setMonthView();
            }
        });
+
+        addTripFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(root).navigate(R.id.action_nav_home_to_calendarEventEditFragment);
+            }
+        });
     }
 
     @Override
@@ -115,6 +128,21 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
             bundle.putString("UserID", user.getUid());
             Navigation.findNavController(root).navigate(R.id.action_nav_home_to_itineraryFragment, bundle);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTripAdapter();
+    }
+
+    private void setTripAdapter() {
+        Log.d("Log", "method used");
+        Log.d("log", selectedDate.toString());
+        ArrayList<CalendarTripEvent> tripEvents = CalendarTripEvent.tripsBeforeDate(selectedDate);
+        Log.d("Log", tripEvents.size() + "");
+        CalendarEventAdapter eventAdapter = new CalendarEventAdapter(getContext().getApplicationContext(), tripEvents);
+        tripListView.setAdapter(eventAdapter);
     }
 
     @Override
