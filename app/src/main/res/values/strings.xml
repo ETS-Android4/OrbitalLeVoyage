@@ -67,5 +67,8 @@
     <string name="reviews">Reviews</string>
     <string name="add_review">ADD REVIEW</string>
     <string name="type_review_here">Type review here</string>
+    <!-- Strings related to notes -->
+    <string name="new_note">NEW NOTE</string>
+    <string name="title">Title</string>
 
 </resources>
