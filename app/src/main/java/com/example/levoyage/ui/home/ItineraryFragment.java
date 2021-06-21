@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,22 +60,21 @@ public class ItineraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_itinerary, container, false);
+        return inflater.inflate(R.layout.fragment_recycler, container, false);
     }
 
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.itineraryRecyclerView);
+        recyclerView = view.findViewById(R.id.recycler);
         database = FirebaseDatabase
                 .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
                 .getReference(userID).child("Itinerary").child(date);
-        fab = view.findViewById(R.id.itineraryfab);
-        itineraryDate = view.findViewById(R.id.itineraryDate);
+        fab = view.findViewById(R.id.fab);
 
         // Set header
-        itineraryDate.setText(String.format("Date: %s", date));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(date);
 
         // Fill up recycler view with data from database
         database.addValueEventListener(new ValueEventListener() {

@@ -143,6 +143,7 @@
         android:id="@+id/addTripButton"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/blue"
+        app:tint="@android:color/white"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"/>
 
