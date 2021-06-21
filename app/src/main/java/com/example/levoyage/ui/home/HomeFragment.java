@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,7 +71,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         int daysInMonth = yearMonth.lengthOfMonth();
 
         LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
-        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue() % 7;
 
         for(int i = 1; i <= 42; i++) {
             if(i <= dayOfWeek || i > daysInMonth + dayOfWeek) {
@@ -121,8 +119,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     @Override
     public void onItemClick(int position, String dayText) {
         if(!dayText.equals("")) {
-            String message = "Selected Date " + dayText + " " + monthYearFromDate(selectedDate);
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             Bundle bundle = new Bundle();
             bundle.putString("DATE", dayText + " " + monthYearFromDate(selectedDate));
             bundle.putString("UserID", user.getUid());

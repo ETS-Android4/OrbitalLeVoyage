@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(LoginActivity.this, DrawerActivity.class);
                                         startActivity(i);
+                                        finish();
                                     }
                                 }
                             });
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (mFirebaseUser != null) {
                     Intent i = new Intent(LoginActivity.this, DrawerActivity.class);
                     startActivity(i);
+                    finish();
                 }
             }
         };
