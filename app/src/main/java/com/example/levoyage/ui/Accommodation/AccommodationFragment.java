@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,9 +33,9 @@ import java.util.Map;
 
 public class AccommodationFragment extends SearchFragment {
 
-    private EditText locationView;
-    private ImageButton searchBtn;
+    private SearchView searchView;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
     private ArrayList<AccommodationItineraryItem> list = new ArrayList<>();
     private AccommodationAdapter adapter;
     private RequestQueue queue;
@@ -43,19 +45,24 @@ public class AccommodationFragment extends SearchFragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.searchRecycler);
-        locationView = view.findViewById(R.id.searchLocation);
-        searchBtn = view.findViewById(R.id.searchButton);
+        searchView = view.findViewById(R.id.searchView);
+        progressBar = view.findViewById(R.id.searchProgressBar);
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
 
-
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onQueryTextSubmit(String query) {
+                progressBar.setVisibility(ProgressBar.VISIBLE);
                 list = new ArrayList<>();
                 queue = Volley.newRequestQueue(getContext());
-                String location = locationView.getText().toString();
-//                getLocationID(location, queue);
-                extractInfo("298570");
+                getLocationID(query, queue);
+//                extractInfo("298570");
+                return false;
             }
+
+            @Override
+            public boolean onQueryTextChange(String newText) { return false; }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -73,18 +80,21 @@ public class AccommodationFragment extends SearchFragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray arr = response.getJSONArray("data");
-                    for (int i = 0; i < arr.length(); i++) {
-                        if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
-                            JSONObject item = arr.getJSONObject(i);
-                            AccommodationItineraryItem hotel = new AccommodationItineraryItem();
-                            hotel.setLocation(getFromJson("name", item));
-                            hotel.setRating(getFromJson("rating", item));
-                            hotel.setPrice(getFromJson("price", item));
-                            hotel.setId(getFromJson("location_id", item));
-                            JSONObject image = item.getJSONObject("photo").getJSONObject("images").getJSONObject("medium");
-                            hotel.setImageURL(image.getString("url"));
-                            list.add(hotel);
+                    if (response.isNull("data")) {
+                        Toast.makeText(getContext(), "No accommodation found.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        JSONArray arr = response.getJSONArray("data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
+                                JSONObject item = arr.getJSONObject(i);
+                                AccommodationItineraryItem hotel = new AccommodationItineraryItem();
+                                hotel.setLocation(getFromJson("name", item));
+                                hotel.setRating(getFromJson("rating", item));
+                                hotel.setPrice(getFromJson("price", item));
+                                hotel.setId(getFromJson("location_id", item));
+                                hotel.setImageURL(getImageURLFromJson(item));
+                                list.add(hotel);
+                            }
                         }
                     }
                 } catch (JSONException e) {
@@ -94,6 +104,7 @@ public class AccommodationFragment extends SearchFragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new AccommodationAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
+                progressBar.setVisibility(ProgressBar.GONE);
             }
         }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
         {
@@ -105,7 +116,6 @@ public class AccommodationFragment extends SearchFragment {
                 return h;
             }
         };
-        Toast.makeText(getContext(), "Loading...", Toast.LENGTH_LONG).show();
         searchHotels.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(searchHotels);

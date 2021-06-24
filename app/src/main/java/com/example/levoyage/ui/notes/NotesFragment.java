@@ -1,6 +1,7 @@
 package com.example.levoyage.ui.notes;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,12 +92,19 @@ public class NotesFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 NoteItem deleted = list.remove(position);
                 adapter.notifyItemRemoved(position);
-                database.child(deleted.getId()).removeValue(new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                        Toast.makeText(getContext(), "Note Deleted", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                database.child(deleted.getId()).removeValue();
+                Snackbar snackbar = Snackbar.make(notesRecycler, String.format("%s deleted", deleted.getTitle()), Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                list.add(position, deleted);
+                                database.child(deleted.getId()).setValue(deleted);
+                                adapter.notifyItemInserted(position);
+                            }
+                        });
+                snackbar.setActionTextColor(Color.RED);
+                snackbar.setTextColor(Color.parseColor("#3B99EA"));
+                snackbar.show();
             }
         };
 
@@ -134,6 +143,5 @@ public class NotesFragment extends Fragment {
             }
         });
     }
-
 
 }

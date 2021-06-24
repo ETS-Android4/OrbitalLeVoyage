@@ -38,7 +38,7 @@ public class ItineraryFragment extends Fragment {
     private DatabaseReference database;
     private ItineraryAdapter adapter;
     private ArrayList<ItineraryItem> list;
-    private TextView itineraryDate, start, end;
+    private TextView start, end;
     private EditText location;
     private FloatingActionButton fab;
     private Button btn;
@@ -74,7 +74,8 @@ public class ItineraryFragment extends Fragment {
         fab = view.findViewById(R.id.fab);
 
         // Set header
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(date);
+        ((AppCompatActivity) getActivity()).getSupportActionBar()
+                .setTitle(String.format("Itinerary for: %s", date));
 
         // Fill up recycler view with data from database
         database.addValueEventListener(new ValueEventListener() {
@@ -120,6 +121,7 @@ public class ItineraryFragment extends Fragment {
                             st.setHr(hourOfDay);
                             st.setMin(minute);
                             start.setText(st.toString());
+                            start.setError(null);
                         }
                     }, 0, 0, false);
                     timePicker.show();
@@ -132,6 +134,7 @@ public class ItineraryFragment extends Fragment {
                             et.setHr(hourOfDay);
                             et.setMin(minute);
                             end.setText(et.toString());
+                            end.setError(null);
                         }
                     }, 0, 0, false);
                     timePicker.show();
@@ -144,9 +147,20 @@ public class ItineraryFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String loc = location.getText().toString();
-                        ItineraryItem item = new ItineraryItem(loc, date, st, et);
-                        database.child(loc).setValue(item);
-                        dialog.dismiss();
+                        if (loc.isEmpty()) {
+                            location.setError("Please key in an event");
+                            location.requestFocus();
+                        } else if (start.getText().toString().isEmpty()) {
+                            start.setError("Please select a start time");
+                            start.requestFocus();
+                        } else if (end.getText().toString().isEmpty()) {
+                            end.setError("Please select an end time");
+                            end.requestFocus();
+                        } else {
+                            ItineraryItem item = new ItineraryItem(loc, date, st, et);
+                            database.child(loc).setValue(item);
+                            dialog.dismiss();
+                        }
                     }
                 });
 

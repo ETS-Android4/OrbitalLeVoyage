@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -61,25 +62,23 @@ public class MapsFragment extends Fragment {
         searchView = view.findViewById(R.id.mapSearchView);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
+        searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 map.clear();
-                String location = searchView.getQuery().toString();
                 List<Address> addressList = null;
-
-                if (!location.equals("")) {
-                    Geocoder geocoder = new Geocoder(getContext());
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    map.addMarker(new MarkerOptions().position(latLng).title(location));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                Geocoder geocoder = new Geocoder(getContext());
+                try {
+                    addressList = geocoder.getFromLocationName(query, 1);
+                } catch (IOException e) {
+                    Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                map.addMarker(new MarkerOptions().position(latLng).title(query));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 return false;
             }
 

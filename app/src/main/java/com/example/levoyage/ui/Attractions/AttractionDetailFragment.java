@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +26,7 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
     private Button addReviewBtn;
     private FloatingActionButton detailFab;
     private RecyclerView reviewsRecycler;
+    private ProgressBar progressBar;
     private boolean saved;
 
     public AttractionDetailFragment() { }
@@ -51,6 +53,7 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
         detailFab = view.findViewById(R.id.detailfab);
         addReviewBtn = view.findViewById(R.id.addReviewOpenBtn);
         reviewsRecycler = view.findViewById(R.id.detailReviews);
+        progressBar = view.findViewById(R.id.detailProgressBar);
 
         if (saved) {
             detailFab.hide();
@@ -73,6 +76,7 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
         categoryView.setText(String.format("Category: %s", item.getCategory()));
         Picasso.get().load(item.getImageURL()).into(image);
         retrieveReviews(item.getId(), reviewsRecycler);
+        progressBar.setVisibility(View.GONE);
 
         bookingView.setOnClickListener(v -> goToLink(bookingURL));
         linkView.setOnClickListener(v -> goToLink(link));

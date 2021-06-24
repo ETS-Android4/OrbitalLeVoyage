@@ -21,9 +21,11 @@
 
     <EditText
         android:id="@+id/popupEvent"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
         android:ems="10"
         android:hint="@string/event"
@@ -39,15 +41,15 @@
         android:id="@+id/popupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popupEnd"
-        app:layout_constraintVertical_bias="0.067" />
+        app:layout_constraintVertical_bias="0.035" />
 
     <ImageButton
         android:id="@+id/popupClose"
@@ -61,13 +63,17 @@
 
     <TextView
         android:id="@+id/popupStart"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:hint="@string/start_time"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="7.5dp"
+        android:paddingVertical="10.5dp"
         android:textAlignment="textStart"
         android:textColor="@color/text_blue"
         android:textSize="18sp"
@@ -78,18 +84,21 @@
 
     <TextView
         android:id="@+id/popupEnd"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:hint="@string/end_time"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="7.5dp"
+        android:paddingVertical="10.5dp"
         android:textAlignment="textStart"
         android:textColor="@color/text_blue"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popupStart" />
 

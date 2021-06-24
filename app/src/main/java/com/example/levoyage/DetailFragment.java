@@ -44,7 +44,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
-    private TextView date, start, end, location, reviewLocation;
+    private TextView date, start, end, location, reviewLocation, ratingBarBG;
     private Button itineraryBtn, reviewBtn;
     private ImageButton itineraryCloseBtn, reviewCloseBtn;
     private EditText reviewText;
@@ -113,6 +113,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                     TimeParcel st = new TimeParcel(hourOfDay, minute);
                     item.setStartTime(st);
                     start.setText(st.toString());
+                    start.setError(null);
                 }
             }, 0, 0, false);
             timePicker.show();
@@ -125,6 +126,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                     TimeParcel et = new TimeParcel(hourOfDay, minute);
                     item.setEndTime(et);
                     end.setText(et.toString());
+                    end.setError(null);
                 }
             }, 0, 0, false);
             timePicker.show();
@@ -140,6 +142,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                     String dateString = localDate.format(formatter);
                     date.setText(dateString);
                     item.setDate(dateString);
+                    date.setError(null);
                 }
             });
             datePicker.show();
@@ -151,8 +154,19 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         itineraryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                database.child(item.getDate()).child(item.getLocation()).setValue(item);
-                dialog.dismiss();
+                if (date.getText().toString().isEmpty()) {
+                    date.setError("Please select a date");
+                    date.requestFocus();
+                } else if (start.getText().toString().isEmpty()) {
+                    start.setError("Please select a start time");
+                    start.requestFocus();
+                } else if (end.getText().toString().isEmpty()) {
+                    end.setError("Please select an end time");
+                    end.requestFocus();
+                } else {
+                    database.child(item.getDate()).child(item.getLocation()).setValue(item);
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -167,27 +181,45 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         ratingBar = popupView.findViewById(R.id.addRatingBar);
         reviewBtn = popupView.findViewById(R.id.addReviewBtn);
         reviewCloseBtn = popupView.findViewById(R.id.addReviewClose);
+        ratingBarBG = popupView.findViewById(R.id.ratingBarBG);
 
         reviewLocation.setText(location);
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
         dialog.show();
 
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (rating > 0.0) {
+                    ratingBarBG.setError(null);
+                } else {
+                    ratingBarBG.setError("Please select a rating");
+                    ratingBarBG.requestFocus();
+                }
+            }
+        });
+
         reviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String reviewString = reviewText.getText().toString();
                 float rating = ratingBar.getRating();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String userID = user.getUid();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-                String date = LocalDate.now().format(formatter);
-                ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
-                DatabaseReference database = FirebaseDatabase
-                        .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                        .getReference("Reviews").child(locationID).child(userID);
-                database.setValue(review);
-                dialog.dismiss();
+                if (rating == 0.0) {
+                    ratingBarBG.setError("Please select a rating");
+                    ratingBarBG.requestFocus();
+                } else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    String userID = user.getUid();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+                    String date = LocalDate.now().format(formatter);
+                    ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
+                    DatabaseReference database = FirebaseDatabase
+                            .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                            .getReference("Reviews").child(locationID).child(userID);
+                    database.setValue(review);
+                    dialog.dismiss();
+                }
             }
         });
         reviewCloseBtn.setOnClickListener(v -> dialog.dismiss());

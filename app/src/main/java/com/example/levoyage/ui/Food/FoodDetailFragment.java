@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.levoyage.DetailFragment;
@@ -26,6 +27,7 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
     private FloatingActionButton detailFab;
     private Button addReviewBtn;
     private RecyclerView reviewsRecycler;
+    private ProgressBar progressBar;
     private boolean saved;
 
     public FoodDetailFragment() { }
@@ -52,6 +54,7 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
         detailFab = view.findViewById(R.id.detailfab);
         addReviewBtn = view.findViewById(R.id.addReviewOpenBtn);
         reviewsRecycler = view.findViewById(R.id.detailReviews);
+        progressBar = view.findViewById(R.id.detailProgressBar);
 
         if (saved) {
             detailFab.hide();
@@ -73,6 +76,7 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
         priceView.setText(String.format("Price level: %s", item.getPrice()));
         Picasso.get().load(item.getImageURL()).into(image);
         retrieveReviews(item.getId(), reviewsRecycler);
+        progressBar.setVisibility(View.GONE);
 
         linkView.setOnClickListener(v -> goToLink(link));
         detailFab.setOnClickListener(v -> addToItinerary(item));

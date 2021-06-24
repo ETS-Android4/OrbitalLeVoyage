@@ -61,7 +61,8 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         holder.rating.setText(item.getRating());
         holder.price.setText(item.getCategory());
         holder.address.setVisibility(View.GONE);
-        Picasso.get().load(item.getImageURL()).into(holder.image);
+        Picasso.get().load(item.getImageURL())
+                .placeholder(R.drawable.error_placeholder_small).fit().into(holder.image);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

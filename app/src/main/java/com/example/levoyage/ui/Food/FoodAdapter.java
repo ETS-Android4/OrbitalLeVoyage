@@ -61,7 +61,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.rating.setText(item.getRating());
         holder.category.setText(item.getCategory());
         holder.price.setText(item.getPrice());
-        Picasso.get().load(item.getImageURL()).into(holder.image);
+        Picasso.get().load(item.getImageURL())
+                .placeholder(R.drawable.error_placeholder_small).fit().into(holder.image);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

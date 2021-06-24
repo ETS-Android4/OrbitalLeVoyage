@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * AccommodationAdapter class is an adapter for
- * recycler views used in the itinerary fragment.
+ * recycler views used in the accommodation fragment.
  */
 public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdapter.AccommodationViewHolder> {
 
@@ -65,7 +65,8 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
         holder.address.setVisibility(View.GONE);
         holder.rating.setText(item.getRating());
         holder.price.setText(item.getPrice());
-        Picasso.get().load(item.getImageURL()).into(holder.image);
+        Picasso.get().load(item.getImageURL())
+                .placeholder(R.drawable.error_placeholder_small).fit().into(holder.image);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

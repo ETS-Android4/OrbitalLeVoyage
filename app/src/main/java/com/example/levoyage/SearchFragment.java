@@ -1,7 +1,6 @@
 package com.example.levoyage;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
@@ -57,7 +55,6 @@ public abstract class SearchFragment extends Fragment {
                 return h;
             }
         };
-        Toast.makeText(getContext(), "Loading...", Toast.LENGTH_LONG).show();
         searchLocation.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(searchLocation);
@@ -105,6 +102,17 @@ public abstract class SearchFragment extends Fragment {
             return null;
         } else {
             return json.getString(tag);
+        }
+    }
+
+    public String getImageURLFromJson(JSONObject json) throws JSONException {
+        if (json.isNull("photo") || json.getJSONObject("photo").isNull("images")) {
+            return null;
+        } else if (json.getJSONObject("photo").getJSONObject("images").isNull("medium")) {
+            return null;
+        } else {
+            return getURLFromJson("url", json.getJSONObject("photo")
+                    .getJSONObject("images").getJSONObject("medium"));
         }
     }
 }

@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,8 +40,8 @@ public class AttractionsFragment extends SearchFragment {
     private ArrayList<AttractionItineraryItem> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private AttractionsAdapter adapter;
-    private EditText locationView;
-    private ImageButton searchBtn;
+    private SearchView searchView;
+    private ProgressBar progressBar;
     private RequestQueue queue;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,19 +54,24 @@ public class AttractionsFragment extends SearchFragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.searchRecycler);
-        locationView = view.findViewById(R.id.searchLocation);
-        searchBtn = view.findViewById(R.id.searchButton);
+        searchView = view.findViewById(R.id.searchView);
+        progressBar = view.findViewById(R.id.searchProgressBar);
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
 
-
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onQueryTextSubmit(String query) {
+                progressBar.setVisibility(ProgressBar.VISIBLE);
                 list = new ArrayList<>();
                 queue = Volley.newRequestQueue(getContext());
-                String location = locationView.getText().toString();
-//                getLocationID(location, queue);
-                extractInfo("298570");
+                getLocationID(query, queue);
+//                extractInfo("298570");
+                return false;
             }
+
+            @Override
+            public boolean onQueryTextChange(String newText) { return false; }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,26 +86,26 @@ public class AttractionsFragment extends SearchFragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray arr = response.getJSONArray("data");
-                    if (arr.length() == 0) {
+                    if (response.isNull("data")) {
                         Toast.makeText(getContext(), "No attractions found.", Toast.LENGTH_SHORT).show();
-                    }
-                    for (int i = 0; i < arr.length(); i++) {
-                        if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
-                            JSONObject item = arr.getJSONObject(i);
-                            AttractionItineraryItem attraction = new AttractionItineraryItem();
-                            attraction.setId(getFromJson("location_id", item));
-                            attraction.setLocation(getFromJson("name", item));
-                            attraction.setRating(getFromJson("rating", item));
-                            attraction.setAddress(getFromJson("address", item));
-                            attraction.setLink(getURLFromJson("website", item));
-                            attraction.setDescription(getFromJson("description", item));
-                            attraction.setBookingURL(getBookingURLFromJson(item));
-                            JSONObject image = item.getJSONObject("photo").getJSONObject("images").getJSONObject("medium");
-                            attraction.setImageURL(image.getString("url"));
-                            attraction.setCategory(getFromJsonArray("subcategory", "name", item));
+                    } else {
+                        JSONArray arr = response.getJSONArray("data");
+                        for (int i = 0; i < arr.length(); i++) {
+                            if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
+                                JSONObject item = arr.getJSONObject(i);
+                                AttractionItineraryItem attraction = new AttractionItineraryItem();
+                                attraction.setId(getFromJson("location_id", item));
+                                attraction.setLocation(getFromJson("name", item));
+                                attraction.setRating(getFromJson("rating", item));
+                                attraction.setAddress(getFromJson("address", item));
+                                attraction.setLink(getURLFromJson("website", item));
+                                attraction.setDescription(getFromJson("description", item));
+                                attraction.setBookingURL(getBookingURLFromJson(item));
+                                attraction.setImageURL(getImageURLFromJson(item));
+                                attraction.setCategory(getFromJsonArray("subcategory", "name", item));
 
-                            list.add(attraction);
+                                list.add(attraction);
+                            }
                         }
                     }
                 } catch (JSONException e) {
@@ -108,6 +115,7 @@ public class AttractionsFragment extends SearchFragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new AttractionsAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
+                progressBar.setVisibility(ProgressBar.GONE);
             }
         }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
         {
@@ -121,7 +129,6 @@ public class AttractionsFragment extends SearchFragment {
         };
         searchAttractions.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Toast.makeText(getContext(), "Loading...", Toast.LENGTH_LONG).show();
         queue.add(searchAttractions);
     }
 
