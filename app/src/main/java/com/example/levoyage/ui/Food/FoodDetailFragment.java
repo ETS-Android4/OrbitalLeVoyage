@@ -74,7 +74,8 @@ public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
         descriptionView.setText(item.getDescription());
         categoryView.setText(String.format("Cuisine: %s", item.getCategory()));
         priceView.setText(String.format("Price level: %s", item.getPrice()));
-        Picasso.get().load(item.getImageURL()).into(image);
+        Picasso.get().load(item.getImageURL())
+                .placeholder(R.drawable.error_placeholder_large).fit().into(image);
         retrieveReviews(item.getId(), reviewsRecycler);
         progressBar.setVisibility(View.GONE);
 

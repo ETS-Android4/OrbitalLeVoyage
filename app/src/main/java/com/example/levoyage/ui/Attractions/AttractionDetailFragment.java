@@ -74,7 +74,8 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
         addressView.setText(String.format("Address: %s", item.getAddress()));
         descriptionView.setText(item.getDescription());
         categoryView.setText(String.format("Category: %s", item.getCategory()));
-        Picasso.get().load(item.getImageURL()).into(image);
+        Picasso.get().load(item.getImageURL())
+                .placeholder(R.drawable.error_placeholder_large).fit().into(image);
         retrieveReviews(item.getId(), reviewsRecycler);
         progressBar.setVisibility(View.GONE);
 
