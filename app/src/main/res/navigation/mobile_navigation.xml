@@ -22,9 +22,9 @@
     </fragment>
     <fragment
         android:id="@+id/nav_weather"
-        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:name="com.example.levoyage.ui.Weather.WeatherFragment"
         android:label="@string/menu_weather"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_weather" />
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.levoyage.ui.home.HomeFragment"
@@ -42,6 +42,7 @@
             android:id="@+id/action_nav_home_to_calendarEventEditFragment"
             app:destination="@id/calendarEventEditFragment"/>
     </fragment>
+
 
     <fragment
         android:id="@+id/nav_accommodation"

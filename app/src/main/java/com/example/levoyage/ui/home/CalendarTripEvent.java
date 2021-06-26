@@ -10,7 +10,7 @@ public class CalendarTripEvent {
         ArrayList<CalendarTripEvent> trips = new ArrayList<>();
 
         for(CalendarTripEvent trip : calendarTripEventArrayList) {
-            if(trip.getEndDate().isBefore(date))
+            if(!trip.getEndDate().isBefore(date))
                 trips.add(trip);
         }
 
