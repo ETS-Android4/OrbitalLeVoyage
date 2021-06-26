@@ -8,14 +8,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.DetailFragment;
 import com.example.levoyage.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.annotations.NotNull;
 import com.squareup.picasso.Picasso;
-
-import org.jetbrains.annotations.NotNull;
 
 public class AttractionDetailFragment extends DetailFragment<AttractionItineraryItem> {
 
@@ -40,7 +40,7 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
     }
 
     @Override
-    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         nameView = view.findViewById(R.id.detailName);

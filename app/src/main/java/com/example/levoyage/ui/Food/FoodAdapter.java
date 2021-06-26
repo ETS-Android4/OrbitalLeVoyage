@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
+import com.google.firebase.database.annotations.NotNull;
 import com.squareup.picasso.Picasso;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -47,9 +47,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         }
     }
 
+    @NonNull
     @NotNull
     @Override
-    public FoodAdapter.FoodViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+    public FoodAdapter.FoodViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.search_result, parent,false);
         return new FoodAdapter.FoodViewHolder(v);
     }

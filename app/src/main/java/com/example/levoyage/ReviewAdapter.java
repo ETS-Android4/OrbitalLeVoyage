@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.levoyage.ui.home.ItineraryItem;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -42,9 +41,10 @@ public static class ReviewViewHolder extends RecyclerView.ViewHolder {
     }
 }
 
+    @NonNull
     @NotNull
     @Override
-    public ReviewAdapter.ReviewViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+    public ReviewAdapter.ReviewViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.review_item, parent,false);
         return new ReviewAdapter.ReviewViewHolder(v);
     }

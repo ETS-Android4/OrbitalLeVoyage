@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,8 +19,7 @@ import com.example.levoyage.databinding.FragmentHomeBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     private FloatingActionButton addTripFAB;
     private ListView tripListView;
 
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         initWidgets();
@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     }
 
     @Override
-    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
        root.findViewById(R.id.previousMonth).setOnClickListener(new View.OnClickListener() {

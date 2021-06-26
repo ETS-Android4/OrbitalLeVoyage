@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,8 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -64,7 +64,7 @@ public class ItineraryFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull @NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recycler);
@@ -80,7 +80,7 @@ public class ItineraryFragment extends Fragment {
         // Fill up recycler view with data from database
         database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 list = new ArrayList<>();
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -95,7 +95,7 @@ public class ItineraryFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(@NotNull DatabaseError error) {
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
             }
         });

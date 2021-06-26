@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,8 +34,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,13 +77,13 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 T item = dataSnapshot.getValue(tClass);
                 setDetails(item);
             }
 
             @Override
-            public void onCancelled(@NotNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
                 Toast.makeText(getContext(), "No data saved", Toast.LENGTH_SHORT).show();
             }
         });
@@ -232,7 +232,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 list = new ArrayList<>();
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -246,7 +246,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
             }
 
             @Override
-            public void onCancelled(@NotNull DatabaseError error) {
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
             }
         });

@@ -19,8 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +42,7 @@ public class MapsFragment extends Fragment {
          * user has installed Google Play services and returned to the app.
          */
         @Override
-        public void onMapReady(@NotNull GoogleMap googleMap) {
+        public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
             map = googleMap;
         }
     };

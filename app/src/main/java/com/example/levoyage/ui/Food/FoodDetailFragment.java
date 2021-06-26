@@ -15,9 +15,8 @@ import android.widget.TextView;
 import com.example.levoyage.DetailFragment;
 import com.example.levoyage.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.annotations.NotNull;
 import com.squareup.picasso.Picasso;
-
-import org.jetbrains.annotations.NotNull;
 
 public class FoodDetailFragment extends DetailFragment<FoodItineraryItem> {
 

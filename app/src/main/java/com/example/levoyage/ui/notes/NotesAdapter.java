@@ -8,15 +8,13 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
-import com.example.levoyage.ReviewAdapter;
-import com.example.levoyage.ReviewItem;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -43,6 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
     }
 
+    @NonNull
     @NotNull
     @Override
     public NotesAdapter.NoteViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {

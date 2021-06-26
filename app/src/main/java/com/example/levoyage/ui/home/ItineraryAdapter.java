@@ -28,8 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -66,9 +65,10 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.MyVi
         }
     }
 
+    @NonNull
     @NotNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.itinerary_item, parent,false);
         return new MyViewHolder(v);
     }
@@ -183,11 +183,11 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.MyVi
                             DatabaseReference newReference = database.child((String) updates.get("date")).child(item.getLocation());
                             oldReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                                     oldReference.removeValue();
                                     newReference.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                                         @Override
-                                        public void onComplete(DatabaseError firebaseError, @NotNull DatabaseReference firebase) {
+                                        public void onComplete(DatabaseError firebaseError, @NonNull @NotNull DatabaseReference firebase) {
                                             if (firebaseError != null) {
                                                 Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                                             } else {

@@ -25,8 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -81,7 +80,7 @@ public class NotesViewFragment extends Fragment {
                 updates.put("date", LocalDate.now().toString());
                 database.updateChildren(updates, new DatabaseReference.CompletionListener() {
                     @Override
-                    public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                    public void onComplete(@Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                         Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
                     }
                 });

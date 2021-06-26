@@ -27,8 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class NotesFragment extends Fragment {
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 list = new ArrayList<>();
                 notesRecycler.setHasFixedSize(true);
                 notesRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -76,7 +75,7 @@ public class NotesFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(@NotNull DatabaseError error) {
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
             }
         });
