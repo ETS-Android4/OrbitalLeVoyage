@@ -61,7 +61,7 @@
 
     </ImageView>
 
-    <RelativeLayout
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/changeCityButton"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -81,7 +81,7 @@
             android:textSize="16sp"
             android:fontFamily="sans-serif-smallcaps"
             android:textStyle="bold"/>
-    </RelativeLayout>
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 
 </RelativeLayout>

@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/light_blue_2"
-    tools:context=".ui.Weather.cityFinder">
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@color/light_blue_2"-->
+<!--    tools:context=".ui.Weather.cityFinder">-->
 
-    <ImageView
-        android:id="@+id/back_button"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/left_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<!--    <ImageView-->
+<!--        android:id="@+id/back_button"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentLeft="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:src="@drawable/left_icon"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
-    </ImageView>
+<!--    </ImageView>-->
 
-    <EditText
-        android:id="@+id/weather_search_city"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:hint="@string/enter_city_name"
-        android:imeOptions="actionGo"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:background="@drawable/weather_city_finder_text_box"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:inputType="textAutoCorrect"
-        android:gravity="center_vertical|center_horizontal">
+<!--    <EditText-->
+<!--        android:id="@+id/weather_search_city"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:hint="@string/enter_city_name"-->
+<!--        android:imeOptions="actionGo"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:background="@drawable/weather_city_finder_text_box"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:layout_editor_absoluteX="30dp"-->
+<!--        android:layout_marginRight="30dp"-->
+<!--        android:layout_marginLeft="30dp"-->
+<!--        android:inputType="textAutoCorrect"-->
+<!--        android:gravity="center_vertical|center_horizontal">-->
 
-    </EditText>
-
-
+<!--    </EditText>-->
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

@@ -72,5 +72,6 @@
     <string name="title">Title</string>
     <string name="enter_city_name">Enter City Name</string>
     <string name="change_city">Change City</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

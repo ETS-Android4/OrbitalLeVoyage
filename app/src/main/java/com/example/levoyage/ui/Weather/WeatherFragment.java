@@ -1,6 +1,7 @@
 package com.example.levoyage.ui.Weather;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,9 +10,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,16 +27,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.Loader;
 import androidx.navigation.Navigation;
 
 import com.android.volley.Header;
 import com.example.levoyage.R;
+import com.example.levoyage.ui.notes.NoteItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.annotations.NotNull;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
+
+import java.time.LocalDate;
 
 public class WeatherFragment extends Fragment {
 
@@ -46,6 +56,8 @@ public class WeatherFragment extends Fragment {
 
     TextView cityName, weatherState, temperature;
     ImageView weatherIcon;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
 
     RelativeLayout cityFinder;
 
@@ -71,23 +83,32 @@ public class WeatherFragment extends Fragment {
         cityFinder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Navigation.findNavController(v).navigate();
+                dialogBuilder = new AlertDialog.Builder(getContext());
+                View popupView = getLayoutInflater().inflate(R.layout.city_search_popup, null);
+                dialogBuilder.setView(popupView);
+                dialog = dialogBuilder.create();
+                dialog.show();
+
+                ImageButton returnButton = popupView.findViewById(R.id.returnButton);
+                EditText changeCity = popupView.findViewById(R.id.city_name);
+
+                changeCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        String newCity = changeCity.getText().toString();
+                        if (newCity != null) {
+                            getWeatherForNewCity(newCity);
+                        } else {
+                            getWeatherForCurrentLocation();
+                        }
+                        return false;
+                    }
+                });
+
+                returnButton.setOnClickListener(t -> dialog.dismiss());
             }
         });
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//        Intent intent = getIntent();
-//        String cityName = intent.getStringExtra("City");
-//        if (cityName != null) {
-//            getWeatherForNewCity(cityName);
-//        } else {
-//            getWeatherForCurrentLocation();
-//        }
-//    }
 
     private void getWeatherForNewCity(String city) {
         RequestParams params = new RequestParams();
