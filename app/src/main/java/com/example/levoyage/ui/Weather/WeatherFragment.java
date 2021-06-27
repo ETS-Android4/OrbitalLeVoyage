@@ -1,6 +1,7 @@
 package com.example.levoyage.ui.Weather;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -86,21 +87,18 @@ public class WeatherFragment extends Fragment {
                 dialogBuilder = new AlertDialog.Builder(getContext());
                 View popupView = getLayoutInflater().inflate(R.layout.city_search_popup, null);
                 dialogBuilder.setView(popupView);
-                dialog = dialogBuilder.create();
-                dialog.show();
 
                 ImageButton returnButton = popupView.findViewById(R.id.returnButton);
-                EditText changeCity = popupView.findViewById(R.id.city_name);
+                EditText changeCity = popupView.findViewById(R.id.changed_city_name);
+
+                dialog = dialogBuilder.create();
+                dialog.show();
 
                 changeCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         String newCity = changeCity.getText().toString();
-                        if (newCity != null) {
-                            getWeatherForNewCity(newCity);
-                        } else {
-                            getWeatherForCurrentLocation();
-                        }
+                        getWeatherForNewCity(newCity);
                         return false;
                     }
                 });
@@ -117,6 +115,7 @@ public class WeatherFragment extends Fragment {
         doNetworking(params);
     }
 
+    @SuppressLint("MissingPermission")
     private void getWeatherForCurrentLocation() {
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
