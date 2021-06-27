@@ -25,8 +25,7 @@ more efficient allocation of time.
 ## Scope of Project ##
 
 1. A ***Scheduler*** allows users to arrange their itinerary during the trip and will be the main page of the application 
-2. A ***Map*** feature will be provided for the users to navigate to their destination. Transportation methods will also be shown when searching for the location. 
-Offline maps and traffic reports features are available as well.
+2. A ***Map*** feature will be provided for the users to search for locations on the map. Transportation methods will also be shown when searching for directions. 
 3. A ***Hotel Search*** feature
     * Attached with brief details such as description and address
     * Links to websites for hotel bookings
@@ -35,11 +34,9 @@ Offline maps and traffic reports features are available as well.
     * Attached with brief details such as descriptions and address
     * Users can post reviews and ratings of the attractions
     * Attractions will be categorised according to type (eg. Play, Shop, See, Experience)
-    * Attractions will also be ranked according to reviews
 5. A ***Restaurant Search*** feature
     * Attached with brief descriptions such as popular menus and address
     * Users can post reviews and ratings
-    * Restaurants nearby feature to search for restaurants based on their location
 6. ***Checklist*** feature for users to check their to-do tasks or to identify missing items in the users’ packing list.
 7. ***Notes*** provides a platform for users to write down any other information they want
 8. Displaying one selected week of ***Weather Forecast*** for an area in a country.
@@ -91,7 +88,8 @@ Offline maps and traffic reports features are available as well.
    * Users can search for a particular location on the map
    * Users can search for directions on the map
 * Weather screen
-   * 
+   * Displays the weather for the current week at the user's current location
+   * Users can search for one selected week of weather forecast for an area 
 * Notes screen
    *  Displays list of notes with its titles and date it was last edited
    *  Users can create multiple notes
@@ -118,6 +116,11 @@ Offline maps and traffic reports features are available as well.
       * Select start and end time with timepicker dialog
       * Write new ItineraryItem to database
    * On click for events added through Accommodation, Attraction and Food features: check type and navigate to corresponding detail fragment
+   * On long click, users will open edit itinerary dialog
+      * Choose new date with DatePickerDialog
+      * Choose new timing with TimePickerDialog
+      * Update button for users to save changes
+      * Delete button for users to delete event from itinerary
 * Search screen (AccommodationFragment, AttractionFragment and FoodFragment are subclasses of SearchFragment)
    * SearchView for users to key in query location
    * Make API call with Volley library
@@ -150,6 +153,7 @@ Offline maps and traffic reports features are available as well.
    * SearchView for users to key in query location
    * Call Maps SDK for Android to obtain latitude coordinates for query location
    * Zoom in to location on map
+   * When users click the marker, directions button will appear and direct users to google map application to search for directions
 * Notes screen
    * Read NoteItems from database: userID -> notes
    * Display in recycler view with note title and date it was last saved
@@ -158,11 +162,27 @@ Offline maps and traffic reports features are available as well.
       * User can key in title of new note
       * Create new NoteItem with empty content
       * Pass NoteItem to NotesViewFragment
+   * Swipe left to delete note
+      * Snackbar appears after swiping left
+      * Undo button on snackbar for users to undo the action
 * Notes View screen 
    * Display note content
    * Users can edit the text
-   * Save floating action button: Update NoteItem on database  
+   * Save floating action button: Update NoteItem on database
+* Weather screen  
 
 ### System Flow ###
-![Orbital System Flow](https://user-images.githubusercontent.com/77200594/123302028-d86b2d00-d54e-11eb-8822-6f991789d364.jpg)
+![Orbital System Flow (1)](https://user-images.githubusercontent.com/77200594/123552861-d6050f00-d7aa-11eb-940a-1b53efc8b512.jpg)
+### Database Structure ###
+![Database ER diagram (1)](https://user-images.githubusercontent.com/77200594/123552732-00a29800-d7aa-11eb-86a0-5aa12d183a15.jpg)
+
+## Development Plan ##
+| Week        | Tasks           |
+| ------------- |:-------------:| 
+| 8 (28/6 - 4/7) | Checklist feature, further improvement on current features and peer evaluation | 
+| 9 (5/7 - 11/7)| Profile page and improvements based on peer evaluation |
+| 10 (12/7 - 18/7)| Testing and debugging | 
+| 11 (19/7 - 25/7) | Testing and debugging |
+
+
 
