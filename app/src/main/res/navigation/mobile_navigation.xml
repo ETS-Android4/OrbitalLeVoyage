@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_weather"
-        android:name="com.example.levoyage.ui.Weather.WeatherFragment"
+        android:name="com.example.levoyage.ui.weather.WeatherFragment"
         android:label="@string/menu_weather"
         tools:layout="@layout/fragment_weather" />
     <fragment

@@ -12,6 +12,7 @@
         android:layout_marginTop="32dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/change_city"
+        android:textAllCaps="true"
         android:textColor="@color/text_blue"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,35 +30,19 @@
         android:background="@drawable/edit_text_bg"
         android:ems="10"
         android:hint="@string/enter_city_name"
+        android:imeOptions="actionGo"
+        android:inputType="textAutoCorrect"
         android:paddingHorizontal="16dp"
+        android:textAlignment="viewStart"
         android:textColor="@color/text_blue"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        android:imeOptions="actionGo"
-        android:textSize="20sp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:inputType="textAutoCorrect"
-        android:gravity="center_vertical|center_horizontal"/>
-
-<!--    <Button-->
-<!--        android:id="@+id/confirm_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:layout_marginBottom="24dp"-->
-<!--        android:text="@string/confirm"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.498"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/changed_city_name"-->
-<!--        app:layout_constraintVertical_bias="0.035" />-->
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ImageButton
-        android:id="@+id/returnButton"
+        android:id="@+id/cityCloseButton"
         android:layout_width="52dp"
         android:layout_height="46dp"
         android:backgroundTint="@color/light_blue"
@@ -65,5 +50,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <Button
+        android:id="@+id/changeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="change"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changed_city_name"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

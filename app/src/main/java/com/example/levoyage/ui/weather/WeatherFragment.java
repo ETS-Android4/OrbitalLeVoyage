@@ -1,17 +1,14 @@
-package com.example.levoyage.ui.Weather;
+package com.example.levoyage.ui.weather;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,30 +16,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.Loader;
-import androidx.navigation.Navigation;
+
 
 import com.android.volley.Header;
 import com.example.levoyage.R;
-import com.example.levoyage.ui.notes.NoteItem;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.annotations.NotNull;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
-
-import java.time.LocalDate;
 
 public class WeatherFragment extends Fragment {
 
@@ -57,10 +49,11 @@ public class WeatherFragment extends Fragment {
 
     TextView cityName, weatherState, temperature;
     ImageView weatherIcon;
+    ProgressBar progressBar;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
-    RelativeLayout cityFinder;
+    Button cityFinder;
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -78,6 +71,7 @@ public class WeatherFragment extends Fragment {
         weatherIcon = view.findViewById(R.id.weather_icon);
         cityFinder = view.findViewById(R.id.changeCityButton);
         cityName = view.findViewById(R.id.city_name);
+        progressBar = view.findViewById(R.id.weatherProgressBar);
 
         getWeatherForCurrentLocation();
 
@@ -88,22 +82,23 @@ public class WeatherFragment extends Fragment {
                 View popupView = getLayoutInflater().inflate(R.layout.city_search_popup, null);
                 dialogBuilder.setView(popupView);
 
-                ImageButton returnButton = popupView.findViewById(R.id.returnButton);
+                ImageButton closeButton = popupView.findViewById(R.id.cityCloseButton);
                 EditText changeCity = popupView.findViewById(R.id.changed_city_name);
+                Button changeButton = popupView.findViewById(R.id.changeButton);
 
                 dialog = dialogBuilder.create();
                 dialog.show();
 
-                changeCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                changeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    public void onClick(View v) {
                         String newCity = changeCity.getText().toString();
                         getWeatherForNewCity(newCity);
-                        return false;
+                        dialog.dismiss();
                     }
                 });
 
-                returnButton.setOnClickListener(t -> dialog.dismiss());
+                closeButton.setOnClickListener(t -> dialog.dismiss());
             }
         });
     }
@@ -117,13 +112,18 @@ public class WeatherFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     private void getWeatherForCurrentLocation() {
+        weatherState.setVisibility(View.INVISIBLE);
+        temperature.setVisibility(View.INVISIBLE);
+        weatherIcon.setVisibility(View.INVISIBLE);
+        cityName.setVisibility(View.INVISIBLE);
+        cityFinder.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 String latitude = String.valueOf(location.getLatitude());
                 String longitude = String.valueOf(location.getLongitude());
-                Log.d("Track", "LocationChanged");
                 RequestParams params = new RequestParams();
                 params.put("lat", latitude);
                 params.put("lon", longitude);
@@ -180,7 +180,6 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                Toast.makeText(getContext(), "Data Get Success", Toast.LENGTH_SHORT).show();
 
                 WeatherData weatherD = WeatherData.fromJson(response);
                 updateUI(weatherD);
@@ -198,6 +197,13 @@ public class WeatherFragment extends Fragment {
         weatherState.setText(weatherData.getWeatherType());
         int resourceID = getResources().getIdentifier(weatherData.getIcon(), "drawable", getActivity().getPackageName());
         weatherIcon.setImageResource(resourceID);
+
+        temperature.setVisibility(View.VISIBLE);
+        cityFinder.setVisibility(View.VISIBLE);
+        cityName.setVisibility(View.VISIBLE);
+        weatherState.setVisibility(View.VISIBLE);
+        weatherIcon.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

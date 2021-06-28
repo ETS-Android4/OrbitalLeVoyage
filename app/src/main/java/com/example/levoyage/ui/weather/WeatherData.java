@@ -1,4 +1,4 @@
-package com.example.levoyage.ui.Weather;
+package com.example.levoyage.ui.weather;
 
 import org.json.JSONException;
 import org.json.JSONObject;
