@@ -79,7 +79,9 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 T item = dataSnapshot.getValue(tClass);
-                setDetails(item);
+                if (item != null) {
+                    setDetails(item);
+                }
             }
 
             @Override

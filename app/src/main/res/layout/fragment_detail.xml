@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_blue"
-    tools:context=".ui.Accommodation.AccommodationDetailFragment">
+    android:background="@color/light_blue">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/detailfab"
@@ -31,8 +29,7 @@
                 android:id="@+id/detailImage"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                android:contentDescription="@string/menu_accommodation"
-                tools:src="@drawable/error_placeholder_large" />
+                android:contentDescription="@string/menu_accommodation" />
 
             <TextView
                 android:id="@+id/detailName"

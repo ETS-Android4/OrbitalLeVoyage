@@ -19,32 +19,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/editPopupEvent"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
         android:ems="10"
-        android:inputType="textPersonName"
         android:paddingHorizontal="16dp"
+        android:paddingVertical="7.5dp"
         android:textColor="@color/text_blue"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-    <EditText
+    <TextView
         android:id="@+id/editPopupDate"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
         android:ems="10"
         android:hint="@string/date"
-        android:inputType="textPersonName"
         android:paddingHorizontal="16dp"
+        android:paddingVertical="7.5dp"
         android:textColor="@color/text_blue"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,9 +94,11 @@
 
     <TextView
         android:id="@+id/editPopupStart"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/start_time"
         android:paddingHorizontal="16dp"
@@ -105,9 +113,11 @@
 
     <TextView
         android:id="@+id/editPopupEnd"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/end_time"
         android:paddingHorizontal="16dp"

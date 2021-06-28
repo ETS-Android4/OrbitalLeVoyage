@@ -50,7 +50,7 @@ public abstract class SearchFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> h = new HashMap<>();
-                h.put("x-rapidapi-key", "445a09e84fmsh6d11b122cbebd2bp1bbc53jsnfed0b11069eb");
+                h.put("x-rapidapi-key", "864bde7699msh8d3f983cd6c3ed2p11e31ajsn15e541ffb40a");
                 h.put("x-rapidapi-host", "travel-advisor.p.rapidapi.com");
                 return h;
             }

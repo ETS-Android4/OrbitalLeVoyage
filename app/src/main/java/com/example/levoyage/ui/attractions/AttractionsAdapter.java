@@ -1,4 +1,4 @@
-package com.example.levoyage.ui.Accommodation;
+package com.example.levoyage.ui.attractions;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,28 +19,24 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * AccommodationAdapter class is an adapter for
- * recycler views used in the accommodation fragment.
- */
-public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdapter.AccommodationViewHolder> {
+public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.AttractionViewHolder> {
 
     Context context;
 
-    ArrayList<AccommodationItineraryItem> list;
+    ArrayList<AttractionItineraryItem> list;
 
-    public AccommodationAdapter(Context context, ArrayList<AccommodationItineraryItem> list) {
+    public AttractionsAdapter(Context context, ArrayList<AttractionItineraryItem> list) {
         this.context = context;
         this.list = list;
     }
 
-    public static class AccommodationViewHolder extends RecyclerView.ViewHolder{
+    public static class AttractionViewHolder extends RecyclerView.ViewHolder {
 
         TextView name, address, rating, price;
         ImageView image;
         ConstraintLayout layout;
 
-        public AccommodationViewHolder(View itemView) {
+        public AttractionViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.location);
             address = itemView.findViewById(R.id.itemAddress);
@@ -54,18 +50,18 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
     @NonNull
     @NotNull
     @Override
-    public AccommodationViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public AttractionsAdapter.AttractionViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.search_result, parent,false);
-        return new AccommodationViewHolder(v);
+        return new AttractionsAdapter.AttractionViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(AccommodationViewHolder holder, int position) {
-        AccommodationItineraryItem item = list.get(position);
+    public void onBindViewHolder(AttractionsAdapter.AttractionViewHolder holder, int position) {
+        AttractionItineraryItem item = list.get(position);
         holder.name.setText(item.getLocation());
-        holder.address.setVisibility(View.GONE);
         holder.rating.setText(item.getRating());
-        holder.price.setText(item.getPrice());
+        holder.price.setText(item.getCategory());
+        holder.address.setVisibility(View.GONE);
         Picasso.get().load(item.getImageURL())
                 .placeholder(R.drawable.error_placeholder_small).fit().into(holder.image);
 
@@ -73,10 +69,10 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("Accommodation", item);
+                bundle.putParcelable("Attraction", item);
                 bundle.putBoolean("Saved", false);
                 Navigation.findNavController(v).navigate(
-                        R.id.action_nav_accommodation_to_accommodationDetailFragment, bundle);
+                        R.id.action_nav_attractions_to_attractionDetailFragment, bundle);
             }
         });
 

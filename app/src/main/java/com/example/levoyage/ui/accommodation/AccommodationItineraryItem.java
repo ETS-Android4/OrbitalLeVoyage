@@ -1,4 +1,4 @@
-package com.example.levoyage.ui.Accommodation;
+package com.example.levoyage.ui.accommodation;
 
 import android.os.Parcel;
 import android.os.Parcelable;

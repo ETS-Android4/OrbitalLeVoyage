@@ -1,4 +1,4 @@
-package com.example.levoyage.ui.Food;
+package com.example.levoyage.ui.food;
 
 import android.content.Context;
 import android.os.Bundle;

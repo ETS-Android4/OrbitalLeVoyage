@@ -1,4 +1,4 @@
-package com.example.levoyage.ui.Attractions;
+package com.example.levoyage.ui.attractions;
 
 import android.os.Parcel;
 import android.os.Parcelable;

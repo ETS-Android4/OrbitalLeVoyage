@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -35,6 +34,7 @@
             android:title="@string/menu_notes" />
         <item
             android:id="@+id/nav_checklist"
+            android:enabled="false"
             android:icon="@drawable/ic_baseline_playlist_add_check_24"
             android:title="@string/menu_checklist" />
     </group>

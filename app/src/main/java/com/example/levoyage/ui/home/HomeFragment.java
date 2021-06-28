@@ -51,7 +51,8 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
         calendarRecyclerView = root.findViewById(R.id.calendarRecyclerView);
         monthYearText = root.findViewById(R.id.monthYearTV);
         addTripFAB = root.findViewById(R.id.addTripButton);
-        tripListView = root.findViewById(R.id.tripListView);
+//        tripListView = root.findViewById(R.id.tripListView);
+        addTripFAB.hide();
     }
 
     private void setMonthView() {
@@ -129,7 +130,7 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
     @Override
     public void onResume() {
         super.onResume();
-        setTripAdapter();
+//        setTripAdapter();
     }
 
     private void setTripAdapter() {

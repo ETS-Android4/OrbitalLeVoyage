@@ -131,11 +131,11 @@
         android:layout_height="300dp"
         android:background="@color/light_blue" />
 
-    <ListView
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/tripListView"/>
+<!--    <ListView-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_weight="1"-->
+<!--        android:id="@+id/tripListView"/>-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_height="wrap_content"
@@ -146,5 +146,25 @@
         app:tint="@android:color/white"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"/>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:text="Click on a date to start planning now!"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/text_blue"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:layout_marginVertical="16dp"
+        android:rotation="45"
+        android:src="@drawable/ic_baseline_airplanemode_active_24" />
 
 </LinearLayout>

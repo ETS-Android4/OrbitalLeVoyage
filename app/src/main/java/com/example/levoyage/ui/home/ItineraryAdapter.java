@@ -179,8 +179,10 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.MyVi
                     @Override
                     public void onClick(View v) {
                         if (updates.containsKey("date")) {
+                            String newDate = (String) updates.get("date");
                             DatabaseReference oldReference = database.child(item.getDate()).child(item.getLocation());
-                            DatabaseReference newReference = database.child((String) updates.get("date")).child(item.getLocation());
+                            DatabaseReference newReference = database.child(newDate).child(item.getLocation());
+                            updates.put("date", newDate);
                             oldReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {

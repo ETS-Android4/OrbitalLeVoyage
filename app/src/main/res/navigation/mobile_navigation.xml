@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/nav_checklist"
-        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:name="com.example.levoyage.ui.attractions.AttractionsFragment"
         android:label="@string/menu_checklist"
         tools:layout="@layout/fragment_search" />
     <fragment
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/nav_accommodation"
-        android:name="com.example.levoyage.ui.Accommodation.AccommodationFragment"
+        android:name="com.example.levoyage.ui.accommodation.AccommodationFragment"
         android:label="@string/menu_accommodation"
         tools:layout="@layout/fragment_search" >
         <action
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/nav_attractions"
-        android:name="com.example.levoyage.ui.Attractions.AttractionsFragment"
+        android:name="com.example.levoyage.ui.attractions.AttractionsFragment"
         android:label="@string/menu_attractions"
         tools:layout="@layout/fragment_search" >
         <action
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_food"
-        android:name="com.example.levoyage.ui.Food.FoodFragment"
+        android:name="com.example.levoyage.ui.food.FoodFragment"
         android:label="@string/menu_food"
         tools:layout="@layout/fragment_search" >
         <action
@@ -92,17 +92,17 @@
     </fragment>
     <fragment
         android:id="@+id/accommodationDetailFragment"
-        android:name="com.example.levoyage.ui.Accommodation.AccommodationDetailFragment"
+        android:name="com.example.levoyage.ui.accommodation.AccommodationDetailFragment"
         android:label="Accommodation Details"
         tools:layout="@layout/fragment_detail" />
     <fragment
         android:id="@+id/attractionDetailFragment"
-        android:name="com.example.levoyage.ui.Attractions.AttractionDetailFragment"
+        android:name="com.example.levoyage.ui.attractions.AttractionDetailFragment"
         android:label="Attraction Details"
         tools:layout="@layout/fragment_detail" />
     <fragment
         android:id="@+id/foodDetailFragment"
-        android:name="com.example.levoyage.ui.Food.FoodDetailFragment"
+        android:name="com.example.levoyage.ui.food.FoodDetailFragment"
         android:label="Restaurant Details"
         tools:layout="@layout/fragment_detail" />
     <fragment

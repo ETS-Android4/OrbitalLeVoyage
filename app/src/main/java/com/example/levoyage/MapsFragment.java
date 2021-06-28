@@ -74,10 +74,14 @@ public class MapsFragment extends Fragment {
                     Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-                Address address = addressList.get(0);
-                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                map.addMarker(new MarkerOptions().position(latLng).title(query));
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                if (addressList.isEmpty()) {
+                    Toast.makeText(getContext(), "No location found", Toast.LENGTH_SHORT).show();
+                } else {
+                    Address address = addressList.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    map.addMarker(new MarkerOptions().position(latLng).title(query));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                }
                 return false;
             }
 

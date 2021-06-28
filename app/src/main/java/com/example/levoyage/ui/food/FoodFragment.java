@@ -1,11 +1,8 @@
-package com.example.levoyage.ui.Food;
+package com.example.levoyage.ui.food;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -19,7 +16,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.levoyage.R;
@@ -59,8 +55,8 @@ public class FoodFragment extends SearchFragment {
                 progressBar.setVisibility(ProgressBar.VISIBLE);
                 list = new ArrayList<>();
                 queue = Volley.newRequestQueue(getContext());
-                getLocationID(query, queue);
-//                extractInfo("298570");
+//                getLocationID(query, queue);
+                extractInfo("298570");
                 return false;
             }
 
@@ -116,7 +112,7 @@ public class FoodFragment extends SearchFragment {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> h = new HashMap<>();
-                h.put("x-rapidapi-key", "445a09e84fmsh6d11b122cbebd2bp1bbc53jsnfed0b11069eb");
+                h.put("x-rapidapi-key", "864bde7699msh8d3f983cd6c3ed2p11e31ajsn15e541ffb40a");
                 h.put("x-rapidapi-host", "travel-advisor.p.rapidapi.com");
                 return h;
             }
