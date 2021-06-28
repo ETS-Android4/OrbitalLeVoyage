@@ -51,7 +51,7 @@ more efficient allocation of time.
   * Does not contain features that help users find suitable accommodation, attractions and restaurants
 
 ## Walkthrough ##
-https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=sharing
+https://drive.google.com/file/d/1a6f4VMPdk47Yu37CmBikZq87mb5DhVGl/view?usp=sharing
 
 ## Software Development ##
 
