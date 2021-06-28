@@ -50,6 +50,9 @@ more efficient allocation of time.
   * A mobile application that creates itineraries
   * Does not contain features that help users find suitable accommodation, attractions and restaurants
 
+## Walkthrough ##
+https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=sharing
+
 ## Software Development ##
 
 ### Considerations ###
@@ -100,6 +103,13 @@ more efficient allocation of time.
 * Checklist screen
    * List of tasks that users can check
    * Checked tasks will be at the bottom
+
+### Technical Stack ###
+* Android Studio
+* Firebase
+* Travel Advisor API
+* Google Maps API
+* OpenWeatherMap API
 
 ### Implementation ###
 * Account System
@@ -169,10 +179,14 @@ more efficient allocation of time.
    * Display note content
    * Users can edit the text
    * Save floating action button: Update NoteItem on database
-* Weather screen  
+* Weather screen
+   * Get current location of user and call OpenWeatherMap API
+   * Change city button: open change city dialog
+      * Call API with new city name  
 
 ### System Flow ###
-![Orbital System Flow (1)](https://user-images.githubusercontent.com/77200594/123552861-d6050f00-d7aa-11eb-940a-1b53efc8b512.jpg)
+![Orbital System Flow (2)](https://user-images.githubusercontent.com/77200594/123639197-87ab4b00-d852-11eb-9249-48a720131800.jpg)
+
 ### Database Structure ###
 ![Database ER diagram (1)](https://user-images.githubusercontent.com/77200594/123552732-00a29800-d7aa-11eb-86a0-5aa12d183a15.jpg)
 
@@ -181,7 +195,7 @@ more efficient allocation of time.
 | ------------- |:-------------:| 
 | 8 (28/6 - 4/7) | Checklist feature, further improvement on current features and peer evaluation | 
 | 9 (5/7 - 11/7)| Profile page and improvements based on peer evaluation |
-| 10 (12/7 - 18/7)| Testing and debugging | 
+| 10 (12/7 - 18/7)| Testing and debugging, Improve app design | 
 | 11 (19/7 - 25/7) | Testing and debugging |
 
 
