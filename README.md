@@ -104,6 +104,13 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
    * List of tasks that users can check
    * Checked tasks will be at the bottom
 
+### Technical Stack ###
+* Android Studio
+* Firebase
+* Travel Advisor API
+* Google Maps API
+* OpenWeatherMap API
+
 ### Implementation ###
 * Account System
    * Link to Firebase Authentication: authentication using email and password
