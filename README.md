@@ -1,6 +1,8 @@
 # Le Voyage #
 An all-in-one travel planning application
 
+Click [here](https://github.com/tsy24/OrbitalLeVoyage/raw/master/LeVoyage.apk) to download the apk
+
 ## Motivation ##
 When you are trying to plan your own trip, be it overseas or local, you realise you have been switching between numerous websites and applications, 
 picking up bits and pieces of information from various places and trying to put everything together to form your itinerary.
