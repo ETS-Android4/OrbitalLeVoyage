@@ -10,12 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +35,7 @@ import com.google.firebase.database.annotations.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
@@ -48,6 +47,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
     private EditText reviewText;
     private RatingBar ratingBar;
     private ArrayList<ReviewItem> list;
+    private List<ItineraryItem> itineraryList;
     private ReviewAdapter adapter;
 
     @Override
@@ -61,8 +61,8 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         if (link == null) {
             Toast.makeText(getContext(), "Not Available", Toast.LENGTH_SHORT).show();
         } else {
-            Uri webaddress = Uri.parse(link);
-            Intent goToLink = new Intent(Intent.ACTION_VIEW, webaddress);
+            Uri webAddress = Uri.parse(link);
+            Intent goToLink = new Intent(Intent.ACTION_VIEW, webAddress);
             startActivity(goToLink);
         }
     }
@@ -73,19 +73,9 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                 .getInstance(getString(R.string.database_link))
                 .getReference(userID).child("Itinerary").child(dateString).child(location);
 
-        database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                T item = dataSnapshot.getValue(tClass);
-                if (item != null) {
-                    setDetails(item);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "No data saved", Toast.LENGTH_SHORT).show();
-            }
+        database.get().addOnCompleteListener(task -> {
+            T item = task.getResult().getValue(tClass);
+            setDetails(item);
         });
     }
 
@@ -109,45 +99,36 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
         location.setText(item.getLocation());
         start.setOnClickListener(t -> {
-            TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    st.setHr(hourOfDay);
-                    st.setMin(minute);
-                    item.setStartTime(st);
-                    start.setText(st.toString());
-                    start.setError(null);
-                }
+            TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view, hourOfDay, minute) -> {
+                st.setHr(hourOfDay);
+                st.setMin(minute);
+                item.setStartTime(st);
+                start.setText(st.toString());
+                start.setError(null);
             }, 0, 0, false);
             timePicker.show();
         });
 
         end.setOnClickListener(t -> {
-            TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    et.setHr(hourOfDay);
-                    et.setMin(minute);
-                    item.setEndTime(et);
-                    end.setText(et.toString());
-                    end.setError(null);
-                }
+            TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view, hourOfDay, minute) -> {
+                et.setHr(hourOfDay);
+                et.setMin(minute);
+                item.setEndTime(et);
+                end.setText(et.toString());
+                end.setError(null);
             }, 0, 0, false);
             timePicker.show();
         });
 
         date.setOnClickListener(t -> {
             DatePickerDialog datePicker = new DatePickerDialog(getContext());
-            datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-                    String dateString = localDate.format(formatter);
-                    date.setText(dateString);
-                    item.setDate(dateString);
-                    date.setError(null);
-                }
+            datePicker.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+                LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+                String dateString = localDate.format(formatter);
+                date.setText(dateString);
+                item.setDate(dateString);
+                date.setError(null);
             });
             datePicker.show();
         });
@@ -155,29 +136,67 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
         dialog.show();
-        itineraryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (date.getText().toString().isEmpty()) {
-                    date.setError("Please select a date");
-                    date.requestFocus();
-                } else if (start.getText().toString().isEmpty()) {
-                    start.setError("Please select a start time");
-                    start.requestFocus();
-                } else if (end.getText().toString().isEmpty()) {
-                    end.setError("Please select an end time");
-                    end.requestFocus();
-                } else if (et.compareTo(st) < 0) {
-                    end.setError("End time is earlier than start time");
-                    end.requestFocus();
-                } else {
-                    database.child(item.getDate()).child(item.getLocation()).setValue(item);
-                    dialog.dismiss();
-                }
+        itineraryBtn.setOnClickListener(v -> {
+            if (date.getText().toString().isEmpty()) {
+                date.setError("Please select a date");
+                date.requestFocus();
+            } else if (start.getText().toString().isEmpty()) {
+                start.setError("Please select a start time");
+                start.requestFocus();
+            } else if (end.getText().toString().isEmpty()) {
+                end.setError("Please select an end time");
+                end.requestFocus();
+            } else if (et.compareTo(st) < 0) {
+                end.setError("End time is earlier than start time");
+                end.requestFocus();
+            } else {
+                database.child(item.getDate()).get().addOnCompleteListener(task -> {
+                    itineraryList = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                        ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
+                        itineraryList.add(itineraryItem);
+                    }
+                    ItineraryItem overlap = checkOverlap(st, et);
+                    if (overlap == null) {
+                        database.child(item.getDate()).child(item.getLocation()).setValue(item)
+                                .addOnCompleteListener(t -> Toast.makeText(getContext(),
+                                        "Added to itinerary", Toast.LENGTH_SHORT).show());
+                        dialog.dismiss();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Overlapping Events");
+                        builder.setMessage(String.format(
+                                "This new event overlaps with %s. Are you sure you want to add this event to your itinerary?",
+                                overlap.getLocation()));
+                        builder.setPositiveButton("Confirm", (dialog, which) ->
+                                database.child(item.getDate()).child(item.getLocation()).setValue(item));
+                        builder.setNegativeButton("Cancel", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                });
             }
         });
 
         itineraryCloseBtn.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    private ItineraryItem checkOverlap(TimeParcel start, TimeParcel end) {
+        for (int i = 0; i < itineraryList.size(); i++) {
+            ItineraryItem item = itineraryList.get(i);
+            if (item.getStartTime().compareTo(start) == 0) {
+                return item;
+            } else if (item.getStartTime().compareTo(start) < 0) {
+                if (item.getEndTime().compareTo(start) > 0) {
+                    return item;
+                }
+            } else if (item.getStartTime().compareTo(start) > 0) {
+                if (item.getStartTime().compareTo(end) < 0) {
+                    return item;
+                }
+            }
+        }
+        return null;
     }
 
     public void addReview(String location, String locationID) {
@@ -195,38 +214,32 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         dialog = dialogBuilder.create();
         dialog.show();
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (rating > 0.0) {
-                    ratingBarBG.setError(null);
-                } else {
-                    ratingBarBG.setError("Please select a rating");
-                    ratingBarBG.requestFocus();
-                }
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (rating > 0.0) {
+                ratingBarBG.setError(null);
+            } else {
+                ratingBarBG.setError("Please select a rating");
+                ratingBarBG.requestFocus();
             }
         });
 
-        reviewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String reviewString = reviewText.getText().toString();
-                float rating = ratingBar.getRating();
-                if (rating == 0.0) {
-                    ratingBarBG.setError("Please select a rating");
-                    ratingBarBG.requestFocus();
-                } else {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    String userID = user.getUid();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-                    String date = LocalDate.now().format(formatter);
-                    ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
-                    DatabaseReference database = FirebaseDatabase
-                            .getInstance(getString(R.string.database_link))
-                            .getReference("Reviews").child(locationID).child(userID);
-                    database.setValue(review);
-                    dialog.dismiss();
-                }
+        reviewBtn.setOnClickListener(v -> {
+            String reviewString = reviewText.getText().toString();
+            float rating = ratingBar.getRating();
+            if (rating == 0.0) {
+                ratingBarBG.setError("Please select a rating");
+                ratingBarBG.requestFocus();
+            } else {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userID = user.getUid();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+                String date = LocalDate.now().format(formatter);
+                ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
+                DatabaseReference database = FirebaseDatabase
+                        .getInstance(getString(R.string.database_link))
+                        .getReference("Reviews").child(locationID).child(userID);
+                database.setValue(review);
+                dialog.dismiss();
             }
         });
         reviewCloseBtn.setOnClickListener(v -> dialog.dismiss());

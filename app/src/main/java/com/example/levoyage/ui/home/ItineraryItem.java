@@ -1,6 +1,6 @@
 package com.example.levoyage.ui.home;
 
-public class ItineraryItem {
+public class ItineraryItem implements Comparable<ItineraryItem> {
 
     String location, date;
     TimeParcel startTime, endTime;
@@ -51,4 +51,9 @@ public class ItineraryItem {
     public String getDate() { return date; }
 
     public void setDate(String date) { this.date = date; }
+
+    @Override
+    public int compareTo(ItineraryItem o) {
+        return this.getStartTime().compareTo(o.getStartTime());
+    }
 }

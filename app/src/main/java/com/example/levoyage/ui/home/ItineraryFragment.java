@@ -3,7 +3,6 @@ package com.example.levoyage.ui.home;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,11 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.levoyage.R;
@@ -99,7 +96,7 @@ public class ItineraryFragment extends Fragment {
                     ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
                     list.add(itineraryItem);
                 }
-                list.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
+                list.sort(ItineraryItem::compareTo);
                 adapter.notifyDataSetChanged();
             }
 
@@ -110,74 +107,78 @@ public class ItineraryFragment extends Fragment {
         });
 
         // Pop up for adding new event to itinerary
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogBuilder = new AlertDialog.Builder(getContext());
-                View popupView = getLayoutInflater().inflate(R.layout.itinerary_popup, null);
-                location = popupView.findViewById(R.id.popupEvent);
-                start = popupView.findViewById(R.id.popupStart);
-                end = popupView.findViewById(R.id.popupEnd);
-                btn = popupView.findViewById(R.id.popupButton);
-                closeBtn = popupView.findViewById(R.id.popupClose);
-                TimeParcel st = new TimeParcel();
-                TimeParcel et = new TimeParcel();
+        fab.setOnClickListener(v -> {
+            dialogBuilder = new AlertDialog.Builder(getContext());
+            View popupView = getLayoutInflater().inflate(R.layout.itinerary_popup, null);
+            location = popupView.findViewById(R.id.popupEvent);
+            start = popupView.findViewById(R.id.popupStart);
+            end = popupView.findViewById(R.id.popupEnd);
+            btn = popupView.findViewById(R.id.popupButton);
+            closeBtn = popupView.findViewById(R.id.popupClose);
+            TimeParcel st = new TimeParcel();
+            TimeParcel et = new TimeParcel();
 
-                start.setOnClickListener(t -> {
-                    TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            st.setHr(hourOfDay);
-                            st.setMin(minute);
-                            start.setText(st.toString());
-                            start.setError(null);
-                        }
-                    }, 0, 0, false);
-                    timePicker.show();
-                });
+            start.setOnClickListener(t -> {
+                TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view1, hourOfDay, minute) -> {
+                    st.setHr(hourOfDay);
+                    st.setMin(minute);
+                    start.setText(st.toString());
+                    start.setError(null);
+                }, 0, 0, false);
+                timePicker.show();
+            });
 
-                end.setOnClickListener(t -> {
-                    TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            et.setHr(hourOfDay);
-                            et.setMin(minute);
-                            end.setText(et.toString());
-                            end.setError(null);
-                        }
-                    }, 0, 0, false);
-                    timePicker.show();
-                });
+            end.setOnClickListener(t -> {
+                TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view12, hourOfDay, minute) -> {
+                    et.setHr(hourOfDay);
+                    et.setMin(minute);
+                    end.setText(et.toString());
+                    end.setError(null);
+                }, 0, 0, false);
+                timePicker.show();
+            });
 
-                dialogBuilder.setView(popupView);
-                dialog = dialogBuilder.create();
-                dialog.show();
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String loc = location.getText().toString();
-                        if (loc.isEmpty()) {
-                            location.setError("Please key in an event");
-                            location.requestFocus();
-                        } else if (start.getText().toString().isEmpty()) {
-                            start.setError("Please select a start time");
-                            start.requestFocus();
-                        } else if (end.getText().toString().isEmpty()) {
-                            end.setError("Please select an end time");
-                            end.requestFocus();
-                        } else if (et.compareTo(st) < 0) {
-                            end.setError("End time is earlier than start time");
-                            end.requestFocus();
-                        } else {
+            dialogBuilder.setView(popupView);
+            dialog = dialogBuilder.create();
+            dialog.show();
+            btn.setOnClickListener(v1 -> {
+                String loc = location.getText().toString();
+                if (loc.isEmpty()) {
+                    location.setError("Please key in an event");
+                    location.requestFocus();
+                } else if (start.getText().toString().isEmpty()) {
+                    start.setError("Please select a start time");
+                    start.requestFocus();
+                } else if (end.getText().toString().isEmpty()) {
+                    end.setError("Please select an end time");
+                    end.requestFocus();
+                } else if (et.compareTo(st) < 0) {
+                    end.setError("End time is earlier than start time");
+                    end.requestFocus();
+                } else {
+                    ItineraryItem overlap = checkOverlap(st, et);
+                    if (overlap != null) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Overlapping Events");
+                        builder.setMessage(String.format(
+                                "This new event overlaps with %s. Are you sure you want to add this event to your itinerary?",
+                                overlap.getLocation()));
+                        builder.setPositiveButton("Confirm", (dialog, which) -> {
                             ItineraryItem item = new ItineraryItem(loc, date, st, et);
                             database.child(date).child(loc).setValue(item);
-                            dialog.dismiss();
-                        }
+                        });
+                        builder.setNegativeButton("Cancel", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    } else {
+                        ItineraryItem item = new ItineraryItem(loc, date, st, et);
+                        database.child(date).child(loc).setValue(item);
+                        dialog.dismiss();
                     }
-                });
+                }
+            });
 
-                closeBtn.setOnClickListener(x -> dialog.dismiss());
-            }
+            closeBtn.setOnClickListener(x -> dialog.dismiss());
         });
 
         ItemTouchHelper.SimpleCallback callback = new RecyclerItemTouchHelper(getContext()) {
@@ -185,14 +186,15 @@ public class ItineraryFragment extends Fragment {
             public void deleteItem(int position) {
                 dialogBuilder = new AlertDialog.Builder(getContext());
                 dialogBuilder.setTitle("Delete Event");
-                dialogBuilder.setMessage("Are you sure you want to delete this event from your itinerary?");
-                dialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ItineraryItem deleted = list.remove(position);
-                        adapter.notifyItemRemoved(position);
-                        database.child(date).child(deleted.getLocation()).removeValue();
-                    }
+                ItineraryItem deleteItem = list.get(position);
+                dialogBuilder.setMessage(String.format("Are you sure you want to delete %s from your itinerary?",
+                        deleteItem.getLocation()));
+                dialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+                    ItineraryItem deleted = list.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    database.child(date).child(deleted.getLocation()).removeValue()
+                            .addOnCompleteListener(t -> Toast.makeText(getContext(),
+                                    "Event deleted from itinerary", Toast.LENGTH_SHORT).show());
                 });
                 dialogBuilder.setNegativeButton("Cancel",
                         (dialog, which) -> adapter.notifyItemChanged(position));
@@ -210,14 +212,14 @@ public class ItineraryFragment extends Fragment {
                 TextView end = popupView.findViewById(R.id.editPopupEnd);
                 Button updateBtn = popupView.findViewById(R.id.editPopupUpdate);
                 ImageButton closeBtn = popupView.findViewById(R.id.editPopupClose);
-                TimeParcel st = new TimeParcel();
-                TimeParcel et = new TimeParcel();
 
-                ItineraryItem item = list.get(position);
+                ItineraryItem item = list.remove(position);
+                TimeParcel st = new TimeParcel(item.getStartTime().getHr(), item.getStartTime().getMin());
+                TimeParcel et = new TimeParcel(item.getEndTime().getHr(), item.getEndTime().getMin());
                 event.setText(item.getLocation());
                 date.setText(item.getDate());
-                start.setText(item.getStartTime().toString());
-                end.setText(item.getEndTime().toString());
+                start.setText(st.toString());
+                end.setText(et.toString());
 
                 Map<String, Object> updates = new HashMap<>();
 
@@ -226,92 +228,119 @@ public class ItineraryFragment extends Fragment {
                 dialog.show();
 
                 start.setOnClickListener(t -> {
-                    TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            st.setHr(hourOfDay);
-                            st.setMin(minute);
-                            updates.put("startTime", st);
-                            start.setText(st.toString());
-                        }
+                    TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view13, hourOfDay, minute) -> {
+                        st.setHr(hourOfDay);
+                        st.setMin(minute);
+                        updates.put("startTime", st);
+                        start.setText(st.toString());
                     }, 0, 0, false);
                     timePicker.show();
                 });
 
                 end.setOnClickListener(t -> {
-                    TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            et.setHr(hourOfDay);
-                            et.setMin(minute);
-                            updates.put("endTime", et);
-                            end.setText(et.toString());
-                        }
+                    TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view14, hourOfDay, minute) -> {
+                        et.setHr(hourOfDay);
+                        et.setMin(minute);
+                        updates.put("endTime", et);
+                        end.setText(et.toString());
                     }, 0, 0, false);
                     timePicker.show();
                 });
 
                 date.setOnClickListener(t -> {
                     DatePickerDialog datePicker = new DatePickerDialog(getContext());
-                    datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-                            String dateString = localDate.format(formatter);
-                            date.setText(dateString);
-                            updates.put("date", dateString);
-                        }
+                    datePicker.setOnDateSetListener((view15, year, month, dayOfMonth) -> {
+                        LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+                        String dateString = localDate.format(formatter);
+                        date.setText(dateString);
+                        updates.put("date", dateString);
                     });
                     datePicker.show();
                 });
 
-                updateBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (et.compareTo(st) < 0) {
-                            end.setError("End time is earlier than start time");
-                            end.requestFocus();
-                        } else if (updates.containsKey("date")) {
-                            String newDate = (String) updates.get("date");
-                            DatabaseReference oldReference = database.child(item.getDate()).child(item.getLocation());
-                            DatabaseReference newReference = database.child(newDate).child(item.getLocation());
-                            updates.put("date", newDate);
-                            oldReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                                    oldReference.removeValue();
-                                    newReference.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(DatabaseError firebaseError, @NonNull @NotNull DatabaseReference firebase) {
-                                            if (firebaseError != null) {
-                                                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                newReference.updateChildren(updates)
-                                                        .addOnCompleteListener(t -> Toast.makeText(getContext(), "Itinerary updated", Toast.LENGTH_SHORT).show());
-                                            }
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                updateBtn.setOnClickListener(v -> {
+                    if (et.compareTo(st) < 0) {
+                        end.setError("End time is earlier than start time");
+                        end.requestFocus();
+                    } else {
+                        ItineraryItem overlap = checkOverlap(st, et);
+                        if (overlap != null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Overlapping Events");
+                            builder.setMessage(String.format(
+                                    "This edited event overlaps with %s. Are you sure you want to edit this event?",
+                                    overlap.getLocation()));
+                            builder.setPositiveButton("Confirm", (dialog2, which) -> updateDatabase(updates, item));
+                            builder.setNegativeButton("Cancel", null);
+                            AlertDialog dialog2 = builder.create();
+                            dialog2.show();
                         } else {
-                            database.child(item.getDate()).child(item.getLocation()).updateChildren(updates);
+                            updateDatabase(updates, item);
+                            dialog.dismiss();
+                            adapter.notifyItemChanged(position);
                         }
-                        dialog.dismiss();
                     }
                 });
 
                 closeBtn.setOnClickListener(t -> {
                     dialog.dismiss();
-                    adapter.notifyItemChanged(position); });
+                    list.add(position, item);
+                    adapter.notifyItemChanged(position);});
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private ItineraryItem checkOverlap(TimeParcel start, TimeParcel end) {
+        for (int i = 0; i < list.size(); i++) {
+            ItineraryItem item = list.get(i);
+            if (item.getStartTime().compareTo(start) == 0) {
+                return item;
+            } else if (item.getStartTime().compareTo(start) < 0) {
+                if (item.getEndTime().compareTo(start) > 0) {
+                    return item;
+                }
+            } else if (item.getStartTime().compareTo(start) > 0) {
+                if (item.getStartTime().compareTo(end) < 0) {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void updateDatabase(Map<String, Object> updates, ItineraryItem item) {
+        if (updates.containsKey("date")) {
+            String newDate = (String) updates.get("date");
+            DatabaseReference oldReference = database.child(item.getDate()).child(item.getLocation());
+            DatabaseReference newReference = database.child(newDate).child(item.getLocation());
+            updates.put("date", newDate);
+            oldReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                    oldReference.removeValue();
+                    newReference.setValue(dataSnapshot.getValue(), (firebaseError, firebase) -> {
+                        if (firebaseError != null) {
+                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                        } else {
+                            newReference.updateChildren(updates)
+                                    .addOnCompleteListener(t -> Toast.makeText(getContext(),
+                                            "Itinerary updated", Toast.LENGTH_SHORT).show());
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            database.child(item.getDate()).child(item.getLocation()).updateChildren(updates)
+                    .addOnCompleteListener(t -> Toast.makeText(getContext(),
+                            "Itinerary updated", Toast.LENGTH_SHORT).show());
+        }
     }
 }
