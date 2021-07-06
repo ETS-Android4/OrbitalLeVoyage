@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    android:label="@string/menu_attractions"
     app:startDestination="@+id/nav_home">
 
     <fragment
         android:id="@+id/nav_checklist"
-        android:name="com.example.levoyage.ui.attractions.AttractionsFragment"
+        android:name="com.example.levoyage.ui.checklist.ChecklistFragment"
         android:label="@string/menu_checklist"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_recycler" />
     <fragment
         android:id="@+id/nav_notes"
         android:name="com.example.levoyage.ui.notes.NotesFragment"
