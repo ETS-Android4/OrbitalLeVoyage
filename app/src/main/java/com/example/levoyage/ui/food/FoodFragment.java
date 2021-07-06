@@ -55,8 +55,8 @@ public class FoodFragment extends SearchFragment {
                 progressBar.setVisibility(ProgressBar.VISIBLE);
                 list = new ArrayList<>();
                 queue = Volley.newRequestQueue(getContext());
-//                getLocationID(query, queue);
-                extractInfo("298570");
+                getLocationID(query, queue);
+//                extractInfo("298570");
                 return false;
             }
 

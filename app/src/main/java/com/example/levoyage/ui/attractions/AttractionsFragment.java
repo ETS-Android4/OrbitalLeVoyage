@@ -61,8 +61,8 @@ public class AttractionsFragment extends SearchFragment {
                 progressBar.setVisibility(ProgressBar.VISIBLE);
                 list = new ArrayList<>();
                 queue = Volley.newRequestQueue(getContext());
-//                getLocationID(query, queue);
-                extractInfo("298278");
+                getLocationID(query, queue);
+//                extractInfo("298278");
                 return false;
             }
 
