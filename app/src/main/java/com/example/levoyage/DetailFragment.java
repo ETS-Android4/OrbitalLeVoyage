@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.levoyage.ui.home.ItineraryAdapter;
 import com.example.levoyage.ui.home.ItineraryItem;
 import com.example.levoyage.ui.home.TimeParcel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,7 +70,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
     public void retrieveSavedInfo(String dateString, String location, Class<T> tClass) {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference database = FirebaseDatabase
-                .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getInstance(getString(R.string.database_link))
                 .getReference(userID).child("Itinerary").child(dateString).child(location);
 
         database.addValueEventListener(new ValueEventListener() {
@@ -104,15 +102,18 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         itineraryCloseBtn = popupView.findViewById(R.id.detailPopupClose);
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference database = FirebaseDatabase
-                .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getInstance(getString(R.string.database_link))
                 .getReference(userID).child("Itinerary");
+        TimeParcel st = new TimeParcel();
+        TimeParcel et = new TimeParcel();
 
         location.setText(item.getLocation());
         start.setOnClickListener(t -> {
             TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    TimeParcel st = new TimeParcel(hourOfDay, minute);
+                    st.setHr(hourOfDay);
+                    st.setMin(minute);
                     item.setStartTime(st);
                     start.setText(st.toString());
                     start.setError(null);
@@ -125,7 +126,8 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
             TimePickerDialog timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    TimeParcel et = new TimeParcel(hourOfDay, minute);
+                    et.setHr(hourOfDay);
+                    et.setMin(minute);
                     item.setEndTime(et);
                     end.setText(et.toString());
                     end.setError(null);
@@ -164,6 +166,9 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                     start.requestFocus();
                 } else if (end.getText().toString().isEmpty()) {
                     end.setError("Please select an end time");
+                    end.requestFocus();
+                } else if (et.compareTo(st) < 0) {
+                    end.setError("End time is earlier than start time");
                     end.requestFocus();
                 } else {
                     database.child(item.getDate()).child(item.getLocation()).setValue(item);
@@ -217,7 +222,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                     String date = LocalDate.now().format(formatter);
                     ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
                     DatabaseReference database = FirebaseDatabase
-                            .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                            .getInstance(getString(R.string.database_link))
                             .getReference("Reviews").child(locationID).child(userID);
                     database.setValue(review);
                     dialog.dismiss();
@@ -229,7 +234,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
     public void retrieveReviews(String locationID, RecyclerView recyclerView) {
         DatabaseReference database = FirebaseDatabase
-                .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getInstance(getString(R.string.database_link))
                 .getReference("Reviews").child(locationID);
 
         database.addValueEventListener(new ValueEventListener() {

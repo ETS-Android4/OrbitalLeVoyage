@@ -1,7 +1,7 @@
 package com.example.levoyage.ui.notes;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,8 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
+import com.example.levoyage.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +40,7 @@ public class NotesFragment extends Fragment {
     private FloatingActionButton notesFab;
     private NotesAdapter adapter;
     private DatabaseReference database;
-    private String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
@@ -80,30 +81,71 @@ public class NotesFragment extends Fragment {
             }
         });
 
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleCallback = new RecyclerItemTouchHelper(getContext()) {
             @Override
-            public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-                return false;
+            public void deleteItem(int position) {
+                dialogBuilder = new AlertDialog.Builder(getContext());
+                dialogBuilder.setTitle("Delete Note");
+                dialogBuilder.setMessage("Are you sure you want to delete this note?");
+                dialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+                    NoteItem deleted = list.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    database.child(deleted.getId()).removeValue();
+                });
+                dialogBuilder.setNegativeButton("Cancel",
+                        (dialog, which) -> adapter.notifyItemChanged(position));
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
+//                Snackbar snackbar = Snackbar.make(notesRecycler, String.format("%s deleted", deleted.getTitle()), Snackbar.LENGTH_LONG)
+//                        .setAction("Undo", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                list.add(position, deleted);
+//                                database.child(deleted.getId()).setValue(deleted);
+//                                adapter.notifyItemInserted(position);
+//                            }
+//                        });
+//                snackbar.setActionTextColor(Color.RED);
+//                snackbar.setTextColor(Color.parseColor("#3B99EA"));
+//                snackbar.show();
             }
 
             @Override
-            public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                NoteItem deleted = list.remove(position);
-                adapter.notifyItemRemoved(position);
-                database.child(deleted.getId()).removeValue();
-                Snackbar snackbar = Snackbar.make(notesRecycler, String.format("%s deleted", deleted.getTitle()), Snackbar.LENGTH_LONG)
-                        .setAction("Undo", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                list.add(position, deleted);
-                                database.child(deleted.getId()).setValue(deleted);
-                                adapter.notifyItemInserted(position);
-                            }
-                        });
-                snackbar.setActionTextColor(Color.RED);
-                snackbar.setTextColor(Color.parseColor("#3B99EA"));
-                snackbar.show();
+            public void editItem(int position) {
+                dialogBuilder = new AlertDialog.Builder(getContext());
+                View popupView = getLayoutInflater().inflate(R.layout.simple_popup, null);
+                dialogBuilder.setView(popupView);
+                dialog = dialogBuilder.create();
+                dialog.show();
+
+                ImageButton closeBtn = popupView.findViewById(R.id.simpleClose);
+                Button editBtn = popupView.findViewById(R.id.simpleButton);
+                EditText titleText = popupView.findViewById(R.id.simpleText);
+                TextView header = popupView.findViewById(R.id.simpleHeader);
+
+                NoteItem item = list.get(position);
+                editBtn.setText(R.string.edit);
+                titleText.setText(item.getTitle());
+                header.setText(R.string.edit_title);
+
+                editBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String title = titleText.getText().toString();
+                        if (title.isEmpty()) {
+                            titleText.setError(getString(R.string.empty_title));
+                            titleText.requestFocus();
+                        } else {
+                            database.child(item.getId()).child("title").setValue(title);
+                            adapter.notifyItemChanged(position);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                closeBtn.setOnClickListener(t -> {
+                    dialog.dismiss();
+                    adapter.notifyItemChanged(position); });
             }
         };
 
@@ -114,27 +156,32 @@ public class NotesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialogBuilder = new AlertDialog.Builder(getContext());
-                View popupView = getLayoutInflater().inflate(R.layout.notes_popup, null);
+                View popupView = getLayoutInflater().inflate(R.layout.simple_popup, null);
                 dialogBuilder.setView(popupView);
                 dialog = dialogBuilder.create();
                 dialog.show();
 
-                ImageButton closeBtn = popupView.findViewById(R.id.newNoteClose);
-                Button createBtn = popupView.findViewById(R.id.newNoteCreate);
-                EditText titleText = popupView.findViewById(R.id.newNoteTitle);
+                ImageButton closeBtn = popupView.findViewById(R.id.simpleClose);
+                Button createBtn = popupView.findViewById(R.id.simpleButton);
+                EditText titleText = popupView.findViewById(R.id.simpleText);
 
                 createBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String title = titleText.getText().toString();
-                        Bundle bundle = new Bundle();
-                        String id = database.push().getKey();
-                        NoteItem newNote = new NoteItem("", id, title, LocalDate.now().toString());
-                        database.child(id).setValue(newNote);
-                        bundle.putParcelable("Note", newNote);
-                        dialog.dismiss();
-                        Navigation.findNavController(view).navigate(
-                                R.id.action_nav_notes_to_notesViewFragment, bundle);
+                        if (title.isEmpty()) {
+                            titleText.setError(getString(R.string.empty_title));
+                            titleText.requestFocus();
+                        } else {
+                            Bundle bundle = new Bundle();
+                            String id = database.push().getKey();
+                            NoteItem newNote = new NoteItem("", id, title, LocalDate.now().toString());
+                            database.child(id).setValue(newNote);
+                            bundle.putParcelable("Note", newNote);
+                            dialog.dismiss();
+                            Navigation.findNavController(view).navigate(
+                                    R.id.action_nav_notes_to_notesViewFragment, bundle);
+                        }
                     }
                 });
 
