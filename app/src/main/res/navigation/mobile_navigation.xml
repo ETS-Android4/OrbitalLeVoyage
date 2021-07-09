@@ -123,4 +123,9 @@
         android:name="com.example.levoyage.ui.notes.NotesViewFragment"
         android:label="fragment_notes_view"
         tools:layout="@layout/fragment_notes_view" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.levoyage.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

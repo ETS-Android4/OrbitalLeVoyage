@@ -1,22 +1,17 @@
 package com.example.levoyage;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -24,6 +19,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button signUpButton;
     private ImageButton backToLoginButton;
     private FirebaseAuth myFirebaseAuth;
+    private DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,56 +33,45 @@ public class SignUpActivity extends AppCompatActivity {
         myFirebaseAuth = FirebaseAuth.getInstance();
         backToLoginButton = findViewById(R.id.BackToLoginButton);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = signUpEmail.getText().toString();
-                String pwd = signUpPassword.getText().toString();
-                String name = signUpUsername.getText().toString();
-                if (email.isEmpty() && pwd.isEmpty() && name.isEmpty()) {
-                    Toast.makeText(SignUpActivity.this, "Fields are empty!!",
-                            Toast.LENGTH_SHORT).show();
-                } else if (name.isEmpty()) {
-                    signUpUsername.setError("Please enter your username");
-                    signUpUsername.requestFocus();
-                } else if (email.isEmpty()) {
-                    signUpEmail.setError("Please enter your email");
-                    signUpEmail.requestFocus();
-                } else if (pwd.isEmpty()) {
-                    signUpPassword.setError("Please enter your password");
-                    signUpPassword.requestFocus();
-                } else {
-                    myFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(
-                            SignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (!task.isSuccessful()) {
-                                        Toast.makeText(SignUpActivity.this, "Sign up failed",
+        signUpButton.setOnClickListener(v -> {
+            String email = signUpEmail.getText().toString();
+            String pwd = signUpPassword.getText().toString();
+            String name = signUpUsername.getText().toString();
+            if (email.isEmpty() && pwd.isEmpty() && name.isEmpty()) {
+                Toast.makeText(SignUpActivity.this, "Fields are empty!!",
+                        Toast.LENGTH_SHORT).show();
+            } else if (name.isEmpty()) {
+                signUpUsername.setError("Please enter your username");
+                signUpUsername.requestFocus();
+            } else if (email.isEmpty()) {
+                signUpEmail.setError("Please enter your email");
+                signUpEmail.requestFocus();
+            } else if (pwd.isEmpty()) {
+                signUpPassword.setError("Please enter your password");
+                signUpPassword.requestFocus();
+            } else {
+                myFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(
+                        SignUpActivity.this, task -> {
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(SignUpActivity.this, "Sign up failed",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                database = FirebaseDatabase
+                                        .getInstance(getString(R.string.database_link))
+                                        .getReference("Profiles")
+                                        .child(myFirebaseAuth.getCurrentUser().getUid());
+                                database.child("username").setValue(name).addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        Toast.makeText(SignUpActivity.this, "Sign up successful",
                                                 Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                .setDisplayName(name).build();
-                                        myFirebaseAuth.getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(SignUpActivity.this, "Sign up successful",
-                                                            Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
                                     }
-                                }
-                            });
-                }
+                                });
+                            }
+                        });
             }
         });
 
-        backToLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-            }
-        });
+        backToLoginButton.setOnClickListener(v ->
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class)));
     }
 }

@@ -234,11 +234,15 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                 String userID = user.getUid();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
                 String date = LocalDate.now().format(formatter);
-                ReviewItem review = new ReviewItem(user.getDisplayName(), rating, reviewString, date, locationID);
-                DatabaseReference database = FirebaseDatabase
+                ReviewItem review = new ReviewItem(userID, rating, reviewString, date, location);
+                DatabaseReference databaseReviews = FirebaseDatabase
                         .getInstance(getString(R.string.database_link))
                         .getReference("Reviews").child(locationID).child(userID);
-                database.setValue(review);
+                databaseReviews.setValue(review);
+                DatabaseReference databaseProfile = FirebaseDatabase
+                        .getInstance(getString(R.string.database_link))
+                        .getReference("Profiles").child(userID).child("reviews").child(locationID);
+                databaseProfile.setValue(review);
                 dialog.dismiss();
             }
         });

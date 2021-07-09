@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -17,6 +21,13 @@ import com.example.levoyage.databinding.ActivityDrawerBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
+import com.squareup.picasso.Picasso;
 
 public class DrawerActivity extends AppCompatActivity {
 
@@ -38,28 +49,54 @@ public class DrawerActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_accommodation, R.id.nav_attractions, R.id.nav_food,
-                R.id.nav_map, R.id.nav_weather, R.id.nav_notes, R.id.nav_checklist)
+                R.id.nav_map, R.id.nav_weather, R.id.nav_notes, R.id.nav_checklist, R.id.profileFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_drawer);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(DrawerActivity.this, LoginActivity.class);
-                startActivity(i);
-            }
+        findViewById(R.id.logout).setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(DrawerActivity.this, LoginActivity.class);
+            startActivity(i);
         });
 
         View header = navigationView.getHeaderView(0);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         TextView profileEmail = header.findViewById(R.id.ProfileEmail);
         TextView profileUsername = header.findViewById(R.id.ProfileUsername);
+        ImageView profilePicture = header.findViewById(R.id.profilePicture);
+        LinearLayout profileLayout = header.findViewById(R.id.drawerHeader);
+
+        DatabaseReference database = FirebaseDatabase
+                .getInstance(getString(R.string.database_link))
+                .getReference("Profiles").child(user.getUid());
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                String username = snapshot.child("username").getValue(String.class);
+                profileUsername.setText(username);
+                String imageURL = snapshot.child("image").getValue(String.class);
+                Picasso.get().load(imageURL).placeholder(R.mipmap.ic_launcher_round)
+                        .fit().into(profilePicture);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(DrawerActivity.this,
+                        "Unable to retrieve profile information", Toast.LENGTH_SHORT).show();
+            }
+        });
         profileEmail.setText(user.getEmail());
-        profileUsername.setText(user.getDisplayName());
+
+        profileLayout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("userID", user.getUid());
+            navController.navigate(R.id.profileFragment, bundle);
+            drawer.close();
+        });
     }
 
     @Override

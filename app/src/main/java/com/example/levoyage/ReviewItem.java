@@ -2,15 +2,15 @@ package com.example.levoyage;
 
 public class ReviewItem {
 
-    private String userID, review, date, locationID;
+    private String userID, review, date, location;
     private float rating;
 
-    public ReviewItem(String userID, float rating, String review, String date, String locationID) {
+    public ReviewItem(String userID, float rating, String review, String date, String location) {
         this.userID = userID;
         this.rating = rating;
         this.review = review;
         this.date = date;
-        this.locationID = locationID;
+        this.location = location;
     }
 
     public ReviewItem() {
@@ -32,7 +32,7 @@ public class ReviewItem {
 
     public void setDate(String date) { this.date = date; }
 
-    public String getLocationID() { return locationID; }
+    public String getLocation() { return location; }
 
-    public void setLocationID(String locationID) { this.locationID = locationID; }
+    public void setLocation(String location) { this.location = location; }
 }

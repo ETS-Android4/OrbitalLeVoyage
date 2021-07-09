@@ -1,17 +1,26 @@
 package com.example.levoyage;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,7 +38,7 @@ public static class ReviewViewHolder extends RecyclerView.ViewHolder {
 
     TextView username, review, date;
     RatingBar rating;
-    ConstraintLayout itemLayout;
+    ShapeableImageView image;
 
     public ReviewViewHolder(View itemView) {
         super(itemView);
@@ -37,7 +46,7 @@ public static class ReviewViewHolder extends RecyclerView.ViewHolder {
         review = itemView.findViewById(R.id.reviewText);
         date = itemView.findViewById(R.id.reviewDate);
         rating = itemView.findViewById(R.id.reviewRating);
-        itemLayout = itemView.findViewById(R.id.reviewLayout);
+        image = itemView.findViewById(R.id.userPicture);
     }
 }
 
@@ -52,10 +61,35 @@ public static class ReviewViewHolder extends RecyclerView.ViewHolder {
     @Override
     public void onBindViewHolder(ReviewAdapter.ReviewViewHolder holder, int position) {
         ReviewItem item = list.get(position);
-        holder.username.setText(item.getUserID());
+
+        DatabaseReference database = FirebaseDatabase
+                .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("Profiles").child(item.getUserID());
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                String username = snapshot.child("username").getValue(String.class);
+                holder.username.setText(username);
+                String imageURL = snapshot.child("image").getValue(String.class);
+                Picasso.get().load(imageURL).placeholder(R.mipmap.ic_launcher_round)
+                        .fit().into(holder.image);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context,
+                        "Unable to retrieve profile information", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         holder.date.setText(item.getDate());
         holder.review.setText(item.getReview());
         holder.rating.setRating(item.getRating());
+
+        holder.username.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("userID", item.getUserID());
+            Navigation.findNavController(v).navigate(R.id.profileFragment, bundle);
+        });
     }
 
     @Override

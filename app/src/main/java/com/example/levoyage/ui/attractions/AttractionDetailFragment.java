@@ -56,7 +56,7 @@ public class AttractionDetailFragment extends DetailFragment<AttractionItinerary
         progressBar = view.findViewById(R.id.detailProgressBar);
 
         if (saved) {
-//            detailFab.hide();
+            detailFab.hide();
             String dateString = getArguments().getString("Date");
             String location = getArguments().getString("Location");
             retrieveSavedInfo(dateString, location, AttractionItineraryItem.class);

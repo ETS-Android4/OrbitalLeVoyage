@@ -81,5 +81,9 @@
     <string name="add_task">Add to checklist</string>
     <string name="task">Task</string>
     <string name="empty_title">Please enter a title</string>
+    <!-- Strings related to profile -->
+    <string name="change_picture">Change Picture</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="reviews_written">Reviews Written</string>
 
 </resources>
