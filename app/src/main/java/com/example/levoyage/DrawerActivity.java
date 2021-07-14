@@ -60,6 +60,7 @@ public class DrawerActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(DrawerActivity.this, LoginActivity.class);
             startActivity(i);
+            finish();
         });
 
         View header = navigationView.getHeaderView(0);

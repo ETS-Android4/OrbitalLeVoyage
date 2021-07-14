@@ -25,6 +25,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getSupportActionBar().hide();
 
         signUpEmail = findViewById(R.id.SignUpEmail);
         signUpPassword = findViewById(R.id.SignUpPassword);
@@ -64,6 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     if (task1.isSuccessful()) {
                                         Toast.makeText(SignUpActivity.this, "Sign up successful",
                                                 Toast.LENGTH_SHORT).show();
+                                        finish();
                                     }
                                 });
                             }
@@ -71,7 +73,9 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        backToLoginButton.setOnClickListener(v ->
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class)));
+        backToLoginButton.setOnClickListener(v -> {
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                finish();
+        });
     }
 }
