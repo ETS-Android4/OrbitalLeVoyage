@@ -47,7 +47,6 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
     private EditText reviewText;
     private RatingBar ratingBar;
     private ArrayList<ReviewItem> list;
-    private List<ItineraryItem> itineraryList;
     private ReviewAdapter adapter;
 
     @Override
@@ -151,12 +150,12 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                 end.requestFocus();
             } else {
                 database.child(item.getDate()).get().addOnCompleteListener(task -> {
-                    itineraryList = new ArrayList<>();
+                    List<ItineraryItem> itineraryList = new ArrayList<>();
                     for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
                         ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
                         itineraryList.add(itineraryItem);
                     }
-                    ItineraryItem overlap = checkOverlap(st, et);
+                    ItineraryItem overlap = checkOverlap(itineraryList, st, et);
                     if (overlap == null) {
                         database.child(item.getDate()).child(item.getLocation()).setValue(item)
                                 .addOnCompleteListener(t -> Toast.makeText(getContext(),
@@ -181,7 +180,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         itineraryCloseBtn.setOnClickListener(v -> dialog.dismiss());
     }
 
-    private ItineraryItem checkOverlap(TimeParcel start, TimeParcel end) {
+    public ItineraryItem checkOverlap(List<ItineraryItem> itineraryList, TimeParcel start, TimeParcel end) {
         for (int i = 0; i < itineraryList.size(); i++) {
             ItineraryItem item = itineraryList.get(i);
             if (item.getStartTime().compareTo(start) == 0) {
