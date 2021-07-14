@@ -76,7 +76,7 @@ public class ItineraryFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler);
         database = FirebaseDatabase
                 .getInstance(getString(R.string.database_link))
-                .getReference(userID).child("Itinerary");
+                .getReference("Users").child(userID).child("Itinerary");
         fab = view.findViewById(R.id.fab);
 
         // Set header
@@ -90,7 +90,7 @@ public class ItineraryFragment extends Fragment {
                 list = new ArrayList<>();
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new ItineraryAdapter(getContext(), list, userID);
+                adapter = new ItineraryAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);

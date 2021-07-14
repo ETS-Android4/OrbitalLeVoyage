@@ -259,7 +259,7 @@ public class AccommodationDetailFragment extends DetailFragment<AccommodationIti
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference database = FirebaseDatabase
                 .getInstance(getString(R.string.database_link))
-                .getReference(userID).child("Itinerary");
+                .getReference("Users").child(userID).child("Itinerary");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
         if (dates[0].isEqual(dates[1])) {
             String date = dates[0].format(formatter);
@@ -270,6 +270,7 @@ public class AccommodationDetailFragment extends DetailFragment<AccommodationIti
                     itineraryList.add(itineraryItem);
                 }
                 ItineraryItem overlap = checkOverlap(itineraryList, start, end);
+                item.setDate(date);
                 item.setStartTime(start);
                 item.setEndTime(end);
                 if (overlap == null) {
@@ -302,6 +303,7 @@ public class AccommodationDetailFragment extends DetailFragment<AccommodationIti
                 }
                 TimeParcel endOfDay = new TimeParcel(23, 59);
                 ItineraryItem overlap = checkOverlap(itineraryList, start, endOfDay);
+                item.setDate(date);
                 item.setStartTime(start);
                 item.setEndTime(endOfDay);
                 if (overlap == null) {

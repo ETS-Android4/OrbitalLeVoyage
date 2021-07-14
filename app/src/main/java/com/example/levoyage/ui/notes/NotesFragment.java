@@ -57,8 +57,8 @@ public class NotesFragment extends Fragment {
         notesRecycler = view.findViewById(R.id.recycler);
         notesFab = view.findViewById(R.id.fab);
         database = FirebaseDatabase
-                .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                .getReference(userID).child("Notes");
+                .getInstance(getString(R.string.database_link))
+                .getReference("Users").child(userID).child("Notes");
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,18 +96,6 @@ public class NotesFragment extends Fragment {
                         (dialog, which) -> adapter.notifyItemChanged(position));
                 AlertDialog dialog = dialogBuilder.create();
                 dialog.show();
-//                Snackbar snackbar = Snackbar.make(notesRecycler, String.format("%s deleted", deleted.getTitle()), Snackbar.LENGTH_LONG)
-//                        .setAction("Undo", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                list.add(position, deleted);
-//                                database.child(deleted.getId()).setValue(deleted);
-//                                adapter.notifyItemInserted(position);
-//                            }
-//                        });
-//                snackbar.setActionTextColor(Color.RED);
-//                snackbar.setTextColor(Color.parseColor("#3B99EA"));
-//                snackbar.show();
             }
 
             @Override
@@ -128,18 +116,15 @@ public class NotesFragment extends Fragment {
                 titleText.setText(item.getTitle());
                 header.setText(R.string.edit_title);
 
-                editBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String title = titleText.getText().toString();
-                        if (title.isEmpty()) {
-                            titleText.setError(getString(R.string.empty_title));
-                            titleText.requestFocus();
-                        } else {
-                            database.child(item.getId()).child("title").setValue(title);
-                            adapter.notifyItemChanged(position);
-                            dialog.dismiss();
-                        }
+                editBtn.setOnClickListener(v -> {
+                    String title = titleText.getText().toString();
+                    if (title.isEmpty()) {
+                        titleText.setError(getString(R.string.empty_title));
+                        titleText.requestFocus();
+                    } else {
+                        database.child(item.getId()).child("title").setValue(title);
+                        adapter.notifyItemChanged(position);
+                        dialog.dismiss();
                     }
                 });
 
@@ -152,41 +137,35 @@ public class NotesFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(notesRecycler);
 
-        notesFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogBuilder = new AlertDialog.Builder(getContext());
-                View popupView = getLayoutInflater().inflate(R.layout.simple_popup, null);
-                dialogBuilder.setView(popupView);
-                dialog = dialogBuilder.create();
-                dialog.show();
+        notesFab.setOnClickListener(v -> {
+            dialogBuilder = new AlertDialog.Builder(getContext());
+            View popupView = getLayoutInflater().inflate(R.layout.simple_popup, null);
+            dialogBuilder.setView(popupView);
+            dialog = dialogBuilder.create();
+            dialog.show();
 
-                ImageButton closeBtn = popupView.findViewById(R.id.simpleClose);
-                Button createBtn = popupView.findViewById(R.id.simpleButton);
-                EditText titleText = popupView.findViewById(R.id.simpleText);
+            ImageButton closeBtn = popupView.findViewById(R.id.simpleClose);
+            Button createBtn = popupView.findViewById(R.id.simpleButton);
+            EditText titleText = popupView.findViewById(R.id.simpleText);
 
-                createBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String title = titleText.getText().toString();
-                        if (title.isEmpty()) {
-                            titleText.setError(getString(R.string.empty_title));
-                            titleText.requestFocus();
-                        } else {
-                            Bundle bundle = new Bundle();
-                            String id = database.push().getKey();
-                            NoteItem newNote = new NoteItem("", id, title, LocalDate.now().toString());
-                            database.child(id).setValue(newNote);
-                            bundle.putParcelable("Note", newNote);
-                            dialog.dismiss();
-                            Navigation.findNavController(view).navigate(
-                                    R.id.action_nav_notes_to_notesViewFragment, bundle);
-                        }
-                    }
-                });
+            createBtn.setOnClickListener(v1 -> {
+                String title = titleText.getText().toString();
+                if (title.isEmpty()) {
+                    titleText.setError(getString(R.string.empty_title));
+                    titleText.requestFocus();
+                } else {
+                    Bundle bundle = new Bundle();
+                    String id = database.push().getKey();
+                    NoteItem newNote = new NoteItem("", id, title, LocalDate.now().toString());
+                    database.child(id).setValue(newNote);
+                    bundle.putParcelable("Note", newNote);
+                    dialog.dismiss();
+                    Navigation.findNavController(view).navigate(
+                            R.id.action_nav_notes_to_notesViewFragment, bundle);
+                }
+            });
 
-                closeBtn.setOnClickListener(t -> dialog.dismiss());
-            }
+            closeBtn.setOnClickListener(t -> dialog.dismiss());
         });
     }
 

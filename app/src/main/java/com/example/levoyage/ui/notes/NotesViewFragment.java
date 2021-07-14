@@ -67,25 +67,18 @@ public class NotesViewFragment extends Fragment {
 
         text.setText(noteItem.getContent());
 
-        saveFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                DatabaseReference database = FirebaseDatabase
-                        .getInstance("https://orbital-le-voyage-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                        .getReference(userID).child("Notes").child(noteItem.getId());
-                HashMap<String, Object> updates = new HashMap<>();
-                String content = text.getText().toString();
-                updates.put("content", content);
-                updates.put("date", LocalDate.now().toString());
-                database.updateChildren(updates, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                        Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        saveFab.setOnClickListener(v -> {
+            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            DatabaseReference database = FirebaseDatabase
+                    .getInstance(getString(R.string.database_link))
+                    .getReference("Users").child(userID).child("Notes").child(noteItem.getId());
+            HashMap<String, Object> updates = new HashMap<>();
+            String content = text.getText().toString();
+            updates.put("content", content);
+            updates.put("date", LocalDate.now().toString());
+            database.updateChildren(updates, (error, ref) ->
+                    Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show());
 
-            }
         });
     }
 }

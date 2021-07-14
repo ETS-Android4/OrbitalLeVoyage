@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,10 +69,10 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
 
     public void retrieveSavedInfo(String dateString, String location, Class<T> tClass) {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("child", dateString);
         DatabaseReference database = FirebaseDatabase
                 .getInstance(getString(R.string.database_link))
-                .getReference(userID).child("Itinerary").child(dateString).child(location);
-
+                .getReference("Users").child(userID).child("Itinerary").child(dateString).child(location);
         database.get().addOnCompleteListener(task -> {
             T item = task.getResult().getValue(tClass);
             setDetails(item);
@@ -92,7 +93,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference database = FirebaseDatabase
                 .getInstance(getString(R.string.database_link))
-                .getReference(userID).child("Itinerary");
+                .getReference("Users").child(userID).child("Itinerary");
         TimeParcel st = new TimeParcel();
         TimeParcel et = new TimeParcel();
 

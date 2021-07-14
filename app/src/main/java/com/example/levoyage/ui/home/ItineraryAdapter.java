@@ -1,21 +1,11 @@
 package com.example.levoyage.ui.home;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -23,18 +13,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * ItineraryAdapter class is an adapter for
@@ -43,13 +24,11 @@ import java.util.Map;
 public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.MyViewHolder> {
 
     Context context;
-    String userID;
     ArrayList<ItineraryItem> list;
 
-    public ItineraryAdapter(Context context, ArrayList<ItineraryItem> list, String userID) {
+    public ItineraryAdapter(Context context, ArrayList<ItineraryItem> list) {
         this.context = context;
         this.list = list;
-        this.userID = userID;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -79,23 +58,20 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.MyVi
         holder.location.setText(item.getLocation());
         holder.time.setText(String.format("%s - %s", item.getStartTime().toString(), item.getEndTime().toString()));
 
-        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("Saved", true);
-                bundle.putString("Date", item.getDate());
-                bundle.putString("Location", item.getLocation());
-                if (item.getType() == 1) {
-                    Navigation.findNavController(v).navigate(
-                            R.id.action_itineraryFragment_to_accommodationDetailFragment, bundle);
-                } else if (item.getType() == 2) {
-                    Navigation.findNavController(v).navigate(
-                            R.id.action_itineraryFragment_to_attractionDetailFragment, bundle);
-                } else if (item.getType() == 3) {
-                    Navigation.findNavController(v).navigate(
-                            R.id.action_itineraryFragment_to_foodDetailFragment, bundle);
-                }
+        holder.itemLayout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("Saved", true);
+            bundle.putString("Date", item.getDate());
+            bundle.putString("Location", item.getLocation());
+            if (item.getType() == 1) {
+                Navigation.findNavController(v).navigate(
+                        R.id.action_itineraryFragment_to_accommodationDetailFragment, bundle);
+            } else if (item.getType() == 2) {
+                Navigation.findNavController(v).navigate(
+                        R.id.action_itineraryFragment_to_attractionDetailFragment, bundle);
+            } else if (item.getType() == 3) {
+                Navigation.findNavController(v).navigate(
+                        R.id.action_itineraryFragment_to_foodDetailFragment, bundle);
             }
         });
     }

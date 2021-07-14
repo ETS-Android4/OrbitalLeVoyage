@@ -59,7 +59,7 @@ public class ChecklistFragment extends Fragment {
 
         database = FirebaseDatabase
                 .getInstance(getString(R.string.database_link))
-                .getReference(userID).child("Checklist");
+                .getReference("Users").child(userID).child("Checklist");
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -83,41 +83,35 @@ public class ChecklistFragment extends Fragment {
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogBuilder = new AlertDialog.Builder(getContext());
-                View popupView = getLayoutInflater().inflate(R.layout.simple_popup, null);
-                dialogBuilder.setView(popupView);
-                dialog = dialogBuilder.create();
-                dialog.show();
+        fab.setOnClickListener(v -> {
+            dialogBuilder = new AlertDialog.Builder(getContext());
+            View popupView = getLayoutInflater().inflate(R.layout.simple_popup, null);
+            dialogBuilder.setView(popupView);
+            dialog = dialogBuilder.create();
+            dialog.show();
 
-                ImageButton closeBtn = popupView.findViewById(R.id.simpleClose);
-                Button createBtn = popupView.findViewById(R.id.simpleButton);
-                EditText taskText = popupView.findViewById(R.id.simpleText);
-                TextView header = popupView.findViewById(R.id.simpleHeader);
+            ImageButton closeBtn = popupView.findViewById(R.id.simpleClose);
+            Button createBtn = popupView.findViewById(R.id.simpleButton);
+            EditText taskText = popupView.findViewById(R.id.simpleText);
+            TextView header = popupView.findViewById(R.id.simpleHeader);
 
-                taskText.setHint(R.string.task);
-                header.setText(R.string.add_task);
+            taskText.setHint(R.string.task);
+            header.setText(R.string.add_task);
 
-                createBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String task = taskText.getText().toString();
-                        if (task.isEmpty()) {
-                            taskText.setError(getString(R.string.empty_task));
-                            taskText.requestFocus();
-                        } else {
-                            String id = database.push().getKey();
-                            ChecklistItem newTask = new ChecklistItem(false, task, id);
-                            database.child(id).setValue(newTask);
-                            dialog.dismiss();
-                        }
-                    }
-                });
+            createBtn.setOnClickListener(v1 -> {
+                String task = taskText.getText().toString();
+                if (task.isEmpty()) {
+                    taskText.setError(getString(R.string.empty_task));
+                    taskText.requestFocus();
+                } else {
+                    String id = database.push().getKey();
+                    ChecklistItem newTask = new ChecklistItem(false, task, id);
+                    database.child(id).setValue(newTask);
+                    dialog.dismiss();
+                }
+            });
 
-                closeBtn.setOnClickListener(t -> dialog.dismiss());
-            }
+            closeBtn.setOnClickListener(t -> dialog.dismiss());
         });
 
         ItemTouchHelper.SimpleCallback simpleCallback = new RecyclerItemTouchHelper(getContext()) {
@@ -126,13 +120,10 @@ public class ChecklistFragment extends Fragment {
                 dialogBuilder = new AlertDialog.Builder(getContext());
                 dialogBuilder.setTitle("Delete Task");
                 dialogBuilder.setMessage("Are you sure you want to delete this task from the checklist?");
-                dialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ChecklistItem deleted = list.remove(position);
-                        adapter.notifyItemRemoved(position);
-                        database.child(deleted.getId()).removeValue();
-                    }
+                dialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+                    ChecklistItem deleted = list.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    database.child(deleted.getId()).removeValue();
                 });
                 dialogBuilder.setNegativeButton("Cancel",
                         (dialog, which) -> adapter.notifyItemChanged(position));
@@ -158,18 +149,15 @@ public class ChecklistFragment extends Fragment {
                 taskText.setText(item.getTask());
                 header.setText(R.string.edit_task);
 
-                editBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String task = taskText.getText().toString();
-                        if (task.isEmpty()) {
-                            taskText.setError(getString(R.string.empty_task));
-                            taskText.requestFocus();
-                        } else {
-                            database.child(item.getId()).child("task").setValue(task);
-                            dialog.dismiss();
-                            adapter.notifyItemChanged(position);
-                        }
+                editBtn.setOnClickListener(v -> {
+                    String task = taskText.getText().toString();
+                    if (task.isEmpty()) {
+                        taskText.setError(getString(R.string.empty_task));
+                        taskText.requestFocus();
+                    } else {
+                        database.child(item.getId()).child("task").setValue(task);
+                        dialog.dismiss();
+                        adapter.notifyItemChanged(position);
                     }
                 });
 
