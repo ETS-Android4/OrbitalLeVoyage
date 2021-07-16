@@ -50,6 +50,9 @@ public class SignUpActivity extends AppCompatActivity {
             } else if (pwd.isEmpty()) {
                 signUpPassword.setError("Please enter your password");
                 signUpPassword.requestFocus();
+            } else if (pwd.length() < 6) {
+                signUpPassword.setError("Password must be at least 6 characters");
+                signUpPassword.requestFocus();
             } else {
                 myFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(
                         SignUpActivity.this, task -> {
