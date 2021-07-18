@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,19 +37,29 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
+import java.util.Date;
+
 public class WeatherFragment extends Fragment {
 
     final String API = "798183b24b356e657baaff7ec8bfc4c6";
     final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
+    final String WEATHER_URL_5_DAYS = "https://api.openweathermap.org/data/2.5/onecall";
+
 
     final long MIN_TIME = 5000;
     final float MIN_DISTANCE = 1000;
     final int REQUEST_CODE = 101;
 
+    private Date[] datesA;
+    private String[] temperatureA;
+    private String[] weatherIconsA;
+
     String Location_Provider = LocationManager.GPS_PROVIDER;
 
     TextView cityName, weatherState, temperature;
     ImageView weatherIcon;
+    ListView weather5Days;
+
     ProgressBar progressBar;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -71,6 +82,7 @@ public class WeatherFragment extends Fragment {
         weatherIcon = view.findViewById(R.id.weather_icon);
         cityFinder = view.findViewById(R.id.changeCityButton);
         cityName = view.findViewById(R.id.city_name);
+        weather5Days = view.findViewById(R.id.lvDailyWeather);
         progressBar = view.findViewById(R.id.weatherProgressBar);
 
         getWeatherForCurrentLocation();
@@ -108,6 +120,7 @@ public class WeatherFragment extends Fragment {
         params.put("q", city);
         params.put("appid", API);
         doNetworking(params);
+        doNetworking5Days(params);
     }
 
     @SuppressLint("MissingPermission")
@@ -129,6 +142,7 @@ public class WeatherFragment extends Fragment {
                 params.put("lon", longitude);
                 params.put("appid", API);
                 doNetworking(params);
+                doNetworking5Days(params);
             }
 
             @Override
@@ -191,6 +205,24 @@ public class WeatherFragment extends Fragment {
         });
     }
 
+    private void doNetworking5Days(RequestParams params) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(WEATHER_URL_5_DAYS, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+
+                WeatherData5Days weatherD = WeatherData5Days.fromJson(response);
+                updateUI(weatherD);
+//                super.onSuccess(statusCode, headers, response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
+
     private void updateUI(WeatherData weatherData) {
         temperature.setText(weatherData.getTemperature());
         cityName.setText(weatherData.getCity());
@@ -204,6 +236,14 @@ public class WeatherFragment extends Fragment {
         weatherState.setVisibility(View.VISIBLE);
         weatherIcon.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void updateUI(WeatherData5Days weatherData) {
+        weatherIconsA = new String[] { weatherData.getIconDay1(), weatherData.getIconDay2(), weatherData.getIconDay3(), weatherData.getIconDay4(), weatherData.getIconDay5() };
+        temperatureA = new String[] { weatherData.getTemperatureDay1(), weatherData.getTemperatureDay2(), weatherData.getTemperatureDay3(), weatherData.getTemperatureDay4(), weatherData.getTemperatureDay5()};
+        datesA = new Date[] { weatherData.getDay1(), weatherData.getDay2(), weatherData.getDay3(), weatherData.getDay4(), weatherData.getDay5() };
+        WeatherAdapter weatherAdapter = new WeatherAdapter(WeatherFragment.this, weatherIconsA, datesA, temperatureA);
+        weather5Days.setAdapter(weatherAdapter);
     }
 
     @Override
