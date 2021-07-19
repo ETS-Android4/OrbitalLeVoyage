@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 profile = snapshot.getValue(UserProfile.class);
                 username.setText(profile.getUsername());
-                Picasso.get().load(profile.getImage()).placeholder(R.mipmap.ic_launcher_round)
+                Picasso.get().load(profile.getImage()).placeholder(R.mipmap.default_profile_picture)
                         .fit().into(image);
                 Map<String, ReviewItem> reviews = profile.getReviews();
                 if (reviews != null) {
@@ -150,7 +150,7 @@ public class ProfileFragment extends Fragment {
             ImageButton closeBtn = popupView.findViewById(R.id.editProfileClose);
             updates = new HashMap<>();
             editUsername.setText(profile.getUsername());
-            Picasso.get().load(profile.getImage()).placeholder(R.mipmap.ic_launcher_round)
+            Picasso.get().load(profile.getImage()).placeholder(R.mipmap.default_profile_picture)
                     .fit().into(editPicture);
 
             dialogBuilder.setView(popupView);

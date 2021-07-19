@@ -1,8 +1,10 @@
 package com.example.levoyage;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,7 +82,7 @@ public class DrawerActivity extends AppCompatActivity {
                 String username = snapshot.child("username").getValue(String.class);
                 profileUsername.setText(username);
                 String imageURL = snapshot.child("image").getValue(String.class);
-                Picasso.get().load(imageURL).placeholder(R.mipmap.ic_launcher_round)
+                Picasso.get().load(imageURL).placeholder(R.mipmap.default_profile_picture)
                         .fit().into(profilePicture);
             }
 
@@ -112,5 +114,17 @@ public class DrawerActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_drawer);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {// User chose the "Settings" item, show the app settings UI...
+            Uri webAddress = Uri.parse("https://github.com/tsy24/OrbitalLeVoyage/blob/master/README.md#walkthrough");
+            Intent goToLink = new Intent(Intent.ACTION_VIEW, webAddress);
+            startActivity(goToLink);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
