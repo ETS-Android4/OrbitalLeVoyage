@@ -190,7 +190,9 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
 ![Orbital System Flow (2)](https://user-images.githubusercontent.com/77200594/123639197-87ab4b00-d852-11eb-9249-48a720131800.jpg)
 
 ### Database Structure ###
-![Database ER diagram (1)](https://user-images.githubusercontent.com/77200594/123552732-00a29800-d7aa-11eb-86a0-5aa12d183a15.jpg)
+![Database ER diagram (2)](https://user-images.githubusercontent.com/77200594/126189783-c084b32f-561b-4b4f-9f39-dd5a5bd6ac5f.jpg)
+
+The diagram above shows the structure of the Firebase Realtime Database. The main Users branch stores the information of each user: itinerary, notes and checklist. Only the user himself will have read and write access to the information stored in Users under their userID. Users' itineraries are stored as ItineraryItems. AccommodationItineraryItem, AttractionItineraryItem and FoodItineraryItem are subtypes of ItineraryItem and they inherit the fields of ItineraryItem. The Profiles branch stores information about each user that is available to all users. The Reviews branch stores reviews for locations based on their locationID.
 
 ## Development Plan ##
 | Week        | Tasks           |
