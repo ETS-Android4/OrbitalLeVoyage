@@ -110,6 +110,11 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
    * Displays reviews written by the user
    * User can edit their profile picture and username 
 
+### Activity Diagram ###
+![Activity Diagram](https://user-images.githubusercontent.com/77200594/126673417-96f7be9c-f620-4989-a4a9-06ed7de27ecf.jpg)
+
+The activity diagram shows the overview of the actions that users can take at various pages and the relationship between pages in the application.
+
 ### Technical Stack ###
 * Android Studio
 * Firebase
