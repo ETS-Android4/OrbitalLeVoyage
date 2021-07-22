@@ -17,7 +17,7 @@ We hope to make trip planning processes simpler by bringing different aspects of
 ## User Stories ##
 1. As a person planning my own trip to a country, I would like to know what are the popular attractions and restaurants that I can visit during my trip.
 2. As a person planning my own trip to a country, I would like to plan an itinerary and have a comprehensive schedule that I can refer to.
-3. As a person planning my own trip to a country, I would like to know the tentative weather conditions during my trip so that I can plan ahead. 
+3. As a person planning my own trip to a country, I would like to have a place to write down relevant important information that I can refer to together with my itinerary.
 4. As a person planning my own trip to a country, I would like to know about the travelling time needed between locations when planning my itinerary for 
 more efficient allocation of time.
 5. As a tourist guide, I would want to be able to write reviews for hotels, attractions and restaurants.
@@ -35,13 +35,12 @@ more efficient allocation of time.
 4. An ***Attraction Search*** feature
     * Attached with brief details such as descriptions and address
     * Users can post reviews and ratings of the attractions
-    * Attractions will be categorised according to type (eg. Play, Shop, See, Experience)
 5. A ***Restaurant Search*** feature
-    * Attached with brief descriptions such as popular menus and address
+    * Attached with brief details such as description and address
     * Users can post reviews and ratings
-6. ***Checklist*** feature for users to check their to-do tasks or to identify missing items in the users’ packing list.
-7. ***Notes*** provides a platform for users to write down any other information they want
-8. Displaying one selected week of ***Weather Forecast*** for an area in a country.
+6. ***Checklist*** feature for users to check their to-do tasks or create a packing list.
+7. ***Notes*** provides a platform for users to write down any other information
+8. Displaying 5-day ***Weather Forecast*** for an area.
 
 ## How are we different from similar platforms? ##
 * Klook and Trip.com:
@@ -69,11 +68,11 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
 ### Design ###
 * Account system
    * Users need to create an account to use the application. 
-   * Reviews posted by user will be associated to the account.
    * Login screen will appear when the application is launched. 
    * New users will be directed to the sign up page.
 * Navigating to features
-   * Navigation drawer will be used to navigation between features in the application
+   * Navigation drawer will be used to navigate between features in the application
+   * Logout button will be in the navigation drawer
 * Home screen (Calendar screen) 
    * Screen that appears after login or sign up.
    * Itinerary screen for a date will be shown after clicking the date on the calendar
@@ -89,12 +88,13 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
    * Displays details and reviews of the location
    * Users can add reviews for the location
    * Users can add the location to their itinerary
+   * Users can view the profile of other users who wrote reviews
 * Map screen
    * Users can search for a particular location on the map
    * Users can search for directions on the map
 * Weather screen
-   * Displays the weather for the current week at the user's current location
-   * Users can search for one selected week of weather forecast for an area 
+   * Displays the current weather and 5-day weather forecast at the user's current location
+   * Users can search for the weather forecast for another location 
 * Notes screen
    *  Displays list of notes with its titles and date it was last edited
    *  Users can create multiple notes
@@ -105,6 +105,10 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
 * Checklist screen
    * List of tasks that users can check
    * Checked tasks will be at the bottom
+* Profile screen
+   * Displays profile information of user: username, email, profile picture
+   * Displays reviews written by the user
+   * User can edit their profile picture and username 
 
 ### Technical Stack ###
 * Android Studio
@@ -116,17 +120,18 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
 ### Implementation ###
 * Account System
    * Link to Firebase Authentication: authentication using email and password
-   * New users need to set a username during sign up -> set as display name associated with Firebase User
+   * New users need to set a username during sign up
+      * Write profile information to database: Profiles -> userID
    * If there is already a user signed in, application will skip login page when launched
 * Navigation drawer
    * Drawer Activity to manage the navigation drawer
    * Features are contained in fragments
 * Itinerary screen
-   * Reads ItineraryItems from Firebase Realtime Database: userID -> Itinerary -> Date
+   * Reads ItineraryItems from Firebase Realtime Database: Users -> userID -> Itinerary -> Date
    * Display ItineraryItems in recycler view
    * Add to itinerary button: add custom event dialog opens
       * Select start and end time with timepicker dialog
-      * Write new ItineraryItem to database
+      * Write new ItineraryItem to database: Users -> userID -> Itinerary -> Date
    * On click for events added through Accommodation, Attraction and Food features: check type and navigate to corresponding detail fragment
    * On long click, users will open edit itinerary dialog
       * Choose new date with DatePickerDialog
@@ -161,6 +166,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
       * Set rating with rating bar
       * Create new ReviewItem
       * Write ReviewItem to database: Reviews -> locationID
+      * 
 * Map screen
    * SearchView for users to key in query location
    * Call Maps SDK for Android to obtain latitude coordinates for query location
@@ -187,10 +193,10 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
       * Call API with new city name  
 
 ### System Flow ###
-![Orbital System Flow (2)](https://user-images.githubusercontent.com/77200594/123639197-87ab4b00-d852-11eb-9249-48a720131800.jpg)
+![Orbital System Flow (4)](https://user-images.githubusercontent.com/77200594/126510669-d2e0a276-5bf8-494a-a980-dfbef968c7a2.jpg)
 
 ### Database Structure ###
-![Database ER diagram (2)](https://user-images.githubusercontent.com/77200594/126189783-c084b32f-561b-4b4f-9f39-dd5a5bd6ac5f.jpg)
+![Database ER diagram (3)](https://user-images.githubusercontent.com/77200594/126511888-d4c51063-4514-4f4d-a046-d191729846b4.jpg)
 
 The diagram above shows the structure of the Firebase Realtime Database. The main Users branch stores the information of each user: itinerary, notes and checklist. Only the user himself will have read and write access to the information stored in Users under their userID. Users' itineraries are stored as ItineraryItems. AccommodationItineraryItem, AttractionItineraryItem and FoodItineraryItem are subtypes of ItineraryItem and they inherit the fields of ItineraryItem. The Profiles branch stores information about each user that is available to all users. The Reviews branch stores reviews for locations based on their locationID.
 
