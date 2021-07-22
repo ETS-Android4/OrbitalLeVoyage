@@ -71,7 +71,7 @@ public static class ReviewViewHolder extends RecyclerView.ViewHolder {
                 String username = snapshot.child("username").getValue(String.class);
                 holder.username.setText(username);
                 String imageURL = snapshot.child("image").getValue(String.class);
-                Picasso.get().load(imageURL).placeholder(R.mipmap.ic_launcher_round)
+                Picasso.get().load(imageURL).placeholder(R.mipmap.default_profile_picture)
                         .fit().into(holder.image);
             }
             @Override
