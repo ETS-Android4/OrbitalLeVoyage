@@ -75,7 +75,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Account System</td>
-      <td></td>
+      <td><img src="https://user-images.githubusercontent.com/77200594/126809056-860c0c0a-4f82-4066-b17b-cf1913a98f55.gif" width = "700"> </td>
       <td>
         <ul>
           <li>Users need to create an account to use the application</li>
@@ -86,7 +86,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Navigation</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/ZqjwiE7BODZcGjL8lS/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Navigation drawer will be used to navigate between features in the application</li>
@@ -96,7 +96,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Home Screen</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/pR0vrTckR4JvMmVCrA/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Screen that appears after login or sign up</li>
@@ -106,7 +106,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Itinerary Screen</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/KMrEZGYS5P31MQYdci/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Displays schedule for a selected date arranged in chronological order</li>
@@ -117,7 +117,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Search Screen (Accommodation, Attractions, Food features)</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/KMrEZGYS5P31MQYdci/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Users can key in a location to search</li>
@@ -128,7 +128,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Details screen (Accommodation, Attractions, Food features)</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/KMrEZGYS5P31MQYdci/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Displays details and reviews of the location</li>
@@ -140,7 +140,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr>
     <tr>
       <td>Map screen</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/KMrEZGYS5P31MQYdci/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Users can search for a particular location on the map</li>
@@ -150,7 +150,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr> 
     <tr>
       <td>Weather screen</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/KMrEZGYS5P31MQYdci/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Displays the current weather and 5-day weather forecast at the user's current location</li>
@@ -160,7 +160,7 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
     </tr> 
     <tr>
       <td>Notes screen</td>
-      <td>right-aligned</td>
+      <td><img src="https://media.giphy.com/media/KMrEZGYS5P31MQYdci/giphy.gif" width = "700"></td>
       <td>
         <ul>
           <li>Displays list of notes with its titles and date it was last edited</li>
