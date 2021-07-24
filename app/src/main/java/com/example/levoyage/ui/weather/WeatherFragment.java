@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +22,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -29,6 +33,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ThrowOnExtraProperties;
 import com.google.firebase.database.annotations.NotNull;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,18 +51,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class WeatherFragment extends Fragment {
 
     final String API = "798183b24b356e657baaff7ec8bfc4c6";
     final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
     final String WEATHER_URL_5_DAYS = "https://api.openweathermap.org/data/2.5/onecall";
-
-    final long MIN_TIME = 5000;
-    final float MIN_DISTANCE = 1000;
-    final int REQUEST_CODE = 101;
-
-    String Location_Provider = LocationManager.GPS_PROVIDER;
 
     private TextView cityName, weatherState, temperature;
     private ImageView weatherIcon;
@@ -61,8 +66,7 @@ public class WeatherFragment extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Button cityFinder;
-    LocationManager locationManager;
-    LocationListener locationListener;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -117,52 +121,55 @@ public class WeatherFragment extends Fragment {
         doNetworking(params);
     }
 
-    @SuppressLint("MissingPermission")
     private void getWeatherForCurrentLocation() {
         weatherState.setVisibility(View.INVISIBLE);
         temperature.setVisibility(View.INVISIBLE);
         weatherIcon.setVisibility(View.INVISIBLE);
         cityName.setVisibility(View.INVISIBLE);
-        cityFinder.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                String latitude = String.valueOf(location.getLatitude());
-                String longitude = String.valueOf(location.getLongitude());
-                RequestParams params = new RequestParams();
-                params.put("lat", latitude);
-                params.put("lon", longitude);
-                params.put("appid", API);
-                doNetworking(params);
-            }
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) { }
-
-            @Override
-            public void onProviderEnabled(@NonNull String provider) { }
-
-            @Override
-            public void onProviderDisabled(@NonNull String provider) {
-                Toast.makeText(getContext(), "Unable to obtain current location",
-                        Toast.LENGTH_SHORT).show();
-            }
-        };
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocation();
+        } else {
+            ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    result -> {
+                        if(result) {
+                            getCurrentLocation();
+                        } else {
+                            Toast.makeText(getContext(),"Permission Denied",
+                                    Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+            mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
-        locationManager.requestLocationUpdates(Location_Provider, MIN_TIME, MIN_DISTANCE, locationListener);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void  getCurrentLocation() {
+        LocationManager locationManager = (LocationManager) getActivity()
+                .getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+         locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+                Location location = task.getResult();
+                if (location != null) {
+                    String latitude = String.valueOf(location.getLatitude());
+                    String longitude = String.valueOf(location.getLongitude());
+                    RequestParams params = new RequestParams();
+                    params.put("lat", latitude);
+                    params.put("lon", longitude);
+                    params.put("appid", API);
+                    doNetworking(params);
+                } else {
+                    Toast.makeText(getContext(), "Unable to obtain current location",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+         }
     }
 
     private void doNetworking(RequestParams params) {
@@ -229,14 +236,6 @@ public class WeatherFragment extends Fragment {
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(locationManager != null) {
-            locationManager.removeUpdates(locationListener);
-        }
     }
 
     private static String updateWeatherIcon(int condition) {

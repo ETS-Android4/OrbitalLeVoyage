@@ -156,6 +156,7 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                         ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
                         itineraryList.add(itineraryItem);
                     }
+                    itineraryList.sort(ItineraryItem::compareTo);
                     ItineraryItem overlap = checkOverlap(itineraryList, st, et);
                     if (overlap == null) {
                         database.child(item.getDate()).child(item.getLocation()).setValue(item)
