@@ -169,11 +169,13 @@ public abstract class DetailFragment<T extends ItineraryItem> extends Fragment {
                         builder.setMessage(String.format(
                                 "This new event overlaps with %s. Are you sure you want to add this event to your itinerary?",
                                 overlap.getLocation()));
-                        builder.setPositiveButton("Confirm", (dialog, which) ->
-                                database.child(item.getDate()).child(item.getLocation()).setValue(item));
+                        builder.setPositiveButton("Confirm", (dg, which) -> {
+                                database.child(item.getDate()).child(item.getLocation()).setValue(item);
+                                dialog.dismiss();
+                        });
                         builder.setNegativeButton("Cancel", null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        AlertDialog confirmationDialog = builder.create();
+                        confirmationDialog.show();
                     }
                 });
             }

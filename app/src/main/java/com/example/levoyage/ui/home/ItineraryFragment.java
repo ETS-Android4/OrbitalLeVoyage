@@ -49,8 +49,6 @@ public class ItineraryFragment extends Fragment {
     private FloatingActionButton fab;
     private Button btn;
     private ImageButton closeBtn;
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +106,7 @@ public class ItineraryFragment extends Fragment {
 
         // Pop up for adding new event to itinerary
         fab.setOnClickListener(v -> {
-            dialogBuilder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder addDialogBuilder = new AlertDialog.Builder(getContext());
             View popupView = getLayoutInflater().inflate(R.layout.itinerary_popup, null);
             location = popupView.findViewById(R.id.popupEvent);
             start = popupView.findViewById(R.id.popupStart);
@@ -138,9 +136,9 @@ public class ItineraryFragment extends Fragment {
                 timePicker.show();
             });
 
-            dialogBuilder.setView(popupView);
-            dialog = dialogBuilder.create();
-            dialog.show();
+            addDialogBuilder.setView(popupView);
+            AlertDialog addDialog = addDialogBuilder.create();
+            addDialog.show();
             btn.setOnClickListener(v1 -> {
                 String loc = location.getText().toString();
                 if (loc.isEmpty()) {
@@ -163,48 +161,49 @@ public class ItineraryFragment extends Fragment {
                         builder.setMessage(String.format(
                                 "This new event overlaps with %s. Are you sure you want to add this event to your itinerary?",
                                 overlap.getLocation()));
-                        builder.setPositiveButton("Confirm", (dialog, which) -> {
+                        builder.setPositiveButton("Confirm", (dg, which) -> {
                             ItineraryItem item = new ItineraryItem(loc, date, st, et);
                             database.child(date).child(loc).setValue(item);
+                            addDialog.dismiss();
                         });
                         builder.setNegativeButton("Cancel", null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        AlertDialog confirmationDialog = builder.create();
+                        confirmationDialog.show();
                     } else {
                         ItineraryItem item = new ItineraryItem(loc, date, st, et);
                         database.child(date).child(loc).setValue(item);
-                        dialog.dismiss();
+                        addDialog.dismiss();
                     }
                 }
             });
 
-            closeBtn.setOnClickListener(x -> dialog.dismiss());
+            closeBtn.setOnClickListener(x -> addDialog.dismiss());
         });
 
         ItemTouchHelper.SimpleCallback callback = new RecyclerItemTouchHelper(getContext()) {
             @Override
             public void deleteItem(int position) {
-                dialogBuilder = new AlertDialog.Builder(getContext());
-                dialogBuilder.setTitle("Delete Event");
+                AlertDialog.Builder deleteDialogBuilder = new AlertDialog.Builder(getContext());
+                deleteDialogBuilder.setTitle("Delete Event");
                 ItineraryItem deleteItem = list.get(position);
-                dialogBuilder.setMessage(String.format("Are you sure you want to delete %s from your itinerary?",
+                deleteDialogBuilder.setMessage(String.format("Are you sure you want to delete %s from your itinerary?",
                         deleteItem.getLocation()));
-                dialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+                deleteDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
                     ItineraryItem deleted = list.remove(position);
                     adapter.notifyItemRemoved(position);
                     database.child(date).child(deleted.getLocation()).removeValue()
                             .addOnCompleteListener(t -> Toast.makeText(getContext(),
                                     "Event deleted from itinerary", Toast.LENGTH_SHORT).show());
                 });
-                dialogBuilder.setNegativeButton("Cancel",
+                deleteDialogBuilder.setNegativeButton("Cancel",
                         (dialog, which) -> adapter.notifyItemChanged(position));
-                AlertDialog dialog = dialogBuilder.create();
-                dialog.show();
+                AlertDialog deleteDialog = deleteDialogBuilder.create();
+                deleteDialog.show();
             }
 
             @Override
             public void editItem(int position) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder editDialogBuilder = new AlertDialog.Builder(getContext());
                 View popupView = LayoutInflater.from(getContext()).inflate(R.layout.edit_itinerary_popup, null);
                 TextView event = popupView.findViewById(R.id.editPopupEvent);
                 TextView date = popupView.findViewById(R.id.editPopupDate);
@@ -223,9 +222,9 @@ public class ItineraryFragment extends Fragment {
 
                 Map<String, Object> updates = new HashMap<>();
 
-                dialogBuilder.setView(popupView);
-                AlertDialog dialog = dialogBuilder.create();
-                dialog.show();
+                editDialogBuilder.setView(popupView);
+                AlertDialog editDialog = editDialogBuilder.create();
+                editDialog.show();
 
                 start.setOnClickListener(t -> {
                     TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view13, hourOfDay, minute) -> {
@@ -271,19 +270,22 @@ public class ItineraryFragment extends Fragment {
                             builder.setMessage(String.format(
                                     "This edited event overlaps with %s. Are you sure you want to edit this event?",
                                     overlap.getLocation()));
-                            builder.setPositiveButton("Confirm", (dialog2, which) -> updateDatabase(updates, item));
+                            builder.setPositiveButton("Confirm", (dg, which) -> {
+                                updateDatabase(updates, item);
+                                editDialog.dismiss();
+                            });
                             builder.setNegativeButton("Cancel", null);
-                            AlertDialog dialog2 = builder.create();
-                            dialog2.show();
+                            AlertDialog confirmationDialog = builder.create();
+                            confirmationDialog.show();
                         } else {
                             updateDatabase(updates, item);
-                            dialog.dismiss();
+                            editDialog.dismiss();
                         }
                     }
                 });
 
                 closeBtn.setOnClickListener(t -> {
-                    dialog.dismiss();
+                    editDialog.dismiss();
                     list.add(position, item);
                     adapter.notifyItemChanged(position);});
             }
