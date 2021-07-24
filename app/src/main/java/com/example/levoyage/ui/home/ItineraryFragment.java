@@ -278,7 +278,6 @@ public class ItineraryFragment extends Fragment {
                         } else {
                             updateDatabase(updates, item);
                             dialog.dismiss();
-                            adapter.notifyItemChanged(position);
                         }
                     }
                 });
