@@ -66,49 +66,148 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
    * We are unable to obtain a datbase of hotels, attractions and restaurants. Thus, an API will be used to obtain information required.
 
 ### Design ###
-* Account system
-   * Users need to create an account to use the application. 
-   * Login screen will appear when the application is launched. 
-   * New users will be directed to the sign up page.
-* Navigating to features
-   * Navigation drawer will be used to navigate between features in the application
-   * Logout button will be in the navigation drawer
-* Home screen (Calendar screen) 
-   * Screen that appears after login or sign up.
-   * Itinerary screen for a date will be shown after clicking the date on the calendar
-* Itinerary screen
-   * Displays schedule for a selected date arranged in chronological order
-   * Users will be able to add custom events to the itinerary for that date
-   * Details screen will be shown on click for locations added through the accommodation, attractions or food feature
-* Search screen (Accommodation, Attractions, Food features)
-   * Users can key in a location to search
-   * Displays a list of locations based on the search with brief information such as name, rating, category
-   * Users can click on a location to be directed to the details screen
-* Details screen (Accommodation, Attractions, Food features)
-   * Displays details and reviews of the location
-   * Users can add reviews for the location
-   * Users can add the location to their itinerary
-   * Users can view the profile of other users who wrote reviews
-* Map screen
-   * Users can search for a particular location on the map
-   * Users can search for directions on the map
-* Weather screen
-   * Displays the current weather and 5-day weather forecast at the user's current location
-   * Users can search for the weather forecast for another location 
-* Notes screen
-   *  Displays list of notes with its titles and date it was last edited
-   *  Users can create multiple notes
-   *  Notes content screen will be shown on click
-* Notes content screen
-   * Shows content of notes and title
-   * Save button to save changes to notes
-* Checklist screen
-   * List of tasks that users can check
-   * Checked tasks will be at the bottom
-* Profile screen
-   * Displays profile information of user: username, email, profile picture
-   * Displays reviews written by the user
-   * User can edit their profile picture and username 
+<table>
+  <tbody>
+    <tr>
+      <th>Feature</th>
+      <th>Demo</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Account System</td>
+      <td><img src="https://user-images.githubusercontent.com/77200594/126809056-860c0c0a-4f82-4066-b17b-cf1913a98f55.gif" width = "700"> </td>
+      <td>
+        <ul>
+          <li>Users need to create an account to use the application</li>
+          <li>Login screen will appear when the application is launched</li>
+          <li>New users will be directed to the sign up page</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Navigation</td>
+      <td><img src="https://media.giphy.com/media/ZqjwiE7BODZcGjL8lS/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Navigation drawer will be used to navigate between features in the application</li>
+          <li>Logout button will be in the navigation drawer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Home Screen</td>
+      <td><img src="https://media.giphy.com/media/NQoGDViR1v71AnhfmD/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Screen that appears after login or sign up</li>
+          <li>Itinerary screen for a date will be shown after clicking the date on the calendar</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Itinerary Screen</td>
+      <td><img src="https://media.giphy.com/media/ZpqaP8gTuo6zTxFp8c/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Displays schedule for a selected date arranged in chronological order</li>
+          <li>Users will be able to add custom events to the itinerary for that date</li>
+          <li>Users will be able to edit event in the itinerary by swiping right and delete event by swiping left</li>
+          <li>Details screen will be shown on click for locations added through the accommodation, attractions or food feature</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Search Screen (Accommodation, Attractions, Food features)</td>
+      <td><img src="https://media.giphy.com/media/wzd3FVgy5EdCEM8SmC/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Users can key in a location to search</li>
+          <li>Displays a list of locations based on the search with brief information such as name, rating, category</li>
+          <li>Users can click on a location to be directed to the details screen</li> 
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Details screen (Accommodation, Attractions, Food features)</td>
+      <td><img src="https://media.giphy.com/media/Q4ssA7LiSmrKS8AEW1/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Displays details and reviews of the location</li>
+          <li>Users can add reviews for the location</li>
+          <li>Users can add the location to their itinerary</li>
+          <li>Users can view the profile of other users who wrote reviews</li> 
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Map screen</td>
+      <td><img src="https://media.giphy.com/media/eLWMQWFktt85uOPy9R/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Users can search for a particular location on the map</li>
+          <li>Users can search for directions on the map</li>
+        </ul>
+      </td>
+    </tr> 
+    <tr>
+      <td>Weather screen</td>
+      <td><img src="https://media.giphy.com/media/nfYL8nEB8pBnDlhErO/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Displays the current weather and 5-day weather forecast at the user's current location</li>
+          <li>Users can search for the weather forecast for another location</li>
+        </ul>
+      </td>
+    </tr> 
+    <tr>
+      <td>Notes screen</td>
+      <td><img src="https://media.giphy.com/media/kIDjV3PjHlYDNw422q/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Displays list of notes with its titles and date it was last edited</li>
+          <li>Users can create multiple notes</li>
+          <li>Notes content screen will be shown on click</li> 
+        </ul>
+      </td>
+    </tr> 
+    <tr>
+      <td>Notes content screen</td>
+      <td><img src="https://media.giphy.com/media/ih1CqX5phE2Jo9JmLa/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Shows content of notes and title</li>
+          <li>Save button to save changes to notes</li>
+        </ul>
+      </td>
+    </tr>  
+    <tr>
+      <td>Checklist screen</td>
+      <td><img src="https://media.giphy.com/media/G07JPmSIsfbPjwaUAc/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>List of tasks that users can check</li>
+          <li>Checked tasks will be at the bottom</li>
+        </ul>
+      </td>
+    </tr> 
+    <tr>
+      <td>Profile screen</td>
+      <td><img src="https://media.giphy.com/media/FmSzpM2N8vzpBqCwmB/giphy.gif" width = "700"></td>
+      <td>
+        <ul>
+          <li>Displays profile information of user: username, email, profile picture</li>
+          <li>Displays reviews written by the user</li>
+          <li>User can edit their profile picture and username</li> 
+        </ul>
+      </td>
+    </tr>  
+  </tbody>
+</table>
+
+### Activity Diagram ###
+![Activity Diagram](https://user-images.githubusercontent.com/77200594/126673417-96f7be9c-f620-4989-a4a9-06ed7de27ecf.jpg)
+
+The activity diagram shows the overview of the actions that users can take at various pages and the relationship between pages in the application.
 
 ### Technical Stack ###
 * Android Studio
