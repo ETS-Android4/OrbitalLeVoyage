@@ -73,6 +73,15 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
       <th>Demo</th>
       <th>Description</th>
     </tr>
+     <tr>
+      <td>Splash Screen</td>
+      <td><img src="https://media.giphy.com/media/Is68Cs1xUdSra3mJd8/giphy.gif" width = "700"> </td>
+      <td>
+        <ul>
+          <li>Appears when the application is launched</li>
+        </ul>
+      </td>
+     </tr>
     <tr>
       <td>Account System</td>
       <td><img src="https://user-images.githubusercontent.com/77200594/126809056-860c0c0a-4f82-4066-b17b-cf1913a98f55.gif" width = "700"> </td>
@@ -217,79 +226,135 @@ The activity diagram shows the overview of the actions that users can take at va
 * OpenWeatherMap API
 
 ### Implementation ###
+* Splash screen
+   * Delay for 2.5s before starting Login Activity
 * Account System
    * Link to Firebase Authentication: authentication using email and password
    * New users need to set a username during sign up
       * Write profile information to database: Profiles -> userID
-   * If there is already a user signed in, application will skip login page when launched
+   * FirebaseAuth.AuthStateListener: If there is already a user signed in, application will skip login page when launched
 * Navigation drawer
    * Drawer Activity to manage the navigation drawer
    * Features are contained in fragments
+   * Header displays profile information
+      * Profile picture and username: Read from database Profiles -> userID
+      * Email: FirebaseUser.getEmail()
 * Itinerary screen
    * Reads ItineraryItems from Firebase Realtime Database: Users -> userID -> Itinerary -> Date
    * Display ItineraryItems in recycler view
    * Add to itinerary button: add custom event dialog opens
       * Select start and end time with timepicker dialog
+      * Check that duration is valid: end time is later than start time
+      * Check for overlapping itinerary: open confirmation dialog if there is overlap
       * Write new ItineraryItem to database: Users -> userID -> Itinerary -> Date
    * On click for events added through Accommodation, Attraction and Food features: check type and navigate to corresponding detail fragment
-   * On long click, users will open edit itinerary dialog
+   * On right swipe, users will open edit itinerary dialog
       * Choose new date with DatePickerDialog
       * Choose new timing with TimePickerDialog
+      * Cross ImageButton to cancel changes
       * Update button for users to save changes
-      * Delete button for users to delete event from itinerary
+         * Check that duration is valid: end time is later than start time
+         * Check for overlapping itinerary
+         * Change in date: get ItineraryItem from old database reference, add to new database reference, update fields and delete ItineraryItem at old reference
+         * No change in date: update time values
+   * On left swipe, users will open delete event confirmation dialog
+      * Confirm button for users to delete event from itinerary: removeValue() from database reference
 * Search screen (AccommodationFragment, AttractionFragment and FoodFragment are subclasses of SearchFragment)
    * SearchView for users to key in query location
    * Make API call with Volley library
    * Call Travel Advisor API location search to obtain a location ID
-   * Pass ID to call Travel Advisor API hotel/restaurant/attraction list search
+   * Use ID to call Travel Advisor API hotel/restaurant/attraction list search
    * Create new AccommodationItineraryItem, AttractionItineraryItem, FoodItineraryItem respectively (subclasses of ItineraryItem)
    * Display search results in recycler view
    * On click, corresponding itinerary item is passed to the corresponding details fragment in a bundle
-* Details screen (AccommodationDetailFragment, AttractionDetailFragment and FoodDetailFragment are subclasses of DetailFragment)
-   *  Navigation from search fragment for Accommodation:
+* Details screen for Accommodation (AccommodationDetailFragment which is a subclass of DetailFragment)
+   * Navigation from search fragment:
       * Retrieve AccommodationItineraryItem from bundle
       * Call Travel Advisor API hotel details search using Volley library as there is some information that cannot be obtained from hotel list API call
       * Set information obtained from call to AccommodationItineraryItem and details layout
-   * Navigation from search fragment for Attractions and Food:
+   * Add to itinerary floating action button: dialog opens
+      * Select start and end date with DatePickerDialog
+      * Select start and end time with TimePickerDialog
+      * Add button: 
+         * Check that duration is valid: end is later than start
+         * Breakdown the time period according to the date: full day is from 00.00am to 11.59pm
+         * Check overlap and write AccommodationItineraryItem to database for each date: Users -> userID -> Itinerary -> Date  
+* Details screen for Attractions and Food (AttractionDetailFragment and FoodDetailFragment are subclasses of DetailFragment)
+   * Navigation from search fragment:
       * Retrieve corresponding itinerary item from bundle
       * Display information on details layout
    * Add to itinerary floating action button: dialog opens
       * Select date with DatePickerDialog
       * Select start and end time with TimePickerDialog 
-      * Write corresponding AccommodationItineraryItem, AttractionItineraryItem, FoodItineraryItem (subclasses of ItineraryItem) to database: userID -> Itinerary -> Date
+      * Check that duration is valid: end is later than start
+      * Check overlap and write corresponding AttractionItineraryItem, FoodItineraryItem (subclasses of ItineraryItem) to database: userID -> Itinerary -> Date
+* Details screen for Accommodation, Attractions and Food
    * Navigation from Itinerary
-      * Read corresponding itinerary item from database: userID -> Itinerary -> Date
+      * Hide add to itinerary floating action button
+      * Read corresponding itinerary item from database: Users -> userID -> Itinerary -> Date
       * Display information on details layout
    * Read ReviewItems from database: Reviews -> locationID
+      * Display reviews with recycler view
+      * Read username and profile picture of user who wrote the review from database using userID in ReviewItem: Profiles -> userID
+      * Click username on review: pass userID in ReviewItem to ProfileFragment in a bundle
    * Add reviews button: open add review dialog
       * Set rating with rating bar
       * Create new ReviewItem
-      * Write ReviewItem to database: Reviews -> locationID
-      * 
+      * Write ReviewItem to database: Reviews -> locationID and Profiles -> userID -> Reviews
 * Map screen
    * SearchView for users to key in query location
    * Call Maps SDK for Android to obtain latitude coordinates for query location
    * Zoom in to location on map
    * When users click the marker, directions button will appear and direct users to google map application to search for directions
 * Notes screen
-   * Read NoteItems from database: userID -> notes
+   * Read NoteItems from database: Users -> userID -> notes
    * Display in recycler view with note title and date it was last saved
    * On click, corresponding NoteItem is passed to the NotesViewFragment in a bundle
    * Add new note floating action button: open dialog
       * User can key in title of new note
       * Create new NoteItem with empty content
       * Pass NoteItem to NotesViewFragment
-   * Swipe left to delete note
-      * Snackbar appears after swiping left
-      * Undo button on snackbar for users to undo the action
+   * On right swipe: open edit note title dialog
+      * Edit button to save changes: update note title in database
+   * On left swipe: open delete note confirmation dialog
+      * Confirm button for users to delete note: removeValue() from database reference
 * Notes View screen 
-   * Display note content
+   * Read note content from database: Users- > userID -> Notes -> noteID
    * Users can edit the text
-   * Save floating action button: Update NoteItem on database
+   * Save floating action button: Update NoteItem content on database
 * Weather screen
-   * Get current location of user and call OpenWeatherMap API
+   * Get current location coordinates of user with FusedLocationProviderClient 
+   * Use coordinates to call OpenWeatherMap API current weather data and onecall
+   * Display data on layout and 5-day forecast on recycler view
    * Change city button: open change city dialog
-      * Call API with new city name  
+      * Call current weather data API with new city name to obtain current weather and coordinates of city 
+      * Call onecall API with coordinates of city to obtain 5-day forecast
+* Checklist screen
+   * Read ChecklistItems from database: Users -> userID -> Checklist
+   * Display in recycler view with task and checkbox
+      * Sorted with checked tasks at the bottom
+   * On change in checkbox status: 
+      * Update database
+      * Sort list of ChecklistItems
+   * On right swipe: open edit task dialog
+      * Edit button to save changes: update task in database
+   * On left swipe: open delete task confirmation dialog
+      * Confirm button for users to delete task: removeValue() from database reference
+* Profile screen
+   * User viewing their own profile:
+      * Read profile picture URL, username and reviews written from database: Profiles -> userID
+      * Get email from FirebaseUser
+      * Display reviews in recycler view and profile infomration on layout
+      * Edit profile button: open edit profile dialog
+         * Change profile picture button: launch gallery activity to get image uri
+         * Edit button: 
+            * Save uri to Firebase Storage: images -> userID.jpg
+            * Obtain URL from Firebase Storage and save in database: Profiles -> userID -> image
+            * Update database with new username: Profiles -> userID -> username
+   * User viewing other users' profiles: navigation from review
+      * Read profile picture URL, username and reviews written from database: Profiles -> userID
+      * Hide user email and edit profile button
+      * Display reviews in recycler view
 
 ### System Flow ###
 ![Untitled drawing](https://user-images.githubusercontent.com/77200594/126892453-cb826212-fcb2-4333-905e-e035767f2bd1.jpg)
