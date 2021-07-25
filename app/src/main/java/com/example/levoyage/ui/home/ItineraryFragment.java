@@ -35,6 +35,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ItineraryFragment extends Fragment {
@@ -154,7 +155,7 @@ public class ItineraryFragment extends Fragment {
                     end.setError("End time is earlier than start time");
                     end.requestFocus();
                 } else {
-                    ItineraryItem overlap = checkOverlap(st, et);
+                    ItineraryItem overlap = checkOverlap(list, st, et);
                     if (overlap != null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle("Overlapping Events");
@@ -262,8 +263,35 @@ public class ItineraryFragment extends Fragment {
                     if (et.compareTo(st) < 0) {
                         end.setError("End time is earlier than start time");
                         end.requestFocus();
+                    } else if (updates.containsKey("date")) {
+                        database.child((String)updates.get("date")).get().addOnCompleteListener(task -> {
+                            List<ItineraryItem> itineraryList = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                                ItineraryItem itineraryItem = dataSnapshot.getValue(ItineraryItem.class);
+                                itineraryList.add(itineraryItem);
+                            }
+                            itineraryList.sort(ItineraryItem::compareTo);
+                            ItineraryItem overlap = checkOverlap(itineraryList, st, et);
+                            if (overlap != null) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Overlapping Events");
+                                builder.setMessage(String.format(
+                                        "This edited event overlaps with %s. Are you sure you want to edit this event?",
+                                        overlap.getLocation()));
+                                builder.setPositiveButton("Confirm", (dg, which) -> {
+                                    updateDatabase(updates, item);
+                                    editDialog.dismiss();
+                                });
+                                builder.setNegativeButton("Cancel", null);
+                                AlertDialog confirmationDialog = builder.create();
+                                confirmationDialog.show();
+                            } else {
+                                updateDatabase(updates, item);
+                                editDialog.dismiss();
+                            }
+                        });
                     } else {
-                        ItineraryItem overlap = checkOverlap(st, et);
+                        ItineraryItem overlap = checkOverlap(list, st, et);
                         if (overlap != null) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setTitle("Overlapping Events");
@@ -294,9 +322,9 @@ public class ItineraryFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private ItineraryItem checkOverlap(TimeParcel start, TimeParcel end) {
-        for (int i = 0; i < list.size(); i++) {
-            ItineraryItem item = list.get(i);
+    private ItineraryItem checkOverlap(List<ItineraryItem> itineraryList, TimeParcel start, TimeParcel end) {
+        for (int i = 0; i < itineraryList.size(); i++) {
+            ItineraryItem item = itineraryList.get(i);
             if (item.getStartTime().compareTo(start) == 0) {
                 return item;
             } else if (item.getStartTime().compareTo(start) < 0) {
@@ -317,27 +345,19 @@ public class ItineraryFragment extends Fragment {
             String newDate = (String) updates.get("date");
             DatabaseReference oldReference = database.child(item.getDate()).child(item.getLocation());
             DatabaseReference newReference = database.child(newDate).child(item.getLocation());
-            updates.put("date", newDate);
-            oldReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                    oldReference.removeValue();
-                    newReference.setValue(dataSnapshot.getValue(), (firebaseError, firebase) -> {
-                        if (firebaseError != null) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                        } else {
-                            newReference.updateChildren(updates)
-                                    .addOnCompleteListener(t -> Toast.makeText(getContext(),
-                                            "Itinerary updated", Toast.LENGTH_SHORT).show());
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            oldReference.get().addOnCompleteListener(task ->
+                    newReference.setValue(task.getResult().getValue(), (firebaseError, firebase) -> {
+                if (firebaseError != null) {
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    newReference.updateChildren(updates)
+                            .addOnCompleteListener(t -> {
+                                Toast.makeText(getContext(),
+                                        "Itinerary updated", Toast.LENGTH_SHORT).show();
+                                oldReference.removeValue();
+                            });
                 }
-            });
+            }));
         } else {
             database.child(item.getDate()).child(item.getLocation()).updateChildren(updates)
                     .addOnCompleteListener(t -> Toast.makeText(getContext(),
