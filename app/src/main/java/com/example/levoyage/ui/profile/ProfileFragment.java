@@ -1,6 +1,7 @@
 package com.example.levoyage.ui.profile;
 
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -56,6 +57,7 @@ public class ProfileFragment extends Fragment {
     UserProfile profile;
     private boolean myProfile;
     private String userID;
+    private Uri newUri;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -72,17 +74,7 @@ public class ProfileFragment extends Fragment {
         mGetContent = registerForActivityResult(
                 new ActivityResultContracts.GetContent(), uri -> {
                     editPicture.setImageURI(uri);
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReference()
-                            .child("images").child(userID + ".jpg");
-                    UploadTask uploadTask = storageRef.putFile(uri);
-                    uploadTask.addOnFailureListener(exception -> Toast.makeText(getContext(),
-                            "Upload failed", Toast.LENGTH_SHORT).show())
-                            .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl()
-                            .addOnCompleteListener(task -> {
-                        String imageURL = task.getResult().toString();
-                        updates.put("image", imageURL);
-                    }));
+                    newUri = uri;
                 });
     }
 
@@ -160,10 +152,38 @@ public class ProfileFragment extends Fragment {
             changePic.setOnClickListener(v1 -> mGetContent.launch("image/*"));
 
             editProfileBtn.setOnClickListener(v12 -> {
-                String newUsername = editUsername.getText().toString();
-                updates.put("username", newUsername);
-                database.updateChildren(updates);
-                dialog.dismiss();
+                if (newUri != null) {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference()
+                            .child("images").child(userID + ".jpg");
+                    UploadTask uploadTask = storageRef.putFile(newUri);
+                    uploadTask.addOnFailureListener(exception -> Toast.makeText(getContext(),
+                            "Upload failed", Toast.LENGTH_SHORT).show())
+                            .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl()
+                                    .addOnCompleteListener(task -> {
+                                        String imageURL = task.getResult().toString();
+                                        updates.put("image", imageURL);
+                                        String newUsername = editUsername.getText().toString();
+                                        if (newUsername.isEmpty()) {
+                                            editUsername.setError("Please enter a username");
+                                            editUsername.requestFocus();
+                                        } else {
+                                            updates.put("username", newUsername);
+                                            database.updateChildren(updates);
+                                            dialog.dismiss();
+                                        }
+                                    }));
+                } else {
+                    String newUsername = editUsername.getText().toString();
+                    if (newUsername.isEmpty()) {
+                        editUsername.setError("Please enter a username");
+                        editUsername.requestFocus();
+                    } else {
+                        updates.put("username", newUsername);
+                        database.updateChildren(updates);
+                        dialog.dismiss();
+                    }
+                }
             });
 
             closeBtn.setOnClickListener(x -> dialog.dismiss());

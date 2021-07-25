@@ -100,8 +100,13 @@ public class WeatherFragment extends Fragment {
 
             changeButton.setOnClickListener(v1 -> {
                 String newCity = changeCity.getText().toString();
-                getWeatherForNewCity(newCity);
-                dialog.dismiss();
+                if (newCity.isEmpty()) {
+                    changeCity.setError("Please enter a city");
+                    changeCity.requestFocus();
+                } else {
+                    getWeatherForNewCity(newCity);
+                    dialog.dismiss();
+                }
             });
 
             closeButton.setOnClickListener(t -> dialog.dismiss());
