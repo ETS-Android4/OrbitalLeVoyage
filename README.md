@@ -292,12 +292,24 @@ The activity diagram shows the overview of the actions that users can take at va
       * Call API with new city name  
 
 ### System Flow ###
+![Untitled drawing](https://user-images.githubusercontent.com/77200594/126892453-cb826212-fcb2-4333-905e-e035767f2bd1.jpg)
 ![Orbital System Flow (4)](https://user-images.githubusercontent.com/77200594/126510669-d2e0a276-5bf8-494a-a980-dfbef968c7a2.jpg)
 
 ### Database Structure ###
 ![Database ER diagram (3)](https://user-images.githubusercontent.com/77200594/126511888-d4c51063-4514-4f4d-a046-d191729846b4.jpg)
 
 The diagram above shows the structure of the Firebase Realtime Database. The main Users branch stores the information of each user: itinerary, notes and checklist. Only the user himself will have read and write access to the information stored in Users under their userID. Users' itineraries are stored as ItineraryItems. AccommodationItineraryItem, AttractionItineraryItem and FoodItineraryItem are subtypes of ItineraryItem and they inherit the fields of ItineraryItem. The Profiles branch stores information about each user that is available to all users. The Reviews branch stores reviews for locations based on their locationID.
+
+### Software Testing ###
+System testing was carried out to check for bugs and ensure that the application runs smoothly. Test cases were planned based on the possible usage of the various features in the application.
+
+![image](https://user-images.githubusercontent.com/77200594/126892108-24921c58-4163-4de0-a74a-20d9b2dd34c0.png)
+![image](https://user-images.githubusercontent.com/77200594/126892073-2bf042ce-8a33-49ae-b6fc-f80f6e58077a.png)
+![image](https://user-images.githubusercontent.com/77200594/126892006-67615203-9256-4903-a945-3bf4d99e2608.png)
+![image](https://user-images.githubusercontent.com/77200594/126892029-2d9701dd-c7f4-45f8-9c9c-9d8ad739f5a1.png)
+
+Apart from testing the features, tests for the error messages and error prevention mechanisms were also carried out to ensure that the application runs smoothly.
+https://docs.google.com/document/d/1fr_anTTLY5FdYji6faao-MRCSdDYTrQDerVoqc1jDtM/edit?usp=sharing
 
 ## Development Plan ##
 | Week        | Tasks           |
