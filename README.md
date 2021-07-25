@@ -376,13 +376,94 @@ System testing was carried out to check for bugs and ensure that the application
 Apart from testing the features, tests for the error messages and error prevention mechanisms were also carried out to ensure that the application runs smoothly.
 https://docs.google.com/document/d/1fr_anTTLY5FdYji6faao-MRCSdDYTrQDerVoqc1jDtM/edit?usp=sharing
 
+### Limitations ###
+* Travel Advisor API
+   * The search results obtained from the accommodation, attractions and food features depend on the Travel Advisor API. The results returned may not be up-to-date and may not be comprehensive. As a result, users might not be able to find some locations on the application. Therefore, there is the option for users to add custom events to their itinerary on the itinerary page.
+* Reviews
+   * As we do not have a big user database to write reviews and gather ratings for our reviews database, most of the locations do not have reviews currently. The ratings shown for the locations are currently retrieved from the Travel Advisor API.
+* Directions
+   * As we are unable to get access to the Directions API, the application currently does not have a directions feature where users can search for directions in the application. Users will be directed to the maps application on their phones to search for directions.
+
 ## Development Plan ##
-| Week        | Tasks           |
-| ------------- |:-------------:| 
-| 8 (28/6 - 4/7) | Checklist feature, further improvement on current features and peer evaluation | 
-| 9 (5/7 - 11/7)| Profile page and improvements based on peer evaluation |
-| 10 (12/7 - 18/7)| Testing and debugging, Improve app design | 
-| 11 (19/7 - 25/7) | Testing and debugging |
-
-
+<table>
+  <tbody>
+    <tr>
+      <th>Week</th>
+      <th>Tasks</th>
+    </tr>
+     <tr>
+      <td>4 (31/5 - 6/6)</td>
+      <td>
+        <ul>
+          <li>Home screen: calendar</li>
+          <li>Itinerary page: schedule + adding events</li>
+        </ul>
+      </td>
+     </tr>
+    <tr>
+      <td>5 (7/6 - 13/6)</td>
+      <td>
+        <ul>
+          <li>Accommodation, attractions, food feature</li>
+          <li>Link the accommodation, attractions and food features to itinerary</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>6 (14/6 - 20/6)</td>
+      <td>
+        <ul>
+          <li>Reviews feature (Adding and viewing of reviews)</li>
+          <li>Map feature</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>7 (21/6 - 27/6)</td>
+      <td>
+        <ul>
+          <li>Notes feature</li>
+          <li>Milestone 2 submission preparation</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>8 (28/6 - 4/7)</td>
+      <td>
+        <ul>
+          <li>Checklist feature</li>
+          <li>Further improvement on current features</li>
+          <li>Peer evaluation</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>9 (5/7 - 11/7)</td>
+      <td>
+        <ul>
+          <li>Profile page</li>
+          <li>Improvements based on peer evaluation</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>10 (12/7 - 18/7)</td>
+      <td>
+        <ul>
+          <li>Testing planningImprove app design</li>
+          <li>Improve app design</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>11 (19/7 - 25/7)</td>
+      <td>
+        <ul>
+          <li>Testing and debugging</li>
+          <li>Milestone 3 submission preparation</li>
+        </ul>
+      </td>
+    </tr> 
+  </tbody>
+</table>
 
