@@ -229,20 +229,24 @@ public class ItineraryFragment extends Fragment {
 
                 start.setOnClickListener(t -> {
                     TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view13, hourOfDay, minute) -> {
-                        st.setHr(hourOfDay);
-                        st.setMin(minute);
-                        updates.put("startTime", st);
-                        start.setText(st.toString());
+                        if (hourOfDay != st.getHr() || minute != st.getMin()) {
+                            st.setHr(hourOfDay);
+                            st.setMin(minute);
+                            updates.put("startTime", st);
+                            start.setText(st.toString());
+                        }
                     }, 0, 0, false);
                     timePicker.show();
                 });
 
                 end.setOnClickListener(t -> {
                     TimePickerDialog timePicker = new TimePickerDialog(getContext(), (view14, hourOfDay, minute) -> {
-                        et.setHr(hourOfDay);
-                        et.setMin(minute);
-                        updates.put("endTime", et);
-                        end.setText(et.toString());
+                        if (hourOfDay != et.getHr() || minute != et.getMin()) {
+                            et.setHr(hourOfDay);
+                            et.setMin(minute);
+                            updates.put("endTime", et);
+                            end.setText(et.toString());
+                        }
                     }, 0, 0, false);
                     timePicker.show();
                 });
@@ -253,14 +257,20 @@ public class ItineraryFragment extends Fragment {
                         LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
                         String dateString = localDate.format(formatter);
-                        date.setText(dateString);
-                        updates.put("date", dateString);
+                        if (!item.getDate().equals(dateString)) {
+                            date.setText(dateString);
+                            updates.put("date", dateString);
+                        }
                     });
                     datePicker.show();
                 });
 
                 updateBtn.setOnClickListener(v -> {
-                    if (et.compareTo(st) < 0) {
+                    if (updates.isEmpty()) {
+                        editDialog.dismiss();
+                        list.add(position, item);
+                        adapter.notifyItemChanged(position);
+                    } else if (et.compareTo(st) < 0) {
                         end.setError("End time is earlier than start time");
                         end.requestFocus();
                     } else if (updates.containsKey("date")) {
@@ -315,7 +325,8 @@ public class ItineraryFragment extends Fragment {
                 closeBtn.setOnClickListener(t -> {
                     editDialog.dismiss();
                     list.add(position, item);
-                    adapter.notifyItemChanged(position);});
+                    adapter.notifyItemChanged(position);
+                });
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
