@@ -7,12 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -70,7 +70,7 @@ public class DrawerActivity extends AppCompatActivity {
         TextView profileEmail = header.findViewById(R.id.ProfileEmail);
         TextView profileUsername = header.findViewById(R.id.ProfileUsername);
         ImageView profilePicture = header.findViewById(R.id.profilePicture);
-        LinearLayout profileLayout = header.findViewById(R.id.drawerHeader);
+        ConstraintLayout profileLayout = header.findViewById(R.id.drawerHeader);
 
         DatabaseReference database = FirebaseDatabase
                 .getInstance(getString(R.string.database_link))

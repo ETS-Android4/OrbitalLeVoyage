@@ -4,12 +4,13 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -34,11 +34,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ThrowOnExtraProperties;
 import com.google.firebase.database.annotations.NotNull;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -51,7 +50,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class WeatherFragment extends Fragment {
 
@@ -170,11 +168,31 @@ public class WeatherFragment extends Fragment {
                     params.put("appid", API);
                     doNetworking(params);
                 } else {
-                    Toast.makeText(getContext(), "Unable to obtain current location",
-                            Toast.LENGTH_SHORT).show();
+                    LocationRequest locationRequest = LocationRequest.create();
+                    locationRequest.setInterval(10000);
+                    locationRequest.setFastestInterval(1000);
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    locationRequest.setNumUpdates(1);
+
+                    LocationCallback callback = new LocationCallback() {
+                        @Override
+                        public void onLocationResult(@NonNull LocationResult locationResult) {
+                            Location location1 = locationResult.getLastLocation();
+                            String latitude = String.valueOf(location1.getLatitude());
+                            String longitude = String.valueOf(location1.getLongitude());
+                            RequestParams params = new RequestParams();
+                            params.put("lat", latitude);
+                            params.put("lon", longitude);
+                            params.put("appid", API);
+                            doNetworking(params);
+                        }
+                    };
+                    fusedLocationProviderClient.requestLocationUpdates(locationRequest, callback, Looper.myLooper());
                 }
             });
-         }
+         } else {
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
     }
 
     private void doNetworking(RequestParams params) {

@@ -80,7 +80,7 @@ public class ItineraryFragment extends Fragment {
 
         // Set header
         ((AppCompatActivity) getActivity()).getSupportActionBar()
-                .setTitle(String.format("Itinerary for: %s", date));
+                .setTitle(date);
 
         // Fill up recycler view with data from database
         database.child(date).addValueEventListener(new ValueEventListener() {
