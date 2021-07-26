@@ -1,5 +1,6 @@
 # Le Voyage #
 An all-in-one travel planning application
+Proposed level of achievement: Apollo 11
 
 Click [here](https://github.com/tsy24/OrbitalLeVoyage/raw/master/LeVoyage.apk) to download the apk
 
@@ -384,6 +385,12 @@ https://docs.google.com/document/d/1fr_anTTLY5FdYji6faao-MRCSdDYTrQDerVoqc1jDtM/
 * Directions
    * As we are unable to get access to the Directions API, the application currently does not have a directions feature where users can search for directions in the application. Users will be directed to the maps application on their phones to search for directions.
 
+### Possible Future Work ###
+There are some improvements to the application that we thought of and gathered from user feedback. However, due to time constraints, we were unable to work on them.
+* Markings on Calendar to indicate that there is itinerary for that date
+* Directions function
+* Placeholder for empty recycler views in itinerary, notes, checklist and search pages
+
 ## Development Plan ##
 <table>
   <tbody>
@@ -450,7 +457,7 @@ https://docs.google.com/document/d/1fr_anTTLY5FdYji6faao-MRCSdDYTrQDerVoqc1jDtM/
       <td>10 (12/7 - 18/7)</td>
       <td>
         <ul>
-          <li>Testing planningImprove app design</li>
+          <li>Testing planning</li>
           <li>Improve app design</li>
         </ul>
       </td>
