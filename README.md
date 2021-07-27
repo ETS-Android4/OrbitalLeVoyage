@@ -392,6 +392,18 @@ There are some improvements to the application that we thought of and gathered f
 * Directions function
 * Placeholder for empty recycler views in itinerary, notes, checklist and search pages
 
+### User Testing ###
+
+User testing were carried out by us, before letting our friends try out the application. The general idea of the user testing was to have two different user groups, one being a **tourist** who wishes to use our app for their upcoming trip, and the other being a **tour guide** planning the trip for his or her tourist group. Reason behind splitting our user groups is that we would like to analyse whether our application is suitable for our different target groups, who have different objectives in mind when using our application. This will allow us to improve our application in a neater fashion, and our blindspots when designing the application could be better discovered when the users are only using the applications for a specific query.
+
+The same apk and questionaire were given out to both groups. 
+
+For the "**tour guide**" group, we made an additional comment saying that they should try to fit in as many travel events as they can, while taking note that none of the events should overlap and they should take the travelling time into consideration by using the map function implemented. 
+
+For the "**tourist**" group, we asked them to pay more attention to the UI design of the application, and whether it was easy for them to execute the tasks that were given to them. A screenshot of the questionaire that was sent to them is attached below.
+
+![User Testing Questionarie](https://user-images.githubusercontent.com/77220630/127199314-83dd4709-9ff9-4092-add2-1c44bcaf2bc7.PNG)
+
 ## Development Plan ##
 <table>
   <tbody>
