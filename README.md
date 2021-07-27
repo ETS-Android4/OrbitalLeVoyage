@@ -1,5 +1,6 @@
 # Le Voyage #
 An all-in-one travel planning application
+
 Proposed level of achievement: Apollo 11
 
 Click [here](https://github.com/tsy24/OrbitalLeVoyage/raw/master/LeVoyage.apk) to download the apk
@@ -51,9 +52,6 @@ more efficient allocation of time.
 * TripIt: Travel Planner
   * A mobile application that creates itineraries
   * Does not contain features that help users find suitable accommodation, attractions and restaurants
-
-## Walkthrough ##
-https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=sharing
 
 ## Software Development ##
 
@@ -218,6 +216,9 @@ https://drive.google.com/file/d/1HDnPXq_3PmoBRVFUNzLlvd15j1n42-09/view?usp=shari
 ![Activity Diagram](https://user-images.githubusercontent.com/77200594/126673417-96f7be9c-f620-4989-a4a9-06ed7de27ecf.jpg)
 
 The activity diagram shows the overview of the actions that users can take at various pages and the relationship between pages in the application.
+
+### Application Walkthrough ###
+Click [here](https://drive.google.com/file/d/125vFijnFku8xd_5KxIXCNJmHJKNonx7t/view?usp=sharing) to view a walkthrough of the application.
 
 ### Technical Stack ###
 * Android Studio
