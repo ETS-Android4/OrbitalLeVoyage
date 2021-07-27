@@ -217,7 +217,7 @@ more efficient allocation of time.
 
 The activity diagram shows the overview of the actions that users can take at various pages and the relationship between pages in the application.
 
-### Application Walkthrough ###
+### Walkthrough ###
 Click [here](https://drive.google.com/file/d/125vFijnFku8xd_5KxIXCNJmHJKNonx7t/view?usp=sharing) to view a walkthrough of the application.
 
 ### Technical Stack ###
