@@ -101,9 +101,6 @@ public class HomeFragment extends Fragment implements CalendarAdapter.OnItemList
            selectedDate = selectedDate.plusMonths(1);
            setMonthView();
        });
-
-        addTripFAB.setOnClickListener(v -> Navigation.findNavController(root).
-                navigate(R.id.action_nav_home_to_calendarEventEditFragment));
     }
 
     @Override
