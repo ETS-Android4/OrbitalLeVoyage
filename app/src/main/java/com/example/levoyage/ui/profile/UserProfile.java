@@ -2,7 +2,6 @@ package com.example.levoyage.ui.profile;
 
 import com.example.levoyage.ReviewItem;
 
-import java.util.List;
 import java.util.Map;
 
 public class UserProfile {

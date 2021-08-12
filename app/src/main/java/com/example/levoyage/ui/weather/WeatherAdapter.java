@@ -1,28 +1,18 @@
 package com.example.levoyage.ui.weather;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.levoyage.R;
-import com.example.levoyage.ui.notes.NoteItem;
-import com.example.levoyage.ui.notes.NotesAdapter;
 import com.google.firebase.database.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder> {

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,14 +54,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         holder.title.setText(item.getTitle());
         holder.date.setText(item.getDate());
 
-        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Note", item);
-                Navigation.findNavController(v).navigate(
-                        R.id.action_nav_notes_to_notesViewFragment, bundle);
-            }
+        holder.itemLayout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("Note", item);
+            Navigation.findNavController(v).navigate(
+                    R.id.action_nav_notes_to_notesViewFragment, bundle);
         });
     }
 

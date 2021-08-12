@@ -15,7 +15,6 @@ import com.example.levoyage.ReviewItem;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileReviewsAdapter extends RecyclerView.Adapter<ProfileReviewsAdapter.ProfileReviewViewHolder> {

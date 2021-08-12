@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
@@ -33,17 +32,14 @@ public abstract class SearchFragment extends Fragment {
     }
 
     public void getLocationID(String location, RequestQueue requestQueue) {
-        JsonObjectRequest searchLocation = new JsonObjectRequest(Request.Method.GET, searchURl(location), null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray arr = response.getJSONArray("data");
-                    JSONObject result = arr.getJSONObject(0);
-                    String locationID = result.getJSONObject("result_object").getString("location_id");
-                    extractInfo(locationID);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        JsonObjectRequest searchLocation = new JsonObjectRequest(Request.Method.GET, searchURl(location), null, response -> {
+            try {
+                JSONArray arr = response.getJSONArray("data");
+                JSONObject result = arr.getJSONObject(0);
+                String locationID = result.getJSONObject("result_object").getString("location_id");
+                extractInfo(locationID);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
         {

@@ -20,6 +20,7 @@
         app:backgroundTint="@color/blue"
         app:tint="@android:color/white"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/add" />
 
 </RelativeLayout>

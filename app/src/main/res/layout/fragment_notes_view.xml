@@ -15,7 +15,8 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"
         app:backgroundTint="@color/blue"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        android:contentDescription="@string/save" />
 
     <ScrollView
         android:layout_width="match_parent"

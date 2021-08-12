@@ -69,15 +69,12 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
         Picasso.get().load(item.getImageURL())
                 .placeholder(R.drawable.error_placeholder_small).fit().into(holder.image);
 
-        holder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Accommodation", item);
-                bundle.putBoolean("Saved", false);
-                Navigation.findNavController(v).navigate(
-                        R.id.action_nav_accommodation_to_accommodationDetailFragment, bundle);
-            }
+        holder.layout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("Accommodation", item);
+            bundle.putBoolean("Saved", false);
+            Navigation.findNavController(v).navigate(
+                    R.id.action_nav_accommodation_to_accommodationDetailFragment, bundle);
         });
 
     }

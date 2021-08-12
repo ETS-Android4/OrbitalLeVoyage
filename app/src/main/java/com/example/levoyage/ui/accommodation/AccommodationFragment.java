@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.levoyage.R;
@@ -73,37 +72,34 @@ public class AccommodationFragment extends SearchFragment {
         propertiesURL = propertiesURL + "&location_id=" + locationID;
         RequestQueue queue = Volley.newRequestQueue(getContext());
         JsonObjectRequest searchHotels = new JsonObjectRequest(Request.Method.GET,
-                propertiesURL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (response.isNull("data")) {
-                        Toast.makeText(getContext(), "No accommodation found.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        JSONArray arr = response.getJSONArray("data");
-                        for (int i = 0; i < arr.length(); i++) {
-                            if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
-                                JSONObject item = arr.getJSONObject(i);
-                                AccommodationItineraryItem hotel = new AccommodationItineraryItem();
-                                hotel.setLocation(getFromJson("name", item));
-                                hotel.setRating(getFromJson("rating", item));
-                                hotel.setPrice(getFromJson("price", item));
-                                hotel.setId(getFromJson("location_id", item));
-                                hotel.setImageURL(getImageURLFromJson(item));
-                                list.add(hotel);
+                propertiesURL, null, response -> {
+                    try {
+                        if (response.isNull("data")) {
+                            Toast.makeText(getContext(), "No accommodation found.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            JSONArray arr = response.getJSONArray("data");
+                            for (int i = 0; i < arr.length(); i++) {
+                                if (i != 6 && i != 15 && i != 24) { // API call returns different data at these positions
+                                    JSONObject item = arr.getJSONObject(i);
+                                    AccommodationItineraryItem hotel = new AccommodationItineraryItem();
+                                    hotel.setLocation(getFromJson("name", item));
+                                    hotel.setRating(getFromJson("rating", item));
+                                    hotel.setPrice(getFromJson("price", item));
+                                    hotel.setId(getFromJson("location_id", item));
+                                    hotel.setImageURL(getImageURLFromJson(item));
+                                    list.add(hotel);
+                                }
                             }
                         }
+                    } catch (JSONException e) {
+                        Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new AccommodationAdapter(getContext(), list);
-                recyclerView.setAdapter(adapter);
-                progressBar.setVisibility(ProgressBar.GONE);
-            }
-        }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapter = new AccommodationAdapter(getContext(), list);
+                    recyclerView.setAdapter(adapter);
+                    progressBar.setVisibility(ProgressBar.GONE);
+                }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
         {
             @Override
             public Map<String, String> getHeaders() {

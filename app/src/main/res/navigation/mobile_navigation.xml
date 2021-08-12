@@ -37,9 +37,6 @@
         <action
             android:id="@+id/action_nav_home_to_itineraryFragment"
             app:destination="@id/itineraryFragment" />
-        <action
-            android:id="@+id/action_nav_home_to_calendarEventEditFragment"
-            app:destination="@id/calendarEventEditFragment"/>
     </fragment>
 
 
@@ -104,15 +101,6 @@
         android:name="com.example.levoyage.ui.food.FoodDetailFragment"
         android:label="Restaurant Details"
         tools:layout="@layout/fragment_detail" />
-    <fragment
-        android:label="Add Trip"
-        android:id="@+id/calendarEventEditFragment"
-        tools:layout="@layout/fragment_calendar_event_edit"
-        android:name="com.example.levoyage.ui.home.CalendarEventEditFragment">
-        <action
-            android:id="@+id/action_nav_calendarEventEditFragment_to_home"
-            app:destination="@+id/nav_home"/>
-    </fragment>
     <fragment
         android:id="@+id/nav_map"
         android:name="com.example.levoyage.MapsFragment"

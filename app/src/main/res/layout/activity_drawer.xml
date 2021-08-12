@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textAlignment="center"
             android:textColor="#050505"
             android:textSize="15sp"
@@ -48,7 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:translationX="5dp"
-            app:srcCompat="@drawable/ic_baseline_exit_to_app_24" />
+            app:srcCompat="@drawable/ic_baseline_exit_to_app_24"
+            android:contentDescription="@string/profile_picture" />
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

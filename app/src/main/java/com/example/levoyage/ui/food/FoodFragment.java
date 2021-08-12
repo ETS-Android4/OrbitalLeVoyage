@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.levoyage.R;
@@ -72,42 +71,39 @@ public class FoodFragment extends SearchFragment {
     public void extractInfo(String locationID) {
         String foodURL = "https://travel-advisor.p.rapidapi.com/restaurants/list?currency=USD&location_id=" + locationID;
         JsonObjectRequest searchFood = new JsonObjectRequest(Request.Method.GET,
-                foodURL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (response.isNull("data")) {
-                        Toast.makeText(getContext(), "No restaurants found.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        JSONArray arr = response.getJSONArray("data");
-                        for (int i = 0; i < arr.length(); i++) {
-                            if (i != 4 && i != 11 && i != 18) { // API call returns different data at these positions
-                                JSONObject item = arr.getJSONObject(i);
-                                FoodItineraryItem restaurant = new FoodItineraryItem();
-                                restaurant.setId(getFromJson("location_id", item));
-                                restaurant.setLocation(getFromJson("name", item));
-                                restaurant.setRating(getFromJson("rating", item));
-                                restaurant.setAddress(getFromJson("address", item));
-                                restaurant.setLink(getURLFromJson("website", item));
-                                restaurant.setPrice(getFromJson("price_level", item));
-                                restaurant.setDescription(getFromJson("description", item));
-                                restaurant.setImageURL(getImageURLFromJson(item));
-                                restaurant.setCategory(getFromJsonArray("cuisine", "name", item));
+                foodURL, null, response -> {
+                    try {
+                        if (response.isNull("data")) {
+                            Toast.makeText(getContext(), "No restaurants found.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            JSONArray arr = response.getJSONArray("data");
+                            for (int i = 0; i < arr.length(); i++) {
+                                if (i != 4 && i != 11 && i != 18) { // API call returns different data at these positions
+                                    JSONObject item = arr.getJSONObject(i);
+                                    FoodItineraryItem restaurant = new FoodItineraryItem();
+                                    restaurant.setId(getFromJson("location_id", item));
+                                    restaurant.setLocation(getFromJson("name", item));
+                                    restaurant.setRating(getFromJson("rating", item));
+                                    restaurant.setAddress(getFromJson("address", item));
+                                    restaurant.setLink(getURLFromJson("website", item));
+                                    restaurant.setPrice(getFromJson("price_level", item));
+                                    restaurant.setDescription(getFromJson("description", item));
+                                    restaurant.setImageURL(getImageURLFromJson(item));
+                                    restaurant.setCategory(getFromJsonArray("cuisine", "name", item));
 
-                                list.add(restaurant);
+                                    list.add(restaurant);
+                                }
                             }
                         }
+                    } catch (JSONException e) {
+                        Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new FoodAdapter(getContext(), list);
-                recyclerView.setAdapter(adapter);
-                progressBar.setVisibility(ProgressBar.GONE);
-            }
-        }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapter = new FoodAdapter(getContext(), list);
+                    recyclerView.setAdapter(adapter);
+                    progressBar.setVisibility(ProgressBar.GONE);
+                }, e -> Toast.makeText(getContext(), "Error. Please try again.", Toast.LENGTH_SHORT).show())
         {
             @Override
             public Map<String, String> getHeaders() {

@@ -65,15 +65,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         Picasso.get().load(item.getImageURL())
                 .placeholder(R.drawable.error_placeholder_small).fit().into(holder.image);
 
-        holder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Food", item);
-                bundle.putBoolean("Saved", false);
-                Navigation.findNavController(v).navigate(
-                        R.id.action_nav_food_to_foodDetailFragment, bundle);
-            }
+        holder.layout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("Food", item);
+            bundle.putBoolean("Saved", false);
+            Navigation.findNavController(v).navigate(
+                    R.id.action_nav_food_to_foodDetailFragment, bundle);
         });
 
     }

@@ -26,7 +26,8 @@
             android:rotation="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            android:contentDescription="@string/prev_month" />
 
         <TextView
             android:id="@+id/monthYearTV"
@@ -50,7 +51,8 @@
             android:translationX="-10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            android:contentDescription="@string/next_month" />
 
     </LinearLayout>
 
@@ -142,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="cursive"
-        android:text="Click on a date to start planning now!"
+        android:text="@string/home_message"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/text_blue"
@@ -165,6 +167,7 @@
         app:backgroundTint="@color/blue"
         app:tint="@android:color/white"
         android:layout_margin="@dimen/fab_margin"
-        android:layout_gravity="bottom|end"/>
+        android:layout_gravity="bottom|end"
+        android:contentDescription="@string/add" />
 
 </LinearLayout>

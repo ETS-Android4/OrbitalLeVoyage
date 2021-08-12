@@ -33,6 +33,7 @@
     <string name="menu_weather">Weather</string>
     <string name="menu_notes">Notes</string>
     <string name="menu_checklist">Checklist</string>
+    <string name="logout">Logout</string>
     <!-- Strings related to Calendar -->
     <string name="back"><![CDATA[←]]></string>
     <string name="forward"><![CDATA[→]]></string>
@@ -44,6 +45,9 @@
     <string name="friday">FRI</string>
     <string name="saturday">SAT</string>
     <string name="create_new_trip">Create New Trip</string>
+    <string name="next_month">next_month</string>
+    <string name="prev_month">prev_month</string>
+    <string name="home_message">Click on a date to start planning now!</string>
     <!-- Strings related to itinerary -->
     <string name="add_itinerary_header">Add to itinerary</string>
     <string name="add">Add</string>
@@ -57,6 +61,7 @@
     <string name="delete">Delete</string>
     <string name="add_to_itinerary">ADD TO ITINERARY</string>
     <string name="event">Event</string>
+    <string name="close">close</string>
     <!-- Strings related to details -->
     <string name="price_range">Price Range</string>
     <string name="address">Address</string>
@@ -72,6 +77,7 @@
     <string name="new_note">new note</string>
     <string name="title">Title</string>
     <string name="edit_title">Edit note title</string>
+    <string name="save">save</string>
     <!-- Strings related to weather -->
     <string name="enter_city_name">City</string>
     <string name="change_city">Change City</string>
@@ -87,5 +93,7 @@
     <string name="change_picture">Change Picture</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="reviews_written">Reviews Written</string>
+    <string name="profile_picture">profile_picture</string>
+
 
 </resources>
